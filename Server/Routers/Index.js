@@ -1,0 +1,25 @@
+
+const productCategoryRouter = require('./ProductCategory')
+const productRouter = require('./Product')
+const BlogCategory = require('./BlogCategory')
+const blog = require('./Blog')
+const userRouter = require('./User')
+const breand = require('./Breand')
+const { notFound, errHandler } = require("../Anthi/ErrHander")
+const coupon = require("./Coupon")
+const order = require('./Order')
+const insertProduct = require('./Insertproduc')
+const initRouters = (app) => {
+    app.use('/api/user', userRouter)
+    app.use('/api/product', productRouter)
+    app.use('/api/productcategoryrouter', productCategoryRouter)
+    app.use('/api/blogcategory', BlogCategory)
+    app.use('/api/blog',blog)
+    app.use('/api/breand',breand)
+    app.use('/api/coupon',coupon)
+    app.use('/api/order',order)
+    app.use('/api/insertProduct',insertProduct)
+    app.use(notFound)
+    app.use(errHandler)
+}
+module.exports = initRouters
