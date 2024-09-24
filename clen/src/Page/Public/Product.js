@@ -128,7 +128,6 @@ const Products = () => {
             onPageChange={(page) => setCurrentPage(page)}
           />
         </div>}
-
     </div>
 
   )

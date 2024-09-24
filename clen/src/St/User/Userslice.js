@@ -28,15 +28,15 @@ export const userSlice = createSlice({
         clearMessage: (state) => {
             state.mes = '';
         },
-        updateCart: (state,action) => {
-            const {pid,color,quantity} = action.payload
-            const updateCart = JSON.parse(stringify(state.currentCart))
-            const updateItem = updateCart.map(el => {
-                if (el.color === color && el.product?._id === pid) {
-                    el.quantity = quantity
-                } else return el
-        })
-         state.currentCart =   updateCart
+        updateCart: (state, action) => {
+            const { pid, color, quantity } = action.payload;
+            const updatedCart = state.currentCart.map(el => {
+                if (el.color === color && el.product === pid) {
+                    return { ...el, quantity: quantity };
+                }
+                return el;
+            });
+            state.currentCart = updatedCart; 
         }
     },
     extraReducers: (builder) => {
@@ -46,8 +46,10 @@ export const userSlice = createSlice({
         builder.addCase(actions.getCurrent.fulfilled, (state, action) => {
             state.isLoading = false;
             state.current = action.payload;
+            state.currentCart = action.payload?.cart;
+            state.current = action.payload;
             state.isLoggedIn = true;
-            state.currentCart = action.payload.cart;
+           
         });
         builder.addCase(actions.getCurrent.rejected, (state) => {
             state.isLoading = false;

@@ -1,5 +1,5 @@
 import { Button } from '@mui/material'
-import { apiUpdate, apiUpdateCurrent } from 'Apis/User'
+import {  apiUpdateCurrent } from 'Apis/User'
 import { InputFrom } from 'Comporen/Index'
 import WithRase from 'hocs/withRase'
 import moment from 'moment'
@@ -19,8 +19,7 @@ const Pesonal = ({navigate}) => {
   reset({
     firstname: current?.firstname,
     lastname: current?.lastname,
-    mobile: current?.mobile,
-    email: current?.email,
+    mobile: current?.mobile,  
     avatar: current?.avatar,
     address: current?.address,
   })
@@ -39,11 +38,17 @@ const Pesonal = ({navigate}) => {
   
   return (
     <div className='w-full relative'>
-      <header className='text-3xl font-semibold py-4 border-b-2'>
-         Pesonal
-      </header>
-      <form onSubmit={handleSubmit(handleUpdateInform)}>
+      <div className='w-full '>
+        <header className=' w-full text-3xl font-semibold py-4 border-b-2 pl-2'>
+          Pesonal
+        </header>
+      </div>
+    
+      <form className='mt-5 ml-20' onSubmit={handleSubmit(handleUpdateInform)}>
+        <p className='flex '><span className='w-[120px]'>Email address:</span> <span>{current?.email}</span></p>
         <InputFrom
+          layoutUser
+          className='flex  w-full mt-[10px]'
           label='Firstname'
           register={register}
           errors={errors}
@@ -53,6 +58,8 @@ const Pesonal = ({navigate}) => {
           }}
         />
         <InputFrom
+          layoutUser
+          className='flex  w-full mt-[10px]'
           label='Lastname'
           register={register}
           errors={errors}
@@ -61,24 +68,14 @@ const Pesonal = ({navigate}) => {
             required:"Need fill this field"
           }}
         />
+       
         <InputFrom
-          label='Email address'
+          layoutUser
+          className='flex  w-full mt-[10px]'
+          label='Mobile'
           register={register}
           errors={errors}
-          id='email'
-          validate={{
-            required: "Need fill this field",
-           pattern:{
-             value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-             message:'email invalid'
-           }
-          }}
-        />
-        <InputFrom
-          label='Phone'
-          register={register}
-          errors={errors}
-          id='Phone'
+          id='mobile'
           validate={{
             required: "Need fill this field",
             pattern:{
@@ -88,7 +85,9 @@ const Pesonal = ({navigate}) => {
           }}
         />
         <InputFrom
-          label='address'
+          className='flex  w-full mt-[10px]'
+          label='Address'
+          layoutUser
           register={register}
           errors={errors}
           id='address'
@@ -100,29 +99,29 @@ const Pesonal = ({navigate}) => {
             }
           }}
         />
-        <div>
-          <span className='font-me'>Account status:</span>
-          <span>{current?.isBlocked ? 'Blocked' : 'Active'}</span>
+        <div className='mt-[10px]'>
+          <span className='font-medium w-[120px] !important'>Account status:</span>
+          <span className='ml-[10px]'>{current?.isBlocked ? 'Blocked' : 'Active'}</span>
         </div>
-        <div>
-          <span className='font-me'>Role:</span>
-          <span>{current?.role === 1945 ? 'Admin' : 'User'}</span>
+        <div className='mt-[10px]'>
+          <span className='font-medium w-[120px] !important'>Role:</span>
+          <span className='ml-[90px]'>{current?.role === 1945 ? 'Admin' : 'User'}</span>
         </div>
-        <div>
-          <span className='font-me'>Created At:</span>
-          <span>{moment(current?.createAt).fromNow()}</span>
+        <div className='mt-[10px]'>
+          <span className='font-medium w-[120px] !important'>Created At:</span>
+          <span className='ml-[40px]'>{moment(current?.createAt).fromNow()}</span>
         </div>
         <div className='flex items-center gap-2'>
         <span className='font-medium'>
          Profile image:
         </span>
        <label htmlFor='file'>
-            <img src={current?.avatar || ""} alt='' className='w-10 h-10 object-cover rounded-full' />
+            <img src={current?.avatar || "https://static.vecteezy.com/system/resources/previews/005/005/788/original/user-icon-in-trendy-flat-style-isolated-on-grey-background-user-symbol-for-your-web-site-design-logo-app-ui-illustration-eps10-free-vector.jpg"} alt='' className='w-10 h-10 object-cover rounded-full cursor-pointer' />
        </label>
           <input type='file' id='file' {...register('avatar')} hidden/>
         </div>
-        <div className='w-full flex justify-end'>
-          <Button type="submit">Update Infomation</Button>
+        <div className='w-full flex'>
+          <Button type="submit">Update Information</Button>
         </div>
       </form>
       

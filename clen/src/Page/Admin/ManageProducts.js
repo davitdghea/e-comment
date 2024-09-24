@@ -8,6 +8,9 @@ import { useSearchParams } from 'react-router-dom'
 import UpdateProducts from './UpdateProducts'
 import Swal from 'sweetalert2'
 import { toast } from 'react-toastify'
+import { FaEdit } from "react-icons/fa";
+import { BiAddToQueue } from "react-icons/bi";
+import { AiOutlineDelete } from "react-icons/ai";
 const ManageProducts = () => {
   const [customzeVarriant, setCustomzeVarriant] = useState(null)
   const [params] = useSearchParams()
@@ -51,6 +54,7 @@ const ManageProducts = () => {
     })
 
   }
+  
   return (
     <div className='w-full flex flex-col gap-4 relative'>
       {editProduct && <div className='absolute inset-0 min-h-screen '>
@@ -87,8 +91,8 @@ const ManageProducts = () => {
         <from>
           <table className='w-[97%] m-auto text-left'>
             <thead>
-              <tr className='border-b pb-5'>
-                <th className='text-center'>Order</th>
+              <tr className='border-b pb-5 text-center'>
+                <th className=''>Order</th>
                 <th>thumb</th>
                 <th>Title</th>
                 <th>Brand</th>
@@ -106,8 +110,8 @@ const ManageProducts = () => {
             </thead>
             <tbody>
               {products?.map((el, idx) => (
-                <tr key={el._id} className='border-b py-2'>
-                  <td className='text-center'>{idx + 1}</td>
+                <tr key={el._id} className='border-b py-2 text-center'>
+                  <td >{idx + 1}</td>
                   <td>
                     <img src={el.images[0]} alt='thumb' className='w-10 h-14 object-cover py-2' />
                   </td>
@@ -119,12 +123,12 @@ const ManageProducts = () => {
                   <td>{el.soId}</td>
                   <td>{el.color}</td>
                   <td>{el.totalRatings}</td>
-                  <td>{el?.Variants?.length}</td>
+                  <td>{el?.variants?.length}</td>
                   <td>{moment(el.updatedAt).format('DD/MM/YYYY')}</td>
-                  <td>
-                    <span onClick={() => setEditProduct(el)} className='text-orange-500 mr-5'>Edit</span>
-                    <span onClick={() => handleDeleteProduct(el._id)} className='text-red-500'>Delete</span>
-                    <span onClick={() => setCustomzeVarriant(el)} className='text-red-500'>Variants</span>
+                  <td className='flex items-center mt-5'>
+                    <span onClick={() => setEditProduct(el)} className='text-orange-500 mr-1' title="Edit"><FaEdit/></span>
+                    <span onClick={() => handleDeleteProduct(el._id)} className='text-red-500 mr-1' title="Delete"><AiOutlineDelete/></span>
+                    <span onClick={() => setCustomzeVarriant(el)} className='text-blue-500' title="Variants"><BiAddToQueue/></span>
                   </td>
                 </tr>
               ))}

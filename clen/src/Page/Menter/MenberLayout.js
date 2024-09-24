@@ -8,10 +8,10 @@ const MenberLayout = () => {
   if (!isLoggedIn || !current) return <Navigate to={`/${path.LOGIN}`} replace={true}/>
   return (
     <div className='flex'>
-     <div>
+     <div className='w-full max-w-[300px]'>
         <MenberSidebar />
      </div>
-     <div>
+     <div className='w-full'>
         <Outlet />
      </div>    
     </div>

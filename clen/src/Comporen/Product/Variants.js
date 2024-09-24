@@ -72,23 +72,23 @@ const Variants = ({ customzeVarriant, setCustomzeVarriant, render }) => {
         }
     }, [watch('images')]);
     return (
-        <div className='w-full flex flex-col gap-4 relative bg-slate-200'>
+        <div className='w-full h-full flex flex-col gap-4 relative bg-slate-200'>
             <div div className='h-[69px] w-full' ></div>
-            <div className='p-4 border-b w-full bg-gray-100 flex justify-between items-center fixed top-0 z-50'>
-                <h1 className='text-2xl font-bold tracking-tight'>Variants</h1>
+            <div className='p-4 border-b w-full max-w-[1360px] bg-gray-100 flex justify-between items-center fixed top-0 z-50'>
+                <h1 className='text-2xl font-bold tracking-tight w-200px'>Variants</h1>
                 <span
                     onClick={() => { setCustomzeVarriant(null) }}>
                     Cancel
                 </span>
             </div>
             <form onSubmit={handleSubmit(handleAddVarriant)}>
-                <div>
+                <div className='ml-5 w-main'>
                     <InputFrom
                         label="Name product"
                         register={register}
                         errors={errors}
                         id="title"
-                        fullWidth
+                        
                         validate={{
                             required: "Need fill this field"
                         }}
@@ -97,32 +97,35 @@ const Variants = ({ customzeVarriant, setCustomzeVarriant, render }) => {
                     />
                     
                 </div>
-                <div className='flex gap-4 items-center'>
-                    <InputFrom
-                        label="Price product"
-                        register={register}
-                        errors={errors}
-                        id="price"
-                        validate={{
-                            required: "Need fill this field"
-                        }}
-                        fullWidth
-                        placeholder='Price of new product'
-                        style='flex-auto'
-                        type='number'
-                    />
-                    <InputFrom
-                        label="Color product"
-                        register={register}
-                        errors={errors}
-                        id="color"
-                        validate={{
-                            required: "Need fill this field"
-                        }}
-                        fullWidth
-                        placeholder='Color of new product'
-                        style='flex-auto'
-                    />
+                <div className='flex flex-col gap-4 ml-5'>
+                    <div className='flex'>
+                        <InputFrom
+                            label="Price product"
+                            register={register}
+                            errors={errors}
+                            id="price"
+                            validate={{
+                                required: "Need fill this field"
+                            }}
+                            fullWidth
+                            placeholder='Price of new product'
+                            style='flex-auto'
+                            type='number'
+                        />
+                        <InputFrom
+                            label="Color product"
+                            register={register}
+                            errors={errors}
+                            id="color"
+                            validate={{
+                                required: "Need fill this field"
+                            }}
+                            fullWidth
+                            placeholder='Color of new product'
+                            style='flex-auto ml-2'
+                        />
+                    </div>
+                   
                     <div className='flex flex-col gap-2 my-2'>
                         <label className='font-semibold' htmlFor='thumb'>Upload thumb</label>
                         <input

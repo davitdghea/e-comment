@@ -99,11 +99,11 @@ const dispatch = useDispatch()
   return (
     
     <div>
-      <h1 className='border-b flex'>
-        <span>CreateProducts</span>
-      </h1>
+      <div className='p-4 border-b w-full max-w-[1360px] bg-gray-100 flex justify-between items-center fixed top-0 z-50'>
+        <h1 className='text-2xl font-bold tracking-tight w-200px'>CreateProducts</h1>
+      </div>
       {/* const {title, price, description, brand, category, color} = req.body */}
-      <div className='p-4'>
+      <div className='p-4 mt-12'>
         <form onSubmit={handleSubmit(handleCreateProduct)}>
           <InputFrom
             style='flex-1'

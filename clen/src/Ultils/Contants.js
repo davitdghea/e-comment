@@ -217,28 +217,28 @@ export const memberSidebar = [
         type: "Single",
         text: "Personal",
         path: `/${path.MEMBER}/${path.PERSONAL}`,
-        icon: <AiOutlineDashboard />
+        icon: <AiOutlineDashboard size={24}/>
     },
     {
         id: 2,
         type: "Single",
         text: "My cart",
         path: `/${path.MEMBER}/${path.MY_CART}`,
-        icon: <MdGroups />
+        icon: <MdGroups size={24} />
     },
     {
         id: 3,
         type: "Single",
         text: "Buy histories",
         path: `/${path.MEMBER}/${path.HISTORY}`,
-        icon: <AiFillGift />
+        icon: <AiFillGift size={24} />
     },
     {
         id: 4,
         type: "Single",
         text: "Wislist",
         path: `/${path.MEMBER}/${path.WISHLIST}`,
-        icon: <AiFillGift />
+        icon: <AiFillGift size={24} />
     },
 
 ]

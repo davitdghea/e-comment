@@ -3,13 +3,11 @@ import React, { memo, useCallback, useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { getBase64, validate } from 'Ultils/Hellpers'
-import { IoTrashBinSharp } from 'react-icons/io5'
 import { useSelector, useDispatch } from 'react-redux'
 import { apiUpdateProduct } from 'Apis/Products'
 import { ShowModal} from 'St/App/Appslice'
 
 const UpdateProducts = ({ editProduct, render, setEditProduct }) => {
-   
     const { handleSubmit,watch, register, formState: { errors }, reset } = useForm()
     const { categories } = useSelector(state => state.app)
     const dispatch = useDispatch()
@@ -17,7 +15,9 @@ const UpdateProducts = ({ editProduct, render, setEditProduct }) => {
         thumb: null,
         images: []
     })
-   
+    const [payload, setPayload] = useState({
+        description: ''
+    })
     useEffect(()=>{
         reset({
             title:editProduct?.title || '',
@@ -28,14 +28,12 @@ const UpdateProducts = ({ editProduct, render, setEditProduct }) => {
             brand: editProduct?.brand.toLowerCase() || '',
         })
         setPreview({
-            thumb: editProduct.images[0] || '',
+            thumb: editProduct.thumb || '',
             images: editProduct?.images || []
         })
         setPayload({description: typeof editProduct?.description === 'object' ? editProduct?.description?.join(',') : editProduct?.description })
     },[editProduct])
-    const [payload, setPayload] = useState({
-        description: ''
-    })
+    
     const [isFocusDescription, setIsFocusDescription] = useState(false);
     const [invalidFields, setInvalidFields] = useState([])
     const changeValue = useCallback((e) => {
@@ -53,43 +51,46 @@ const UpdateProducts = ({ editProduct, render, setEditProduct }) => {
                 return
             }
             const base64 = await getBase64(file)
-            imgPreview.push(base64)
+            imgPreview.push({ name: file.name, path: base64 })
         }
         setPreview(prev => ({ ...prev, images: imgPreview }))
     }
     useEffect(() => {
         const thumbFile  = watch('thumb')
-        if (watch('thumb') instanceof FileList && watch('thumb').length > 0) {
+        if (thumbFile && thumbFile.length > 0) {
             handlePreviewThumb(thumbFile[0]);
         }
     }, [watch('thumb')]);
 
     useEffect(() => {
        const images = watch('images')
-        if (watch('images') instanceof FileList && watch('images').length > 0) {
+        if (images && images.length > 0) {
             handlePreviewImg(images);
         }
     }, [watch('images')]);
 
 
-
+    
     const handleUpdateProduct = async (data) => {
         const invalids = validate(payload, setInvalidFields)
         if (invalids === 0) {
             if (data.category)
-            { data.category = categories?.find(el => el.title === data.category)?.title }
-             
-            const finalPayload = { ...data, ...payload,... data.category }
+            { data.category = categories?.find(el => el.title === data.category)?.title }            
+            const finalPayload = { ...data, ...payload}
             const formData = new FormData()
             for (let i of Object.entries(finalPayload)) formData.append(i[0], i[1])
-            
                 if (finalPayload?.thumb) formData.append('thumb',data?.thumb?.length === 0 ? preview.thumb : finalPayload.thumb[0])
             if (finalPayload.images) {
                const images = finalPayload?.image?.length === 0 ? preview.images : finalPayload.images
                 for (let image of images) formData.append('images', image)
             }
             dispatch(ShowModal({ isShowModal: true, moDalChildren: <Loading /> }))
-            const response = await apiUpdateProduct(formData,editProduct._id)
+            const obj = {};
+            formData.forEach((value, key) => {
+                obj[key] = value;
+            });
+            console.log(obj);
+            const response = await apiUpdateProduct(obj,editProduct._id)
             dispatch(ShowModal({ isShowModal: false, moDalChildren: null }))
             if (response.success) {
                 toast.success(response.mes)
@@ -101,6 +102,7 @@ const UpdateProducts = ({ editProduct, render, setEditProduct }) => {
 
 
     }
+    console.log(preview)
     return (
         <div className='w-full flex flex-col gap-4 relative bg-slate-200'>
         <div className='h-[69px] w-full'></div>
@@ -178,7 +180,7 @@ const UpdateProducts = ({ editProduct, render, setEditProduct }) => {
                         <Select
                             errors={errors}
                             label="Brand (Option)"
-                            options={categories?.find(el => el.title.toLowerCase() == watch('category'))?.brand?.map(el => ({ code: el, value: el }))}
+                            options={categories?.find(el => el.title == watch('category'))?.brand?.map(el => ({ code: el, value: el }))}
                             register={register}
                             id='brand'
                             style='flex-auto'

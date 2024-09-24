@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Route, Routes } from "react-router-dom"
-import { Finalregister, ReserPass, Home, Login, Public, Blog, DetailProduct, FAQ, Product, Servir,DealdeallyCart } from "./Page/Public/Index"
+import { Finalregister, ReserPass, Home, Login, Public,  DetailProduct, Product } from "./Page/Public/Index"
 import path from './Ultils/Path';
 import { GetCategory } from './St/App/AsyncAction';  
 import { useDispatch,useSelector } from 'react-redux'
@@ -8,7 +8,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Modal from './Comporen/Common/Modal';
 import {AdminLayout,Dashboard,ManageOrider,ManageProducts,CreateProducts, ManageUser} from './Page/Admin/Index'
-import { MenberLayout,Pesonal,History,Mycart,WishList, Checkout}from './Page/Menter/Index'
+import { MenberLayout,Pesonal,History,Mycart,WishList, Checkout,DealdeallyCart}from './Page/Menter/Index'
 
 function App() {
   const dispatch = useDispatch()
@@ -25,11 +25,8 @@ function App() {
         <Route path={path.PUBLIC} element={<Public />}>
          
           <Route path={path.HOME} element={<Home />}></Route>
-          <Route path={path.BLOGS} element={<Blog />}></Route>
           <Route path={path.DETAIL_PRODUCT__CATEGORY__PID_TITLE} element={<DetailProduct />}></Route>
-          <Route path={path.FAQs} element={<FAQ />}></Route>
           <Route path={path.PRODUCTS} element={<Product />}></Route>
-          <Route path={path.OUR_SERVICES} element={<Servir />}></Route>
           <Route path={path.ALL} element={<Home />} />
           
           <Route path={path.RESET_PASSWORD} element={<ReserPass />}></Route>

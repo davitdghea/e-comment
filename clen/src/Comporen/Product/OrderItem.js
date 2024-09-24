@@ -1,4 +1,5 @@
 import { SelectQuantity } from 'Comporen/Index'
+import WithRase from 'hocs/withRase'
 import React, { useEffect, useState } from 'react'
 import { updateCart } from 'St/User/Userslice'
 import { formatMoney } from 'Ultils/Hellpers'
@@ -17,7 +18,7 @@ const OrderItem = ({ el, defaultQuantity = 1, dispatch }) => {
         if (flag === 'plus') setQuantity(prev => +prev + 1)
     }
 useEffect(()=>{
-     dispatch(updateCart({pid:el.product?._id,quantity,color:el.color}))
+     dispatch(updateCart({pid:el.product,quantity,color:el.color}))
 },[quantity])
   return (
       <div key={el._id} className='w-main mx-auto font-bold  border-b py-3 grid grid-cols-10  '>
@@ -30,9 +31,9 @@ useEffect(()=>{
                   </div>
               </div >
           </span>
-          <span className='col-span-1 w-full mt-[22px]'>
-            {el.quantity}
-              <div className='flex items-center justify-center mt-[22px]'>
+          <span className='col-span-1 w-full'>
+           
+              <div className='flex items-center justify-start mt-[22px]'>
                   <SelectQuantity
                       quantity={quantity}
                       handleQuantity={handleQuantity}
@@ -47,4 +48,4 @@ useEffect(()=>{
   )
 }
 
-export default OrderItem
+export default WithRase(OrderItem)

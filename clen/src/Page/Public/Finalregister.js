@@ -15,7 +15,6 @@ const Finalregister = () => {
   },[])
   return (
     <div>
-
     </div>
     
   )

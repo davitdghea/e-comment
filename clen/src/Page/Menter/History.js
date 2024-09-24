@@ -41,6 +41,10 @@ const History = ({ navigate, location }) => {
       <header className='text-3xl font-semibold py-4 border-b border-b-blue-200'>
         History
       </header>
+      {counts === 0  && <div className='w-main mx-auto text-center'>
+        <p>Bạn chưa mua sản phẩm nào!!!</p>
+      </div>}
+      {counts !== 0 && <div>
       <div className='flex justify-end items-center px-4'>
         <form className='w-[45%] flex items-center gap-4'>
           <div className='col-span-1'>
@@ -105,7 +109,7 @@ const History = ({ navigate, location }) => {
             </tr>
           ))}
         </tbody>
-      </table>
+      </table></div>}
     </div>
   )
 }

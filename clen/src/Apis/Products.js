@@ -5,8 +5,8 @@ const getToken = () => {
     return token ? token.replace(/^"(.*)"$/, '$1') : null;
 };
 export const apiGetProducts = (params) => axios({
-    url:'/product',
-    method:"get",
+    url: '/product',
+    method: "get",
     params
 })
 export const GetProducts = (pid) => axios({
@@ -16,27 +16,29 @@ export const GetProducts = (pid) => axios({
 export const apiRatings = (data) => {
     const token = getToken();
     return axios({
-    url: 'product/ratings/',
-    method: "put",
-    data,
-    headers: {
-        Authorization: token ? `Bearer ${token}` : undefined 
-    }
-})
+        url: 'product/ratings/',
+        method: "put",
+        data,
+        headers: {
+            Authorization: token ? `Bearer ${token}` : undefined
+        }
+    })
 }
 export const apiCreateProduct = (data) => {
     const token = getToken();
+    console.log(data)
     return axios({
-    url: '/product/',
-    method: "post",
-    data,
-    headers: {
-        Authorization: token ? `Bearer ${token}` : undefined
-    }
+        url: '/product/',
+        method: "post",
+        data,
+        headers: {
+            Authorization: token ? `Bearer ${token}` : undefined
+        }
     })
 }
-export const apiUpdateProduct = (data,pid) => {
+export const apiUpdateProduct = (data, pid) => {
     const token = getToken();
+    console.log(data)
     return axios({
         url: '/product/' + pid,
         method: "put",
@@ -50,16 +52,16 @@ export const apiDeleteProduct = (pid) => {
     const token = getToken();
     return axios({
         url: '/product/' + pid,
-        method: "delete",      
+        method: "delete",
         headers: {
             Authorization: token ? `Bearer ${token}` : undefined
         }
     })
 }
-export const apiAddVarriant = (data,pid) => {
+export const apiAddVarriant = (data, pid) => {
     const token = getToken();
     return axios({
-        url: '/product/' + pid,
+        url: '/product/variant/' + pid,
         method: "put",
         data,
         headers: {

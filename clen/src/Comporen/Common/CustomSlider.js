@@ -18,6 +18,7 @@ const CustomSlider = ({ product, activedtab, normal, dispatch }) => {
          {
           product?.map((el)=>(
             <Product 
+            pid = {el._id}
             dispatch={dispatch}
             key = {el.id}
             productData={el}

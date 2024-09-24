@@ -71,7 +71,8 @@ const getUserOrder = asyncHandler(async(req,res)=>{
     //         ]
     //     }
     // }
-    const q = { ...colorQueryObject, ...formatedQueries, ...queryObject, orderBy:_id }
+    // ...queryObject, ...colorQueryObject,
+    const q = { ...formatedQueries, orderBy:_id }
     let queryCommand = Order.find(q)
     // sắp xếp 
     // abc,efg =>[abc,efg]=>abc efg
@@ -91,24 +92,28 @@ const getUserOrder = asyncHandler(async(req,res)=>{
     //skip: 2
     // 1 2 3 ....10
     const page = +req.query.page || 1
-    const limit = +req.query.limit || process.env.LIMIT_PRODUCT
+    const limit = +req.query.limit || process.env.LIMIT_PRODUCT || 10
     const skip = (page - 1) * limit
     queryCommand.skip(skip).limit(limit)
     // execute query
     //số luộng sp thỏa mán đk
     try {
         const response = await queryCommand;
-        const counts = await Product.countDocuments(q);
+        const counts = await Order.countDocuments(q);
         return res.status(200).json({
             success: response ? true : false,
             counts,
-            orders: response ? response : 'cannot get product',
+            orders: response ? response : 'Chưa mua sản phẩm nào',
 
         })
     } catch (err) {
-        throw new Error(err?.message)
+        return res.status(500).json({
+            success: false,
+            message: err.message || 'Something went wrong'
+        });
     }
-})
+    }
+)
 
 const getOrders = asyncHandler(async (req, res) => {
     const queries = { ...req.query };

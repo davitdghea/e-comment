@@ -1,5 +1,6 @@
 
 export {default as Banner} from './Common/Banner'
+export { default as Bestsale } from './Product/Bestsale'
 export {default as Navbar} from './Navagition/Navbar'
 export {default as Sideba} from './SiderBar/Sideba'
 export {default as Product} from './Product/Product'

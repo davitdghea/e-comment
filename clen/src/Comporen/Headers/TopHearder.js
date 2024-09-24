@@ -1,5 +1,5 @@
 import React, { useEffect, Fragment, useState, memo } from 'react'
-import { Link } from 'react-router-dom'
+import { createSearchParams, Link } from 'react-router-dom'
 import path from 'Ultils/Path'
 import { getCurrent } from 'St/User/AsyncAction'
 import {  useSelector } from 'react-redux'
@@ -8,10 +8,14 @@ import icons from 'Ultils/Icons'
 import Swal from 'sweetalert2'
 import WithRase from 'hocs/withRase'
 import { ShowCart } from 'St/App/Appslice'
+import { apiGetProducts } from 'Apis/Products'
+import { keywordMap } from 'Ultils/Hellpers'
 const { LuMenuSquare, IoIosSearch, BsPersonCircle, RiPhoneFill, BsHandbagFill, FaRegHeart } = icons
 const TopHearder = ({ handleClickMenu, dispatch, navigate }) => {
   const [InformationUser, setInformationUser] = useState(false)
+  const [dataSearch,setDataSeach] = useState('')
   const { isLoggedIn, current, mes } = useSelector(state => state.user)
+  const [data,setData] = useState()
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (isLoggedIn) dispatch(getCurrent());
@@ -27,6 +31,27 @@ const TopHearder = ({ handleClickMenu, dispatch, navigate }) => {
     })
   }, [mes])
 
+  const Seach = async (dataSearch) =>{
+    const normalizedSearch = keywordMap[dataSearch.toLowerCase()] || dataSearch.toLowerCase();
+    const params = ["smartphone", "tablet", "laptop", "speaker", "television", "printer", "camera", "accessories"].includes(normalizedSearch)
+      ? { category: normalizedSearch }
+      : { title: normalizedSearch };
+    const response = await apiGetProducts(params) 
+    const queryParams = new URLSearchParams();
+    if (params.category) {
+      queryParams.append('category', params.category);
+    }
+    if (params.title) {
+      queryParams.append('title', params.title);
+    }
+    if (response.success){
+      setData(response.producData)
+      navigate({
+        pathname: `/${data[0].category}`,
+          search: queryParams.toString()
+    })
+  }
+}
   const clearLocalStorage = () => {
     localStorage.clear()
   }
@@ -47,8 +72,8 @@ const TopHearder = ({ handleClickMenu, dispatch, navigate }) => {
             </div>
             <div className='cursor-pointer flex flex-col px-4 border-r items-center'>
               <span className='flex items-center'>
-                <span className='bg-slate-300  p-3 rounded-l-md'><IoIosSearch color='red' size={15} /></span>
-                <input placeholder='Bạn cần gì?' className=' w-[250px] outline-none p-3 rounded-r-md  flex  bg-slate-300 text-gray-100' />
+                <span className='bg-slate-300  p-3 rounded-l-md' onClick={() => Seach(dataSearch)}><IoIosSearch color='red' size={15} /></span>
+                <input onChange={el => setDataSeach(el.target.value)} placeholder='Bạn cần gì?' className=' w-[250px] outline-none p-3 rounded-r-md  flex  bg-slate-300 text-gray-100' value={dataSearch} />
               </span>
               <span></span>
             </div>
@@ -58,8 +83,8 @@ const TopHearder = ({ handleClickMenu, dispatch, navigate }) => {
                 <span className='font-semibold ml-3 text-base'> (+1800) 000 8808</span>
               </span>
               <span>Online Support 24/7</span>
-            </div>
-            <div className='cursor-pointer flex items-center border-r justify-end '>
+            </div> 
+            <div onClick={() =>  navigate(`/${path.MEMBER}/${path.WISHLIST}`) } className='cursor-pointer flex items-center border-r justify-end '>
               <span className='mx-3'><FaRegHeart size={24} color='red' /></span>
             </div>
             <div onClick={() => dispatch(ShowCart())} className='cursor-pointer flex items-center justify-center  p-2  border-r mr-2'>

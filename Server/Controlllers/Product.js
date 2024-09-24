@@ -4,6 +4,7 @@ const ansyncHandler = require('express-async-handler')
 const makeSKU = require('uniqid')
 const creatProduct = ansyncHandler(async (req, res) => {
     const { title, price, description, brand, category, color } = req.body
+
     const thumb = req?.files?.thumb[0]?.path
     const images = req.files?.images.map(el => el.path)
     if (!(title && price && description && brand && category && color)) throw new Error('miss input')
@@ -28,7 +29,7 @@ const getProduct = ansyncHandler(async (req, res) => {
     })
     return res.status(200).json({
         success: product ? true : false,
-        ProductData: product ? product : 'canot get product'
+        ProductData: product ? product : 'cannot get product'
     })
 })
 // Filtering,sorting & pagination
@@ -103,6 +104,18 @@ const getProducts = ansyncHandler(async (req, res) => {
         throw new Error(err?.message)
     }
 })
+const addVariant = ansyncHandler(async (req, res) => {
+    const { pid } = req.params
+    const { title, price, color } = req.body
+    const thumb = req?.files?.thumb[0]?.path
+    const images = req.files?.images.map(el => el.path)
+    if (!(title && price && color)) throw new Error('miss input')
+    const response = await Product.findByIdAndUpdate(pid, { $push: { variants: { color, price, title, thumb, images, sku: makeSKU().toUpperCase() } } }, { new: true })
+    return res.status(200).json({
+        success: response ? true : false,
+        mes: response ? 'add variants ok' : "sai rồi"
+    })
+})
 const UpdateProducts = ansyncHandler(async (req, res) => {
     const { pid } = req.params
     const files = req?.files
@@ -112,6 +125,7 @@ const UpdateProducts = ansyncHandler(async (req, res) => {
     const updateProducts = await Product.findByIdAndUpdate(pid, req.body, { new: true })
     return res.status(200).json({
         success: updateProducts ? true : false,
+        pid: req.body,
         mes: updateProducts ? 'Update.' : 'Cannot get products'
     })
 })
@@ -168,18 +182,7 @@ const uploadImagesProduct = ansyncHandler(async (req, res) => {
         updatedProduct: response ? response : "sai rồi"
     })
 })
-const addVariant = ansyncHandler(async (req, res) => {
-    const { pid } = req.params
-    const { title, price, color } = req.body
-    const thumb = req?.files?.thumb[0]?.path
-    const images = req.files?.images.map(el => el.path)
-    if (!(title && price && color)) throw new Error('miss input')
-    const response = await Product.findByIdAndDelete(pid, { $push: { variants: { color, price, title, thumb, images, sku: makeSKU().toUpperCase() } } }, { new: true })
-    return res.status(200).json({
-        success: response ? true : false,
-        mes: response ? 'add variants ok' : "sai rồi"
-    })
-})
+
 module.exports = {
     addVariant,
     ratings,

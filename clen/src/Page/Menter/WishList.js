@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 
 const WishList = () => {
   const { current } = useSelector(s => s.user)
-
+  console.log(current)
   return (
     <div>
       <header className='text-3xl font-semibold py-4 border-b-2'>

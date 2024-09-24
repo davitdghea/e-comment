@@ -8,7 +8,7 @@ const Select = ({label,options=[],register,errors,id,validate,style,fullWidth,de
        id={id} {...register(id,validate)}>
         <option value=''>----CHOOSE----</option>
         {options?.map(el=>(
-          <option value={el.code}>{el.value.toLowerCase()}</option>
+          <option value={el.code} className='capitalize'>{el.value.toLowerCase()}</option>
         ))}
       </select>
       {errors[id] && <small className='text-xs text-red-500 '>{errors[id]?.message}</small>}

@@ -99,7 +99,10 @@ const getone = asyncHend(async (req, res) => {
             select: 'title thumb price'
         //}
         
-    }).populate('wishlist','title thumb price color')
+    }).populate(
+        {
+            path: 'wishList',
+            select: 'title thumb price color',})
     return res.status(200).json({
         success: user ? true : false,
         rs: user ? user : "user not found"
@@ -132,10 +135,7 @@ const logout = asyncHend(async (req, res) => {
         mes: "logout is done"
     })
 })
-// client gửi email
-// server có hợp lệ ko => gửi mail + link (password change token)
-// clien check mail => click link sẽ gủi api kèm theo token
-// check token có giống to ken giống server mà mình giử mail ko 
+
 const forgotPassword = asyncHend(async (req, res) => {
     const { email } = req.body
     if (!email) throw new Error('Missing Email')
@@ -247,8 +247,8 @@ const deleteUsers = asyncHend(async (req, res) => {
 })
 const UpdateUsers = asyncHend(async (req, res) => {
     const { _id } = req.user
-    const { firstname, lastname, email, mobile, address } = req.body
-    const data = { firstname, lastname, email, mobile, address }
+    const { firstname, lastname,  mobile, address } = req.body
+    const data = { firstname, lastname,  mobile, address }
     if (req.file) data.avatar = req.file.path
     if (!_id || Object.keys(req.body).length === 0) throw new Error("missing input")
     const response = await User.findByIdAndUpdate(_id, data, req.body, { new: true }).select('-password -role -refreshToken')
@@ -320,28 +320,33 @@ const removeProductInCart = asyncHend(async (req, res) => {
     })
 })
 const updateWishList = asyncHend(async (req, res) => {
-    const { pid } = req.params
+    const { pid } = req.body
     const { _id } = req.user
-    const user = await Blog.findById(_id)
-    const alreadyInWishlist = user.wishlist?.find(el => el.toString() === pid)
+    const user = await User.findById(_id)
+    const alreadyInWishlist = user.wishList?.find(el => el.toString() === pid)
+    console.log(alreadyInWishlist)
     if (alreadyInWishlist) {
         const response = await User.findByIdAndUpdate(
             _id,
-            { $pull: { wishlist: pid } },
+            { $pull: { wishList: pid } },
             { new: true }
         )
         return res.json({
             success: response ? true : false,
-            rs: response ? 'updated your wishlist' : 'false to update wishlist',
+            tem: user,
+            rs: response ? 'Removed from wishlist' : 'false to update wishlist',
         })
     } else {
         const response = await User.findByIdAndUpdate(
             _id,
-            { $push: { wishlist: pid } },
+            { $push: { wishList: pid } },
             { new: true }
         )
+        console.log(response)
         return res.status(200).json({
-            success: user ? true : false,
+            success: response ? true : false,
+            tem:pid,
+            _id,
             rs: response ? 'updated your wishlist' : 'false to update wishlist',
         })
     }

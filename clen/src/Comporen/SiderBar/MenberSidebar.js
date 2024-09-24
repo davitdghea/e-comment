@@ -16,15 +16,15 @@ const MenberSidebar = () => {
   return (
     <div className=' flex-col  min-h-screen bg-gray-200 items-center py-4 text-black'>
       <Link to={'/'} className='flex flex-col justify-center py-4 items-center gap-2'>
-        <img src={current?.avatar || ""} alt='logo' className='w-[16px] object-contain' />
+        <img src={current?.avatar || "https://static.vecteezy.com/system/resources/previews/005/005/788/original/user-icon-in-trendy-flat-style-isolated-on-grey-background-user-symbol-for-your-web-site-design-logo-app-ui-illustration-eps10-free-vector.jpg"} alt='logo' className='w-[36px] object-contain' />
         <span>{`${current?.lastname} ${current?.firstname}`}</span>
       </Link>
       <div>
         {memberSidebar.map(el => (
           <Fragment key={el.id}>
             {el.type === 'Single' && <NavLink to={el.path} className={({ isActive }) => clsx(isActive && activedStyle, !isActive && notActivedStyle)}>
-              <span>{el.icon}</span>
-              <span>{el.text}</span>
+              <span className=''>{el.icon}</span>
+              <span className='text-md'>{el.text}</span>
             </NavLink>}
             {el.type === 'Parent' && <div onClick={() => handleShowTabs(el.id)} className={({ isActive }) => clsx(isActive && activedStyle, !isActive && notActivedStyle)}>
               <div className='flex items-center gap-2 px-4 py-2 hover:bg-gray-500 cursor-pointer'>

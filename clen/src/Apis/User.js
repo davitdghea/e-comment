@@ -48,9 +48,12 @@ export const apiDelete = (uid) => axios({
     method: 'delete',
 })
 export const apiUpdateCurrent = (data) => axios({
-    url: '/user/current',
+    url: '/user/update',
     method: 'put',
-    data
+    data,
+    headers: {
+        Authorization: 'Bearer ' + token.token.slice(1, -1)
+    }
 })
 export const apiUpdateCart = (data) => axios({
     url: '/user/cart',
@@ -61,9 +64,12 @@ export const apiRemoteCart = (pid,color) => axios({
     url: `/user/remote_cart/${pid}/${color}`,
     method: 'delete',
 })
-export const apiUpdateWithlist = (pid) => axios({
-    url: `/user/wishlist/` + pid,
+export const apiUpdateWithlist = (data) => axios({
+    url: `/user/wishlist` ,
     method: 'put',
-    Authorization: 'Bearer ' + token.token.slice(1, -1)
+    data,
+    headers: {
+        Authorization: 'Bearer ' + token.token.slice(1, -1) 
+    }
 
 })

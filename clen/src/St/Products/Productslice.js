@@ -8,10 +8,11 @@ export const productSlice = createSlice({
         newproduct: null,
         isLoading: false,
         errorMessage: '',
-        dealDaily: null
+        dealDaily: null,
     },
     reducers: {
         getDealDaily: (state,action) =>{
+            console.log("Updating dealDaily with:", action.payload);
             state.dealDaily = action.payload
         }
     },
@@ -25,7 +26,7 @@ export const productSlice = createSlice({
         });
         builder.addCase(getNewProducts.rejected, (state, action) => {
             state.isLoading = false;
-            state.errorMessage = action.payload.message;
+            state.errorMessage = action.payload?.message || 'An error occurred';
         });
     },
 });
