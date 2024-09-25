@@ -119,13 +119,19 @@ const addVariant = ansyncHandler(async (req, res) => {
 const UpdateProducts = ansyncHandler(async (req, res) => {
     const { pid } = req.params
     const files = req?.files
-    if (files?.thumb) req.body.thumb = files?.thumb[0].path
+    if (Object.keys(req.body).length === 0) throw new Error('miss input')
+    if (files?.thumb) {
+        req.body.thumb = files?.thumb[0].path;
+    } else if (typeof req.body.thumb === 'string') {
+        req.body.thumb = req.body.thumb;
+    } else {
+        req.body.thumb = undefined; 
+    }
     if (files?.images) req.body.images = files?.images?.map(el => el.path)
     if (req.body && req.body.title) req.body.slug = slugify(req.body.title)
     const updateProducts = await Product.findByIdAndUpdate(pid, req.body, { new: true })
     return res.status(200).json({
         success: updateProducts ? true : false,
-        pid: req.body,
         mes: updateProducts ? 'Update.' : 'Cannot get products'
     })
 })

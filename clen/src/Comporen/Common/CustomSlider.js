@@ -5,10 +5,19 @@ const settings = {
     dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
+    slidesToShow: 3, 
+    slidesToScroll: 3,
   autoplay: true,
   autoplaySpeed: 7000,
+  responsive: [
+    {
+      breakpoint: 500,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 2,
+      },
+    },
+  ]
   };
 const CustomSlider = ({ product, activedtab, normal, dispatch }) => {
  

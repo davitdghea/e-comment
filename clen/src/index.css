@@ -2,17 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-.slick-dots.slick-thumb li {
+/* .slick-dots.slick-thumb li {
   margin: 0 10px;
   /* Tạo khoảng cách giữa các dots */
-}
+/* }/ */
 
-.slick-dots li {
+/* .slick-dots li {
   width: 150px !important;
 
-}
+} */
 
-.slick-dots {
+/* .slick-dots {
   background-color: white !important;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   border-bottom-left-radius: 10px;
@@ -20,29 +20,26 @@
   margin-top: -5px;
   padding-bottom: 10px !important;
 
-}
+} */ 
 
-.animate__animated div .slick-active {
-  border-bottom: red 2px solid;
-  font-weight: 500;
-}
 
-.slick-dots li {
+
+/* .slick-dots li {
   height: 50px !important;
 
-}
+} */
 
-.slick-dots li:hover {
+/* .slick-dots li:hover {
   background-color: rgb(216, 215, 215) !important;
 }
 
 .slick-dots.slick-thumb li div {
   text-align: center;
   font-size: 14px;
-  /* Điều chỉnh kích thước chữ nếu cần */
+  /* Điều chỉnh kích thước chữ nếu cần 
   white-space: nowrap;
-  /* Ngăn tên dots bị cắt */
-}
+   Ngăn tên dots bị cắt 
+} */
 
 .animate__animated div button.slick-next {
   right: 10px;

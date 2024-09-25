@@ -17,6 +17,9 @@ module.exports = {
       roman:"upper-roman",
     },
     extend: {
+      screens: {
+        xs: '426px', 
+      },
       width: {
         main: "1320px"
       },

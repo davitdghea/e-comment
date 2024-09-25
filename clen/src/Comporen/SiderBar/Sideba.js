@@ -9,7 +9,7 @@ const array = {
   IoIosTabletPortrait, IoIosPhonePortrait, AiOutlineLaptop, BsFillSpeakerFill, CiCamera, FaHeadphones, PiTelevisionSimpleBold, TfiPrinter
 }
 
-const Sideba = ({ style = 'flex flex-col shadow-xl rounded-lg mt-6' }) => {
+const Sideba = ({ style = 'sm:flex flex-col shadow-xl rounded-lg mt-6 hidden ' }) => {
 const {categories} = useSelector(state => state.app)  
   const iconKeys = Object.keys(array);
   const result = categories?.map((item, index) => {

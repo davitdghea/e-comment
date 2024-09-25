@@ -30,7 +30,7 @@ const handleClickMenu = useCallback((e) =>{
           <Outlet/>
         </div>
 
-             <Footer/>
+      <Footer handleClickMenu={handleClickMenu} />
     </div>
   )
 }

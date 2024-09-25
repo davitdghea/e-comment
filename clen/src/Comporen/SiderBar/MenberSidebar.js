@@ -1,6 +1,7 @@
 import React, { memo, Fragment, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { memberSidebar } from 'Ultils/Contants'
+import { IoHome } from "react-icons/io5";
 import clsx from 'clsx'
 import { AiOutlineCaretDown, AiOutlineCaretRight } from 'react-icons/ai'
 import { useSelector } from 'react-redux'
@@ -15,10 +16,8 @@ const MenberSidebar = () => {
   }
   return (
     <div className=' flex-col  min-h-screen bg-gray-200 items-center py-4 text-black'>
-      <Link to={'/'} className='flex flex-col justify-center py-4 items-center gap-2'>
         <img src={current?.avatar || "https://static.vecteezy.com/system/resources/previews/005/005/788/original/user-icon-in-trendy-flat-style-isolated-on-grey-background-user-symbol-for-your-web-site-design-logo-app-ui-illustration-eps10-free-vector.jpg"} alt='logo' className='w-[36px] object-contain' />
         <span>{`${current?.lastname} ${current?.firstname}`}</span>
-      </Link>
       <div>
         {memberSidebar.map(el => (
           <Fragment key={el.id}>
@@ -54,7 +53,8 @@ const MenberSidebar = () => {
           to={'/'}
           className={clsx(notActivedStyle)}
         >
-          GO home
+          <span><IoHome /></span>
+          <span>Go home</span>
         </NavLink>
       </div>
     </div>

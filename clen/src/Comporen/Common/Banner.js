@@ -34,11 +34,11 @@ const Banner = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 10000,
-    customPaging: (i) => (
-      <div className='w-[100px] ml-5'>
-        {slides[i].name}
-      </div>
-    ),
+    // customPaging: (i) => (
+    //   <div className='w-[100px] ml-5'>
+    //     {slides[i].name}
+    //   </div>
+    // ),
     arrows: showButtons,
     // prevArrow: <SamplePrevArrow />,
     // nextArrow: <SampleNextArrow />

@@ -5,7 +5,6 @@ import icons from '../../Ultils/Icons'
 import { apiGetProducts } from 'Apis/Products'
 import WithRase from 'hocs/withRase'
 import { memo } from 'react'
-import Swal from 'sweetalert2'
 const Home = ({ navigate }) => {
     const { IoIosArrowForward } = icons
     const { newproduct } = useSelector(state => state.products)
@@ -38,12 +37,12 @@ const Home = ({ navigate }) => {
 
     return (
         <div >
-            <div className='w-main flex m-auto'>
-                <div className='flex flex-col gap-5 w-[25%] flex-auto border'>
+            <div className='sm:w-main w-full flex m-auto'>
+                <div className='hidden sm:flex flex-col gap-5 w-[25%] flex-auto border'>
                     <Sideba />
                     <Dealdeally />
                 </div>
-                <div className='flex flex-col gap-5 pl-5 w-[75%] flex-auto border'>
+                <div className='flex flex-col gap-5 pl-5 w-full sm:w-[75%] flex-auto border'>
                     <Banner />
                     <Bestsale />
                 </div>
@@ -52,18 +51,18 @@ const Home = ({ navigate }) => {
                 <FeatureProduct />
             </div>
             <div className='my-8 w-full'>
-                <div className=' m-auto w-main '>
+                <div className=' m-auto sm:w-main '>
                     <h3 className='text-20px py-[15px] border-b-2 uppercase border-black font-medium'>NEW ARRIVALS</h3>
                     <CustomSlider
                         product={newproduct}
                     />
                 </div>
                 <div className='w-full'>
-                    <h3 className='w-main m-auto text-20px py-[15px] border-b-2 uppercase border-black font-bold'>hot colecttion</h3>
-                    <div className='flex flex-wrap w-main m-auto'>
+                    <h3 className='sm:w-main m-auto text-20px py-[15px] border-b-2 uppercase border-black font-bold'>Hot colecttion</h3>
+                    <div className='flex flex-wrap sm:w-main m-auto'>
                         {categories?.filter(el => el.title.toLowerCase() !== 'camera' && el.title.toLowerCase() !== 'speaker').map(el => (
                             <div key={el._id}
-                                className='max-w-[430px] w-full flex-initial p-2 shadow border mx-1 my-1'>
+                                className='sm:max-w-[430px] xs:max-w-[300px] w-full flex-initial p-2 shadow border mx-1 my-1'>
                                 <div className='flex'>
                                     <img src={el.image} className='object-contain flex-1 w-[144px] h-[129px] mt-[10px]' />
                                     <div>

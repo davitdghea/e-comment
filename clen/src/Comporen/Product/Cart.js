@@ -52,7 +52,7 @@ const Cart = ({ dispatch, navigate }) => {
         <span className='text-center text-gray-500'>
           Shipping, taxes, and discounts calculated at checkout
         </span>
-        <Button handleOnclick={() => {navigate(`/${path.MEMBER}/${path.DETALL_CART}`);dispatch(ShowCart())}} style='rounded-none w-full bg-main py-3'>
+        <Button handleOnclick={() => {navigate(`/${path.MEMBER}/${path.MY_CART}`);dispatch(ShowCart())}} style='rounded-none w-full bg-main py-3'>
           Shopping Cart
         </Button>
       </div>

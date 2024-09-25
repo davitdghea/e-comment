@@ -12,12 +12,10 @@ const tabs = [
 
 const Bestsale = () => {
   const [activedtab, setActivedtab] = useState(1)
-
   const [bestSale, setBestSale] = useState(null)
   const [products, setProduct] = useState(null)
   const dispatch = useDispatch()
   const { newproduct } = useSelector(state => state.products)
-
   const FetchProduct = async () => {
     const response = await apiGetProducts({ sort: '-soid' })
 
@@ -36,7 +34,7 @@ const Bestsale = () => {
   }, [activedtab])
   return (
     <div>
-      <div className='flex text-[20px] gap-8 mt-4   items-center pl-4  mr-2'>
+      <div className='w-full flex text-[20px] gap-8 mt-4 justify-center sm:justify-none  items-center pl-4  mr-2'>
         {tabs.map((el) => (
           <span key={el.id}
             onClick={() => { setActivedtab(el.id) }}
@@ -45,7 +43,7 @@ const Bestsale = () => {
           </span>
         ))}
       </div>
-      <div className='mt-4 mx-[10px] '>
+      <div className='mt-4  '>
         <CustomSlider product={products} activedtab={activedtab} dispatch={dispatch} />
       </div>
 

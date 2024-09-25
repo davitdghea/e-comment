@@ -48,7 +48,7 @@ const ManageProducts = () => {
       if (rs.isConfirmed) {
         const response = await apiDeleteProduct(pid)
         if (response.success) toast.success(response.mes)
-        else toast.errors(response.mes)
+        else toast.error(response.mes)
      render()
       }
     })
@@ -57,7 +57,7 @@ const ManageProducts = () => {
   
   return (
     <div className='w-full flex flex-col gap-4 relative'>
-      {editProduct && <div className='absolute inset-0 min-h-screen '>
+      {editProduct && <div className='absolute inset-0 min-h-screen z-20'>
         <UpdateProducts
           editProduct={editProduct}
           render={render}
@@ -65,7 +65,7 @@ const ManageProducts = () => {
         />
       </div>
       }
-      {customzeVarriant && <div className='absolute inset-0 min-h-screen '>
+      {customzeVarriant && <div className='absolute inset-0 min-h-screen z-20'>
         <Variants
           customzeVarriant={customzeVarriant}
           render={render}
@@ -73,11 +73,11 @@ const ManageProducts = () => {
         />
       </div>
       }
-      <div className='px-2 flex-col border-b w-full flex justify-between '>
-        <h1 className='text-2xl font-bold tracking-tight'>ManageProducts</h1>
+      <div className='p-4 border-b w-full max-w-[1360px] bg-gray-100 flex justify-between items-center fixed top-0 z-10'>
+        <h1 className='text-2xl font-bold tracking-tight w-200px ' >ManageProducts</h1>
       </div>
       <div>
-        <div className='p-4 flex w-full justify-end items-center'>
+        <div className='p-4 flex w-full justify-end items-center mt-10'>
           <form className='w-[45%] outline-none'>
             <InputFrom
               id='q'
@@ -113,7 +113,7 @@ const ManageProducts = () => {
                 <tr key={el._id} className='border-b py-2 text-center'>
                   <td >{idx + 1}</td>
                   <td>
-                    <img src={el.images[0]} alt='thumb' className='w-10 h-14 object-cover py-2' />
+                    <img src={el.thumb} alt='thumb' className='w-10 h-14 object-cover py-2' />
                   </td>
                   <td>{el.title}</td>
                   <td>{el.brand}</td>

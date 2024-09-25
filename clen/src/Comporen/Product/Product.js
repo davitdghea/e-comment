@@ -13,6 +13,7 @@ import Swal from 'sweetalert2'
 import { blue } from '@mui/material/colors'
 import path from 'Ultils/Path'
 import WithRase from 'hocs/withRase'
+import DOMPurify from 'dompurify'
 
 
 const { AiFillEye, FaCartPlus, FaHeart } = icons
@@ -74,7 +75,7 @@ const Product = ({ productData, isNew, normal, dispatch, navigate, location,pid 
   }
  
   return (
-    <div className=' relative w-full text-base px-[10px] mb-4'>
+    <div className=' relative w-full text-base px-[4px] sm:px-[10px] mb-4'>
       <div
        
         onMouseEnter={(el) => {
@@ -85,10 +86,13 @@ const Product = ({ productData, isNew, normal, dispatch, navigate, location,pid 
           el.stopPropagation()
           setIsShowOption(false)
         }}
-        className='w-full border p-[15px] flex flex-col items-center shadow-lg rounded-xl my-3'
+        className='w-full border sm:p-[15px] p-[10px] flex flex-col items-center shadow-lg rounded-xl my-3'
       >
-        {isShowOption && <ul className='rounded-xl mx-3 pt-2  top-0 bottom-0 left-0 right-0 absolute z-10 bg-slate-300'>
-          {productData?.description?.map(el => (<li className=' leading-6 ml-[20px]' key={el}>{el}</li>))}
+        {isShowOption && <ul className='rounded-xl sm:mx-3 pt-2  top-0 bottom-0 left-0 right-0 absolute z-10 bg-slate-300'>
+         
+            {productData?.description?.length === 1 && <div className='text-sm' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(productData?.description[0]) }}></div>}
+            {productData?.description?.length > 1 && productData?.description?.map(el => (<li className='leading-6 ml-[20px]' key={el}>{el}</li>))}
+          
         </ul>}
         <div className='w-full relative '>
           {isShowOption && <div className='absolute z-20 bottom-[-10px] left-0 right-0 flex justify-center animate__animated animate__fadeInUp gap-2'>
@@ -100,10 +104,10 @@ const Product = ({ productData, isNew, normal, dispatch, navigate, location,pid 
           <img
             src={productData?.thumb || "https://th.bing.com/th/id/OIP.CaLENRpDWR6DvqXLUqlrJgAAAA?rs=1&pid=ImgDetMain"}
             alt=""
-            className='w-243px h-243px object-cover'
+            className='w-[243px] h-[243px] object-cover mx-auto'
           />
           {!normal && (isNew === 1 ?
-            <div className='w-[100px] h-[10px] absolute bg-red left-[0px] top-[-10px] text-red-600 font-extrabold'>
+            <div className='w-[100px] h-[10px] absolute bg-red left-[0px] top-[-10px] text-red-600 sm:font-extrabold '>
               <p>HOT</p>
             </div> : <div className='w-[100px] h-[10px] absolute bg-red left-[0px] top-[-10px] text-red-600 font-extrabold'>
               <p>NEW</p>

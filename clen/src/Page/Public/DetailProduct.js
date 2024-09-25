@@ -61,7 +61,7 @@ const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
 
     if (response?.success) {
       setProduct(response.ProductData)
-      setCurrentImage(response?.ProductData?.images[0])
+      setCurrentImage(response?.ProductData?.thumb)
     }
   }
 
@@ -107,8 +107,8 @@ const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
     if (flag === 'plus') setQuantity(prev => +prev + 1)
   }, [quantity])
 
-  const handleClickImage = (e, el) => {
-    e.stopPropagation()
+  const handleClickImage = ( el) => {
+  
     setCurrentImage(el)
   }
   const handleAddToCart = async () => {
@@ -140,7 +140,8 @@ const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
     }
     else toast.error(response.mes)
   }
-
+  console.log(currentProduct)
+  console.log(product)
   return (
     <div className='w-full relative'>
       {!isQuickView && <div className='h-[81px] bg-gray-100'>
@@ -152,7 +153,7 @@ const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
       <div className='w-main m-auto mt-4 flex '>
         <div className=' border flex-4 shadow-xl mr-4 rounded-lg'>
           <div className='w-full h-full max-h-[450px] max-w-[450px] flex justify-center items-center'>
-            <img src={currentProduct?.images?.[0] || currentImage} className='max-h-[430px] max-w-[430px] pl-[20px]' />
+            <img src={currentProduct?.thumb || currentImage} className='max-h-[430px] max-w-[430px] pl-[20px] object-cover' />
           </div>
         </div>
         <div className=' border shadow-xl flex-4 mr-4 rounded-lg'>
@@ -179,7 +180,7 @@ const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
                 onClick={() => setVariant(null)}
                 className={clsx('flex w-[160px] gap-2 justify-around border-gray-300', { 'border-red-500': variant === product?.variant?.sku })}>
 
-                <img src={currentProduct?.images?.[0] || currentImage} alt='thumb' className='w-10 h-8 rounded-md object-cover ' />
+                <img src={currentProduct?.thumb || currentImage} alt='thumb' className='w-10 h-8 rounded-md object-cover ' />
                 <span className='flex flex-col'>
                   <span>{product?.color}</span>
                   <span className='text-sm'>{product?.price}</span>
@@ -227,13 +228,13 @@ const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
       <div className='w-main m-auto flex'>
         <div className='w-full max-w-[520px] mt-[20px]'>
           <Slider className='image-slider' {...settings}>
-            {currentProduct?.images?.length === 0 && product?.images?.map(el => (
+            {currentProduct?.images?.length === 0 && product?.images?.length > 1 && product?.images?.map(el => (
               <div onClick={() => { setCurrentImage(el) }}
                 className={clsx('flex w-[160px]  gap-2 justify-around', variant === el.sku && 'border-red-500')}>
                 <img onClick={() => handleClickImage(el)} src={el} alt="sub-product" className='h-[143px] w-[170px] border border-gray-300 object-cover shadow-xl rounded-xl py-[10px]'/>
               </div>
             ))}
-            {currentProduct?.images?.length > 0 && currentProduct?.images?.map(el => (
+            {currentProduct?.images?.length > 2 && currentProduct?.images?.map(el => (
               <div onClick={() => { setCurrentImage(el) }}
                 className={clsx('flex w-[160px]  gap-2 justify-around', variant === el.sku && 'border-red-500')}>
                 <img src={el} alt="sub-product" className='h-[143px] w-[170px] border border-gray-300 object-cover shadow-xl rounded-xl py-[10px]'/>

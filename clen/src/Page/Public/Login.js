@@ -150,8 +150,8 @@ const Login = () => {
         </div>
       </div>}
 
-      <div className='absolute shadow-xl bg-white items-center rounded-lg justify-center flex z-10 w-full max-w-[800px]'>
-        <div className='   w-1/2 relative'>
+      <div className='absolute shadow-xl bg-white items-center rounded-lg justify-center flex z-10 w-full max-w-[550px]'>
+        {/* <div className='   w-1/2 relative'>
           <img
             src="https://th.bing.com/th/id/OIP.RvOpgYypirRSnWaTgGvDlwHaFj?rs=1&pid=ImgDetMain"
             alt=''
@@ -164,8 +164,8 @@ const Login = () => {
             <p className='mt-[180px] mb-[10px]'>Lorem ipsum dolor sit amet</p>
           </div>
 
-        </div>
-        <div className='p-8  rounded-r-md min-w-[300px] w-1/2 h-full'>
+        </div> */}
+        <div className='p-8  rounded-md min-w-[300px] w-full max-w-[400px] h-full'>
           <h1 className='text-[28px] text-main mp-[8px] text-blue-500'><p className='text-shadow-md'>{isRegister ? "Register" : "Login"}</p></h1>
           {isRegister &&
             <div className='flex gap-3'>

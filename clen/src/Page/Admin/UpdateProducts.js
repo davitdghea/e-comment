@@ -79,9 +79,13 @@ const UpdateProducts = ({ editProduct, render, setEditProduct }) => {
             const finalPayload = { ...data, ...payload}
             const formData = new FormData()
             for (let i of Object.entries(finalPayload)) formData.append(i[0], i[1])
-                if (finalPayload?.thumb) formData.append('thumb',data?.thumb?.length === 0 ? preview.thumb : finalPayload.thumb[0])
+            if (finalPayload?.thumb) {
+                formData.append('thumb', data?.thumb?.length === 0 ? preview.thumb : finalPayload.thumb[0]);
+            } else {
+                formData.append('thumb', preview.thumb);
+            }
             if (finalPayload.images) {
-               const images = finalPayload?.image?.length === 0 ? preview.images : finalPayload.images
+               const images = finalPayload?.images?.length === 0 ? preview.images : finalPayload.images
                 for (let image of images) formData.append('images', image)
             }
             dispatch(ShowModal({ isShowModal: true, moDalChildren: <Loading /> }))
@@ -90,7 +94,7 @@ const UpdateProducts = ({ editProduct, render, setEditProduct }) => {
                 obj[key] = value;
             });
             console.log(obj);
-            const response = await apiUpdateProduct(obj,editProduct._id)
+            const response = await apiUpdateProduct(formData,editProduct._id)
             dispatch(ShowModal({ isShowModal: false, moDalChildren: null }))
             if (response.success) {
                 toast.success(response.mes)
@@ -107,7 +111,7 @@ const UpdateProducts = ({ editProduct, render, setEditProduct }) => {
         <div className='w-full flex flex-col gap-4 relative bg-slate-200'>
         <div className='h-[69px] w-full'></div>
         <div className='p-4 border-b w-full bg-gray-100 flex justify-between items-center fixed top-0 z-50'>
-            <h1 className='text-2xl font-bold tracking-tight'>UpdateProducts</h1>
+            <h1 className='text-2xl font-bold tracking-tights'>UpdateProducts</h1>
         </div>
             <div className='p-4 '>
                 <form onSubmit={handleSubmit(handleUpdateProduct)}>

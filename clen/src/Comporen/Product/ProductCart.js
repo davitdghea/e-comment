@@ -10,11 +10,11 @@ const ProductCart = ({pid,navigate,category, images, title, totalRatings, price,
     >
         <img src={images} alt='' className='w-[90px] object-contain p-4'></img>
         <div className='mt-[15px]'>
-        <span>{title}</span>
-        <span className='flex h-[15px]'>{renderStarFromNumber(totalRatings)?.map((el, index) => (
+        <span className='text-[10px] overflow-hidden whitespace-nowrap overflow-ellipsis'>{title}</span>
+        <span className='flex h-[15px] '>{renderStarFromNumber(totalRatings)?.map((el, index) => (
           <span key={index}>{el}</span>
         ))}</span>
-        <span>{`${formatMoney(price)} VNĐ`} </span>
+        <span className='text-[10px]'>{`${formatMoney(price)} VNĐ`} </span>
         </div> 
     </div>
   )
