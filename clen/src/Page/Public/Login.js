@@ -63,18 +63,15 @@ const Login = () => {
       } else {
         try {
           const res = await apiLogin(data);
-          console.log('Kết quả trả về từ API:', res);
 
           if (res.success) {
             dispatch(login({ isLoggedIn: true, token: res.accessToken, userData: res.userData }))
             localStorage.setItem('token', res.accessToken);
-            console.log('token', res.accessToken)
             searchParams.get('redirect') ? navigate(searchParams.get('redirect')) : navigate(`/${path.HOME}`)
           } else {
             Swal.fire('Oops!', res?.mes || 'Có lỗi xảy ra', 'error');
           }
         } catch (error) {
-          console.log('Lỗi xảy ra khi gọi API:', error);
           Swal.fire('Oops!', 'tk hoặc mật khẩu không chính xác', 'error');
         }
 
@@ -135,7 +132,7 @@ const Login = () => {
         <div className=' flex items-center justify-end w-[800px] m-[10px] gap-4'>
           <div>
             <Button
-              style=" bg-blue-500 text-white rounded-md py-2 px-4 "
+              Style=" bg-blue-500 text-white rounded-md py-2 px-4 "
               handleOnclick={handleForgotPassword}
             >submit</Button>
           </div>
@@ -201,7 +198,7 @@ const Login = () => {
             invalidFields={invalidFields}
             setInvalidFields={setInvalidFields}
           />
-          <Button style='w-full flex items-center p-3 text-white rounded-sm justify-center bg-green-500'
+          <Button Style='w-full flex items-center p-3 text-white rounded-sm justify-center bg-green-500'
             handleOnclick={handleSubmit}
             fw
           >

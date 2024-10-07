@@ -4,7 +4,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { apiResetPassWord } from '../../Apis/User'
 import { toast } from 'react-toastify'
 import path from '../../Ultils/Path'
-import { Link } from 'react-router-dom' 
 const ReserPass = () => {
   const [password,setPassword] = useState('')
   const navigate = useNavigate()
@@ -33,7 +32,7 @@ const ReserPass = () => {
       <div className=' flex items-center justify-end w-[800px] m-[10px] gap-4'>
         <div>
           <Button
-            style=" bg-blue-500 text-white rounded-md py-2 px-4 "
+            Style={"bg-blue-500 text-white rounded-md py-2 px-4"}
             name="submit"
             handleOnclick={handleForgotPassword}
           />

@@ -55,18 +55,18 @@ export const slides = [
         name: 'Background Image',
         content: (
             <>
-                <img className='absolute top-[22%] w-[260px] right-3 z-20' src='http://digital-world-2.myshopify.com/cdn/shop/files/slideshow5-img-home2_600x.png?v=1613166683' alt="" />
-                <img className='absolute top-[30%] w-[260px] left-[20px]' src='http://digital-world-2.myshopify.com/cdn/shop/files/slideshow5-desc1-home2_600x.png?v=1613166692' alt="" />
+                <img className='absolute bottom-0 w-[120px] sm:top-[22%] sm:w-[260px] sm:right-3 right-0  z-20 ' src='http://digital-world-2.myshopify.com/cdn/shop/files/slideshow5-img-home2_600x.png?v=1613166683' alt="" />
+                <img className='absolute top-2 sm:top-[30%] w-[260px] left-[20px]' src='http://digital-world-2.myshopify.com/cdn/shop/files/slideshow5-desc1-home2_600x.png?v=1613166692' alt="" />
                 <button className='absolute top-[65%] left-[20px] px-[30px] py-[10px] bg-slate-900 text-white'>Shop now</button>
             </>
         ),
     },
-    {
-        imgSrc: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:90/plain/https://dashboard.cellphones.com.vn/storage/Sliding-HUAWEI-MATEPAD-11.5-S-6-8-2024.jpg',
-        name: 'Background Image',
-    },
-    {
-        imgSrc: 'https://dashboard.cellphones.com.vn/storage/sliding-cate-asus-s-15-01-08.jpg',
-        name: 'Background Image',
-    }
+    // {
+    //     imgSrc: 'https://cdn2.cellphones.com.vn/insecure/rs:fill:690:300/q:90/plain/https://dashboard.cellphones.com.vn/storage/Sliding-HUAWEI-MATEPAD-11.5-S-6-8-2024.jpg',
+    //     name: 'Background Image',
+    // },
+    // {
+    //     imgSrc: 'https://dashboard.cellphones.com.vn/storage/sliding-cate-asus-s-15-01-08.jpg',
+    //     name: 'Background Image',
+    // }
 ];

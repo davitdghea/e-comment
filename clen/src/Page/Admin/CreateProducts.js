@@ -99,8 +99,8 @@ const dispatch = useDispatch()
   return (
     
     <div>
-      <div className='p-4 border-b w-full max-w-[1360px] bg-gray-100 flex justify-between items-center fixed top-0 z-50'>
-        <h1 className='text-2xl font-bold tracking-tight w-200px'>CreateProducts</h1>
+      <div className='p-4 border-b w-full bg-gray-100 flex justify-between items-center fixed top-0 z-20 '>
+        <h1 className='text-2xl font-bold tracking-tight w-200px ml-10'>CreateProducts</h1>
       </div>
       {/* const {title, price, description, brand, category, color} = req.body */}
       <div className='p-4 mt-12'>
@@ -118,7 +118,7 @@ const dispatch = useDispatch()
             fullWidth
 
           />
-          <div className='w-full my-6 flex gap-2'>
+          <div className='w-full my-6 flex flex-col  gap-2'>
             <InputFrom
               label="Price"
               register={register}

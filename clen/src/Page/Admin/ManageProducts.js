@@ -16,7 +16,7 @@ const ManageProducts = () => {
   const [params] = useSearchParams()
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const { register, watch, formState: { errors }, handleSubmit, reset } = useForm()
+  const { register, watch, formState: { errors } } = useForm()
   const [products, setProducts] = useState(null)
   const [editProduct, setEditProduct] = useState(null)
   const [update, setUpdate] = useState(false)
@@ -35,7 +35,7 @@ const ManageProducts = () => {
   const queriesDebounce = useDebounce(watch('q'), 800)
   useEffect(() => {
     const queries = Object.fromEntries([...params])
-    if (queriesDebounce) queries.q = queriesDebounce
+    if (queriesDebounce) queries.title = queriesDebounce
     fetchProducts(queries)
   }, [params, queriesDebounce, currentPage, update])
   const handleDeleteProduct = (pid) => {
@@ -74,7 +74,7 @@ const ManageProducts = () => {
       </div>
       }
       <div className='p-4 border-b w-full max-w-[1360px] bg-gray-100 flex justify-between items-center fixed top-0 z-10'>
-        <h1 className='text-2xl font-bold tracking-tight w-200px ' >ManageProducts</h1>
+        <h1 className='text-2xl font-bold tracking-tight w-200px ml-[45px] sm:ml-0' >ManageProducts</h1>
       </div>
       <div>
         <div className='p-4 flex w-full justify-end items-center mt-10'>
@@ -91,41 +91,41 @@ const ManageProducts = () => {
         <from>
           <table className='w-[97%] m-auto text-left'>
             <thead>
-              <tr className='border-b pb-5 text-center'>
-                <th className=''>Order</th>
-                <th>thumb</th>
-                <th>Title</th>
-                <th>Brand</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Sold</th>
-                <th>Color</th>
-                <th>Rating</th>
-                <th>Variants</th>
-                <th>UpdateAt</th>
-                <th>Actions</th>
+              <tr className='border-b  pb-5 text-center sm:grid sm:grid-cols-13 '>
+                <th className='sm:grid'>Order</th>
+                <th className='sm:grid'>thumb</th>
+                <th className='sm:grid'>Title</th>
+                <th className='sm:grid  hidden'>Brand</th>
+                <th className='sm:grid  hidden'>Category</th>
+                <th className='sm:grid  hidden'>Price</th>
+                <th className='sm:grid  hidden'>Quantity</th>
+                <th className='sm:grid  hidden'>Sold</th>
+                <th className='sm:grid  hidden'>Color</th>
+                <th className='sm:grid  hidden'>Rating</th>
+                <th className='sm:grid  hidden'>Variants</th>
+                <th className='sm:grid  hidden'>UpdateAt</th>
+                <th className='sm:grid'>Actions</th>
               </tr>
 
             </thead>
             <tbody>
               {products?.map((el, idx) => (
-                <tr key={el._id} className='border-b py-2 text-center'>
-                  <td >{idx + 1}</td>
-                  <td>
+                <tr key={el._id} className='border-b py-2 sm:grid sm:grid-cols-13 text-center'>
+                  <td className='sm:grid mt-5'>{idx + 1}</td>
+                  <td className='sm:grid'>
                     <img src={el.thumb} alt='thumb' className='w-10 h-14 object-cover py-2' />
                   </td>
-                  <td>{el.title}</td>
-                  <td>{el.brand}</td>
-                  <td>{el.category}</td>
-                  <td>{el.price}</td>
-                  <td>{el.quantity}</td>
-                  <td>{el.soId}</td>
-                  <td>{el.color}</td>
-                  <td>{el.totalRatings}</td>
-                  <td>{el?.variants?.length}</td>
-                  <td>{moment(el.updatedAt).format('DD/MM/YYYY')}</td>
-                  <td className='flex items-center mt-5'>
+                  <td className='sm:grid text-[12px] mt-3'>{el.title}</td>
+                  <td className='sm:grid hidden text-[12px] mt-5'>{el.brand}</td>
+                  <td className='sm:grid hidden text-[12px] mt-5'>{el.category}</td>
+                  <td className='sm:grid hidden text-[12px] mt-5'>{el.price}</td>
+                  <td className='sm:grid hidden text-[12px] mt-5'>{el.quantity}</td>
+                  <td className='sm:grid hidden text-[12px] mt-5'>{el.soId}</td>
+                  <td className='sm:grid hidden text-[12px] mt-5'>{el.color}</td>
+                  <td className='sm:grid hidden text-[12px] mt-5'>{el.totalRatings}</td>
+                  <td className='sm:grid hidden text-[12px] mt-5'>{el?.variants?.length}</td>
+                  <td className='sm:grid hidden text-[12px] mt-5'>{moment(el.updatedAt).format('DD/MM/YYYY')}</td>
+                  <td className='flex items-center ml-4 mt-5 sm:mt-0'>
                     <span onClick={() => setEditProduct(el)} className='text-orange-500 mr-1' title="Edit"><FaEdit/></span>
                     <span onClick={() => handleDeleteProduct(el._id)} className='text-red-500 mr-1' title="Delete"><AiOutlineDelete/></span>
                     <span onClick={() => setCustomzeVarriant(el)} className='text-blue-500' title="Variants"><BiAddToQueue/></span>

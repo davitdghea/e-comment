@@ -248,11 +248,7 @@ export const statusOrders=[
         value:"Cancalled"
     },
     {
-        label: "Cancalled",
-        value: "Cancalled"
-    },
-    {
-        label: "Cancalled",
-        value: "Cancalled"
+        label: "Succeed",
+        value: "Succeed"
     }
 ]

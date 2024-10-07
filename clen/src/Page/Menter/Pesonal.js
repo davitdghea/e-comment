@@ -33,18 +33,19 @@ const Pesonal = ({navigate}) => {
     if (response.success) {
       dispatch(getCurrent())
       toast.success(response.mes)
-      if (searchParams.get('redirect')) navigate(`/${searchParams.get('redirect')}`)
+      const redirectPath = searchParams.get('redirect');
+      if (searchParams.get('redirect')) navigate(`${redirectPath}`)
   }else toast.error(response.mes)}
-  
+  //${window.location.origin}
   return (
     <div className='w-full relative'>
-      <div className='w-full '>
-        <header className=' w-full text-3xl font-semibold py-4 border-b-2 pl-2'>
-          Pesonal
+      <div className='w-full bg-slate-400'>
+        <header className='flex items-center w-full bg-gray-100 text-3xl font-semibold h-[70px] border-b-2 pl-2 '>
+          <p className='ml-[50px] sm:ml-0'>Pesonal</p>
         </header>
       </div>
     
-      <form className='mt-5 ml-20' onSubmit={handleSubmit(handleUpdateInform)}>
+      <form className='mt-5 sm:ml-20 ml-2' onSubmit={handleSubmit(handleUpdateInform)}>
         <p className='flex '><span className='w-[120px]'>Email address:</span> <span>{current?.email}</span></p>
         <InputFrom
           layoutUser

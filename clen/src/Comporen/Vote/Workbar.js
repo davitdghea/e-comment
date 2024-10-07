@@ -21,8 +21,9 @@ const Workbar = ({number,ratingCount,ratingsTotal}) => {
         </div>
       </div>
           <div className=' text-xs text-400 flex justify-end w-[15%]'>
-              {`${ratingCount || 0} reviewers`}
-      </div>
+          <p className=' sm:hidden block'>{`${ratingCount || 0} rv`}</p>
+          <p className='hidden sm:block'>{`${ratingCount || 0} reviewers`}</p>
+          </div>
     </div>
   )
 }

@@ -4,12 +4,13 @@ import { colors } from '../../Ultils/Contants'
 import { createSearchParams, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { apiGetProducts } from '../../Apis/Index'
 import useDebounce from '../../Hooks/UseDebounce'
+import { toast } from 'react-toastify'
 const { AiOutlineDown } = icons
 const Seach = ({ type, name, activeClick, changeActiveFitler }) => {
   const navigate = useNavigate()
   const { category } = useParams()
   const [params] = useSearchParams()
-  const [price, SetPrice] = useState({
+  const [price, setPrice] = useState({
     from: "",
     to: ""
   })
@@ -38,10 +39,10 @@ const Seach = ({ type, name, activeClick, changeActiveFitler }) => {
         pathname: `/${category}`,
         search: createSearchParams(queries).toString()
       })
-    } else{
-      navigate(`/${category}`)
+    } 
+  else {
+    navigate(`/${category}`)
     }
-    
   }, [selected])
   const debouncePriceFRom = useDebounce(price.from, 500)
   const debouncePriceTo = useDebounce(price.to, 500)
@@ -54,12 +55,22 @@ const Seach = ({ type, name, activeClick, changeActiveFitler }) => {
     else delete queries.from
     if (Number(price.to) > 0) queries.to = price.to
     else delete price.to  
-    navigate({
+    if (Number(price.from) > Number(price.to)) {
+      delete price.to 
+      delete price.from
+      setPrice({
+        from: "",
+        to: ""
+      })
+      toast.error('Please enter correct price')
+    }
+    else
+    {navigate({
         pathname: `/${category}`,
         search: createSearchParams(queries).toString()
-      })
-      navigate(`/${category}`)  
-  }, [ debouncePriceFRom, debouncePriceTo])
+      })}
+       
+  }, [debouncePriceFRom, debouncePriceTo ])
   useEffect(() => {
     if (type === 'input') fetchBestPriceProduct()
   }, [type])
@@ -104,7 +115,7 @@ const Seach = ({ type, name, activeClick, changeActiveFitler }) => {
             <span
               onClick={e => {
                 e.stopPropagation()
-                SetPrice({from:'',to:''})
+                setPrice({from:'',to:''})
                 setSelected([])
               }} className='underline cursor-pointer hover:text-red-500'>Reset</span>
 
@@ -117,7 +128,7 @@ const Seach = ({ type, name, activeClick, changeActiveFitler }) => {
                 type="number"
                 id='from'
                 value={price.from}
-                onChange={e => SetPrice(prev => ({ ...prev, from: e.target.value }))}></input>
+                onChange={e => setPrice(prev => ({ ...prev, from: e.target.value }))}></input>
             </div>
             <div className='flex item-center gap-2'>
               <label htmlFor='to'>to</label>
@@ -126,7 +137,7 @@ const Seach = ({ type, name, activeClick, changeActiveFitler }) => {
                 type="number"
                 id='to'
                 value={price.to}
-                onChange={e => SetPrice(prev => ({ ...prev, to: e.target.value }))}></input>
+                onChange={e => setPrice(prev => ({ ...prev, to: e.target.value }))}></input>
             </div>
           </div>
         </div>}

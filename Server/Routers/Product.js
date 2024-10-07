@@ -3,7 +3,6 @@ const ctrls = require("../Controlllers/Product")
 const {verifileAccessToken, isAdmin} = require("../Anthi/virifiletoken")
 const uploader = require('../Config/Cloudinary.config')
 
-
 router.post("/",[verifileAccessToken, isAdmin],uploader.fields([
     { name: 'images', maxCount: 10 },
     { name: "thumb", maxCount:1   }

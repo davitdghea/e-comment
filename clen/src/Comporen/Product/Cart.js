@@ -22,12 +22,12 @@ const Cart = ({ dispatch, navigate }) => {
     else toast.error(response.mes)
   }
   return (
-    <div onClick={e => { e.stopPropagation() }} className='grid grid-rows-10 w-[400px] h-screen bg-black text-white float-end animate__animated animate__fadeInRight'>
+    <div onClick={e => { e.stopPropagation() }} className='grid grid-rows-10 sm:max-w-[400px] w-full h-screen bg-black text-white float-end animate__animated animate__fadeInRight'>
       <header className=' border-b row-span-1  border-gray-500 flex justify-between font-bold text-2xl items-center pl-2 pb-4'>
         <span>Your cart</span>
-        <span onClick={() => dispatch(ShowCart())}><AiFillCloseCircle size={24} className='p-2 cursor-pointer' /></span>
+        <span onClick={() => dispatch(ShowCart())}><AiFillCloseCircle size={40} className='p-2 cursor-pointer' /></span>
       </header>
-      <section className='flex-col row-span-7 mt-5 gap-3 overflow-y-auto py-3'>
+      <section className='flex-col row-span-7 mt-5 gap-3 overflow-y-auto py-3 scrollbar-hide'>
         {!current?.cart && <span className='text-xs italic'> Your cart is empty</span>}
         {current?.cart && current?.cart?.map(el => (
           <div key={el._id} className='flex justify-between mt-3 pb-3 border-b-2 border-b-slate-300  '>
@@ -52,7 +52,7 @@ const Cart = ({ dispatch, navigate }) => {
         <span className='text-center text-gray-500'>
           Shipping, taxes, and discounts calculated at checkout
         </span>
-        <Button handleOnclick={() => {navigate(`/${path.MEMBER}/${path.MY_CART}`);dispatch(ShowCart())}} style='rounded-none w-full bg-main py-3'>
+        <Button handleOnclick={() => {navigate(`/${path.MEMBER}/${path.MY_CART}`);dispatch(ShowCart())}} Style='rounded-none w-full bg-main py-3'>
           Shopping Cart
         </Button>
       </div>

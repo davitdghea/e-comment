@@ -1,19 +1,23 @@
 import {  Button, OrderItem } from 'Comporen/Index'
 import WithRase from 'hocs/withRase'
-import React, { memo } from 'react'
+import React, { memo, useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { createSearchParams } from 'react-router-dom'
+import { getCurrent } from 'St/User/AsyncAction'
 import Swal from 'sweetalert2'
 import { formatMoney } from 'Ultils/Hellpers'
 import path from 'Ultils/Path'
 
-const DealdeallyCart = ({  location, navigate }) => {
-
+const DealdeallyCart = ({ location, navigate, dispatch }) => {
+  const [selectedProducts, setSelectedProducts] = useState([]);
+  console.log(selectedProducts)
+  const handCallBack = useCallback((id)=>{
+    setSelectedProducts(id)
+  })
+  useEffect(() => {
+    dispatch(getCurrent())
+  }, [dispatch])
   const { currentCart, current } = useSelector(state => state.user)
-  // const { category } = useParams()
-  // const handleChangeQuantites = (pid, quantity, color) => {
-  //   dispatch(updateCart({ pid, quantity, color }))
-  // }
   let effectiveCart = currentCart;
   if (effectiveCart.length === 0) {
     effectiveCart = current.cart
@@ -34,58 +38,52 @@ const DealdeallyCart = ({  location, navigate }) => {
         })
       }
     })
-    else if (effectiveCart.length === 0 ){
+    else if (selectedProducts.length === 0 ){
       return Swal.fire({
         icon: "info",
         title: 'Almost!',
-        text: "Please update your cart.",
-        showCancelButton: true,
+        text: "Please select payment product.",
+        
         showConfirmButton: true,
-        confirmButtonText: "Go update",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          navigate({
-            pathname: `/`,
-          })
-        }
+        confirmButtonText: "OK",
       })
   }
     else {
+      localStorage.setItem('selectedProductDetails', JSON.stringify(selectedProductDetails));
       window.open(`/${path.CHECKOUT}`, '_blank')
     }
   }
+ 
+  const selectedProductDetails = effectiveCart.filter(product => selectedProducts.includes(product._id));
   return (
-    <div className='w-full'>
-      <div className='h-[81px] flex justify-center items-center bg-gray-100'>
-        <div className='w-main'>
-          <h3 className='text-3xl font-bold tracking-tight my-4'>My Cart</h3>
-        </div>
+    <div className='max-w-[1100px] mx-auto w-full '>
+      <div className='h-[70px] flex  items-center bg-gray-100 sm:relative fixed top-0 left-0 right-0'>
+          <h3 className='text-3xl font-bold tracking-tight  ml-[55px] sm:ml-2'>My Cart</h3>
       </div>
-      <div>
-        <div className='w-main mx-auto mt-8 border py-3  font-bold grid grid-cols-10  opacity-70'>
-          <span className='col-span-6 w-full ml-1'>Products</span>
-          <span className='col-span-1 w-full'>Quantity</span>
-          <span className='col-span-3 w-full'>Price</span>
+      <div className='sm:mt-[50px] mt-[100px]'>
+        <div className='w-full  mt-8 border py-3  font-bold grid grid-cols-10  opacity-70'>
+          <span className='sm:col-span-6 col-span-5 w-full ml-1 text-[12px] sm:text-[20px]'>Products</span>
+          <span className='col-span-2 sm:col-span-1 w-full text-[12px] sm:text-[20px]'>Quantity</span>
+          <span className='col-span-2 w-full text-[12px] sm:text-[20px]'>Price</span>
+          <span className='col-span-1 w-full text-[12px] sm:text-[20px]'>Paypal</span>
         </div>
         {effectiveCart?.map(el => (
-          <OrderItem
-            
+          <OrderItem 
+            selectedProducts={selectedProducts}
+            handCallBack={handCallBack}           
             key={el._id}
             el={el}
             defaultQuantity={el.quantity}
           />
         ))}
       </div>
-      <div className=' flex flex-col   mb-12 mt-3 gap-4 w-main mx-auto'>
-        <span className='flex items-center justify-end gap-4 text-xl font-normal'>
+      <div className=' flex flex-col  mb-12 mt-3 gap-4 w-full '>
+        <span className='flex justify-end mr-1 items-center gap-4 text-xl font-normal'>
           <span>Subtotal:</span>
-          <span>{`${formatMoney(effectiveCart?.reduce((sum, el) => (+el?.price * +el?.quantity) + sum, 0))} VND`}</span>
+          <span>{`${formatMoney(selectedProductDetails?.reduce((sum, el) => (+el?.price * +el?.quantity) + sum, 0))} VND`}</span>
         </span>
-        <span className='text-xs italic flex justify-end'>Shipping,taxes, and discounts calculated at checkout</span>
-        <span className='flex justify-end'><Button handleOnclick={() => handleSubmit()}>checkout</Button></span>
-        {/* <Link className='bg-main text-white px-4 py-2 rounded-md' to={`/${path.CHECKOUT}`}>
-          checkout
-        </Link> */}
+        <span className='text-xs justify-end mr-1 italic flex '>Shipping,taxes, and discounts calculated at checkout</span>
+        <span className='flex justify-end mr-1'><Button handleOnclick={() => handleSubmit()}>checkout</Button></span>       
       </div>
     </div>
   )

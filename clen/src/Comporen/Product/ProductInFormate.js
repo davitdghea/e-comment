@@ -57,7 +57,7 @@ const ProductInFormate = ({ rerender, totalRatings, ratings, nameProduct, pid })
           {tabs.map(el => (
             <span
               onClick={() => { setActivetion(el.id) }}
-              className={`py-2  px-4 ${activetion === el.id ? "bg-white border border-b-0" : "bg-gray-200"}`}
+              className={`py-2 text-[10px] px-2 sm:px-4 ${activetion === el.id ? "bg-white border border-b-0" : "bg-gray-200"}`}
             >
               {el.name}
             </span>
@@ -73,7 +73,7 @@ const ProductInFormate = ({ rerender, totalRatings, ratings, nameProduct, pid })
         </div>
       </div>
 
-      <div className="flex flex-col pb-8 w-main shadow-xl rounded-xl mt-[80px] border">
+      <div className="flex flex-col pb-8 w-full sm:max-w-[1360px] shadow-xl rounded-xl mt-[20px] sm:mt-[80px] border">
         <span className={`py-2  px-4  bg-[#f7f7f7] `}>
           CUSTOMER REVIEW
         </span>

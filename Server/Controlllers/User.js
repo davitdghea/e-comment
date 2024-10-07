@@ -73,8 +73,8 @@ const login = asyncHend(async (req, res) => {
         const refreshTokennew = generateReAccessToken(response._id)
         //lưu refresh token vào database
         await User.findByIdAndUpdate(response._id, { refreshToken: refreshTokennew }, { new: true })
-        //lưu refr vào cookie
-        res.cookie("refreshToken", refreshTokennew, { httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000 })
+        //lưu refr vào cookie httpOnly: true,
+        res.cookie("refreshToken", refreshTokennew, {  maxAge: 7 * 24 * 60 * 60 * 1000 })
         return res.status(200).json({
             success: true,
             accessToken,
@@ -278,7 +278,7 @@ const UpdateUserAddress = asyncHend(async (req, res) => {
 const UpdateCart = asyncHend(async (req, res) => {
     const { _id } = req.user
     const { pid, quantity = 1, color, price, thumb, title } = req.body
-
+    console.log(req.body)
     if (!pid || !quantity) throw new Error('missing inputs')
     const user = await User.findById(_id).select('cart')
     const alreadyProduct = user?.cart?.find(el => el.product.toString() === pid)
@@ -288,15 +288,16 @@ const UpdateCart = asyncHend(async (req, res) => {
                 "cart.$.quantity": quantity,
                 'cart.$.price': price,
                 'cart.$.thumb': thumb,
-                'cart.$.title': title
+                'cart.$.title': title,
+                'cart.$.color': color
             }
         }, { new: true })
         return res.status(200).json({
             success: response ? true : false,
-            mes: response ? 'update success' : 'no update'
+            MessageChannel: response ? 'update success' : 'no update'
         })
     } else {
-        const response = await User.findByIdAndUpdate(_id, { $push: { cart: { product: pid, quantity, color, price, thumb } } }, { new: true })
+        const response = await User.findByIdAndUpdate(_id, { $push: { cart: { product: pid, quantity, color, price, thumb,title } } }, { new: true })
         return res.status(200).json({
             success: response ? true : false,
             MessageChannel: response ? 'Update your cart' : 'no update'
@@ -311,7 +312,7 @@ const removeProductInCart = asyncHend(async (req, res) => {
     const alreadyProduct = user?.cart.find(el => el.product.toString() === pid && el.color === color)
     if (!alreadyProduct) return res.status(200).json({
         success: true,
-        mes: 'Updated your cart'
+        MessageChannel: 'Updated your cart'
     })
     const response = await User.findByIdAndUpdate(_id, { $pull: { cart: { product: pid, color } } }, { new: true })
     return res.status(200).json({

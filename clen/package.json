@@ -17,6 +17,7 @@
     "cra-template-redux": "2.0.0",
     "css-loader": "^7.1.2",
     "dompurify": "^3.1.6",
+    "lodash": "^4.17.21",
     "moment": "^2.30.1",
     "postcss-loader": "^8.1.1",
     "react": "^18.3.1",

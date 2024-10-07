@@ -19,16 +19,20 @@ const ManageUser = () => {
   })
   const [edit, setEdit] = useState(null)
   const [params] = useSearchParams()
-  const [currentPage, setCurrentPage] = useState(1); // Số trang hiện tại
-  const [totalPages, setTotalPages] = useState(0);   // Tổng số trang
+  const [currentPage, setCurrentPage] = useState(1); 
+  const [totalPages, setTotalPages] = useState(0);  
+  const [pageSearch, setPageSearch] = useState(0);
   const [users, setUsers] = useState([])
   const [queries, setQueries] = useState({
     q: ''
   })
   const [update, setUpdate] = useState(false)
   const fetchUser = async (params) => {
-
-    const response = await apiGetUsers({ ...params, page: currentPage, limit: process.env.REACT_APP_LIMIT })
+    if (params) {
+      setPageSearch(1)
+    }
+    
+    const response = await apiGetUsers({ ...params, page: pageSearch || currentPage, limit: process.env.REACT_APP_LIMIT })
     if (response.success) {
       setUsers(response);
       setTotalPages(Math.ceil(response.counts / process.env.REACT_APP_LIMIT));
@@ -44,7 +48,9 @@ const ManageUser = () => {
   const queriesDebounce = useDebounce(queries.q, 800)
   useEffect(() => {
     const queries = Object.fromEntries([...params])
-    if (queriesDebounce) queries.q = queriesDebounce;
+    if (queriesDebounce) {
+      queries.q = queriesDebounce;
+    }
     fetchUser(queries);
   }, [queriesDebounce, params, update, currentPage]);
   const handleUpdate = async (data) => {
@@ -84,8 +90,8 @@ const ManageUser = () => {
   }
   return (
     <div className={clsx('w-full' )}>
-      <h1 className='px-4 h-[75px] flex justify-between items-center text-3xl font-bold border-b'>
-        <span>ManageUser</span>
+      <h1 className='bg-gray-100 px-4 h-[70px] flex justify-between items-center text-3xl font-bold border-b'>
+        <span className='ml-[45px] sm:ml-0'>ManageUser</span>
       </h1>
       <div className='w-full py-4'>
         <div className='flex justify-end py-4 mr-[25px]'>
@@ -200,7 +206,7 @@ const ManageUser = () => {
           <Pagination
             totalCount={totalPages}
             currentPage={currentPage}
-            onPageChange={(page) => setCurrentPage(page)}
+            onPageChange={(page) => {setCurrentPage(page);setPageSearch(page)}}
           />
         </div>
       </div>

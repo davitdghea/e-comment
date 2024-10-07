@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import * as actions from './AsyncAction';
-import { stringify } from "postcss";
 
 export const userSlice = createSlice({
     name: "user",
@@ -30,14 +29,21 @@ export const userSlice = createSlice({
         },
         updateCart: (state, action) => {
             const { pid, color, quantity } = action.payload;
-            const updatedCart = state.currentCart.map(el => {
+            console.log("Current payload:", state.current);
+            console.log("CurrentCart payload:", state.currentCart);
+            // Tạo bản sao của currentCart
+            const updatedCart = state.currentCart.slice().map(el => {
                 if (el.color === color && el.product === pid) {
                     return { ...el, quantity: quantity };
                 }
                 return el;
             });
-            state.currentCart = updatedCart; 
+
+            // Cập nhật lại state
+            state.currentCart = updatedCart;
+            console.log(state.currentCart)
         }
+
     },
     extraReducers: (builder) => {
         builder.addCase(actions.getCurrent.pending, (state) => {
@@ -46,8 +52,9 @@ export const userSlice = createSlice({
         builder.addCase(actions.getCurrent.fulfilled, (state, action) => {
             state.isLoading = false;
             state.current = action.payload;
+            console.log(action.payload?.cart)
             state.currentCart = action.payload?.cart;
-            state.current = action.payload;
+            console.log(state.currentCart)
             state.isLoggedIn = true;
            
         });

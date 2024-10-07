@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import { useParams, useSearchParams, useNavigate, createSearchParams } from 'react-router-dom'
+import { useParams, useSearchParams, useNavigate, createSearchParams, useLocation } from 'react-router-dom'
 import { Breadcrumb, InputSelect, Product, Seach, Pagination } from '../../Comporen/Index'
 import { apiGetProducts } from '../../Apis/Index'
 import Masonry from 'react-masonry-css'
@@ -12,9 +12,10 @@ const breakpointColumnsObj = {
 };
 
 const Products = () => {
+  const location = useLocation();
   const { category } = useParams()
-  const [currentPage, setCurrentPage] = useState(1); // Số trang hiện tại
-  const [totalPages, setTotalPages] = useState(0);   // Tổng số trang
+  const [currentPage, setCurrentPage] = useState(1); 
+  const [totalPages, setTotalPages] = useState(0);   
   const navigate = useNavigate()
   const [params] = useSearchParams()
   const [activeClick, SetactiveClick] = useState(null)
@@ -22,9 +23,9 @@ const Products = () => {
   const [sort, setSort] = useState("")
   const fetProductsByCategory = async (queries) => {
 
-    const response = await apiGetProducts({ ...queries, page: currentPage, limit: process.env.REACT_APP_PRODUCT_LIMIT, category })
+    const response = await apiGetProducts({ ...queries, page: currentPage, limit: process.env.REACT_APP_PRODUCT_LIMIT })
     if (response?.success) {
-      setProducts(response)
+      setProducts(response.producData)
       setTotalPages(Math.ceil(response.counts / process.env.REACT_APP_PRODUCT_LIMIT));
     } else {
       setProducts([]);
@@ -33,11 +34,9 @@ const Products = () => {
 
   useEffect(() => {
     console.log('Current params:', Array.from(params.entries()));
-    let param = []
-    for (let i of params.entries()) param.push(i)
-    const queries = {};
+   
+    const queries = Object.fromEntries([...params]);
     let priceQuery = {};
-    for (let i of params) queries[i[0]] = i[1]
     if (queries.to && queries.from) {
       priceQuery = {
         $and: [
@@ -63,16 +62,18 @@ const Products = () => {
   }, [activeClick])
   const changeValue = useCallback((value) => {
     setSort(value)
-  }, [sort])
+  }, [ setSort])
   useEffect(() => {
     if (sort) {
+      const params = new URLSearchParams(location.search);
+      params.set('sort', sort);
       navigate({
         pathname: `/${category}`,
-        search: createSearchParams({ sort }).toString()
+        search: params.toString() 
       })
     }
-  }, [sort, category])
-
+  }, [sort, category, navigate, location.search])
+  
   return (
     <div className='w-full'>
       <div className='h-[81px] bg-gray-100 flex justify-center items-center'>
@@ -81,8 +82,8 @@ const Products = () => {
           <Breadcrumb category={category} />
         </div>
       </div>
-      <div className='w-main border p-4 flex justify-between mt-8 m-auto'>
-        <div className='w-4/5  flex items-center gap-4'>
+      <div className='w-full max-w-[1100px] border p-4 sm:flex  justify-between mt-8 m-auto'>
+        <div className='sm:w-4/5  flex items-center gap-4'>
           <span className='font-semibold text-sm'>Filter by</span>
           <div className='flex items-center gap-3'>
             <Seach
@@ -99,19 +100,19 @@ const Products = () => {
             />
           </div>
         </div>
-        <div className='w-1/5 flex flex-col gap-3'>
-          <span className='font-semibold text-sm'>Sort by</span>
-          <div className=''>
+        <div className='sm:w-1/5 flex sm:flex-col gap-3 mt-2'>
+          <span className='font-semibold text-sm'>Sort by:</span>
+          <div className=' ml-1'>
             <InputSelect changeValue={changeValue} value={sort} options={sorts} />
           </div>
         </div>
       </div>
-      <div className='mt-8 w-main m-auto'>
+      {products?.length !== 0 && <div className='mt-8 w-full mx-auto max-w-[1100px]'>
         <Masonry
           breakpointCols={breakpointColumnsObj}
           className="my-masonry-grid"
           columnClassName="my-masonry-grid_column">
-          {products?.producData?.map(el => (
+          {products?.map(el => (
             <Product
               key={el._id}
               pid={el._id}
@@ -119,9 +120,12 @@ const Products = () => {
               normal={true} />
           ))}
         </Masonry>
-      </div>
-      {products?.producData?.length > 0 &&
-        <div className=' w-main m-auto my-4 flex justify-end'>
+      </div>}
+      {products?.length === 0 && <div className='mt-8 w-full mx-auto max-w-[1100px] text-center min-h-[400px]'>
+        <p>không tìm thấy sản phẩm !!!</p>
+        </div>}
+      {products?.length > 0 &&
+        <div className=' w-full m-auto my-4 flex justify-end'>
           <Pagination
             totalCount={totalPages}
             currentPage={currentPage}

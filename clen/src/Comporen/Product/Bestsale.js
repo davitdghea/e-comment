@@ -34,7 +34,7 @@ const Bestsale = () => {
   }, [activedtab])
   return (
     <div>
-      <div className='w-full flex text-[20px] gap-8 mt-4 justify-center sm:justify-none  items-center pl-4  mr-2'>
+      <div className='w-full flex text-[20px] gap-8 mt-4 justify-center sm:justify-start  items-center pl-4  mr-2'>
         {tabs.map((el) => (
           <span key={el.id}
             onClick={() => { setActivedtab(el.id) }}

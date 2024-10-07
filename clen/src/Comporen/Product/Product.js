@@ -5,22 +5,36 @@ import SelectOption from '../Search/SelectOption'
 import icons from '../../Ultils/Icons'
 import { createSearchParams, Link } from 'react-router-dom'
 import 'animate.css'
-import { apiUpdateCart, apiUpdateWithlist } from 'Apis/User'
+import { apiRemoteCart, apiUpdateCart, apiUpdateWithlist } from 'Apis/User'
 import {  useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { getCurrent } from 'St/User/AsyncAction'
 import Swal from 'sweetalert2'
-import { blue } from '@mui/material/colors'
 import path from 'Ultils/Path'
 import WithRase from 'hocs/withRase'
 import DOMPurify from 'dompurify'
-
+import { FaCartArrowDown } from "react-icons/fa";
 
 const { AiFillEye, FaCartPlus, FaHeart } = icons
 const Product = ({ productData, isNew, normal, dispatch, navigate, location,pid }) => {
  const {current} = useSelector(state => state.user)  
   const [isShowOption, setIsShowOption] = useState(false)
   const handleClickOptions = async (flag) =>{
+    if(flag === 'REMOTECART'){
+      const pid = productData._id
+      const color = productData.color
+      const response = await apiRemoteCart(pid,color)
+      if (response.success) {
+        console.log("Current:", current);
+        console.log("cart:", current?.cart);
+        console.log(current?.cart?.some(el => el.product === productData._id))
+        toast.success(response.MessageChannel)
+        dispatch(getCurrent())
+      }
+      else toast.error(response.MessageChannel)
+
+    }
+    
     if (flag ==='CART'){
       if (!current) return Swal.fire({
         title: 'Almost...',
@@ -35,6 +49,7 @@ const Product = ({ productData, isNew, normal, dispatch, navigate, location,pid 
           search: createSearchParams({ redirect: location.pathname}).toString()
         })
       })
+     
       const response = await apiUpdateCart({
         pid:productData._id,
         color: productData.color,
@@ -44,10 +59,13 @@ const Product = ({ productData, isNew, normal, dispatch, navigate, location,pid 
       })
       
     if(response.success) {
-      toast.success(response.mes)
+      console.log("Current:", current);
+      console.log("cart:", current?.cart);
+      console.log(current?.cart?.some(el => el.product === productData._id))
+      toast.success(response.MessageChannel)
       dispatch(getCurrent())
     }
-      else toast.error(response.mes)
+    else toast.error(response.MessageChannel)
    
     }
     if (flag === 'WISHLIST'){
@@ -65,19 +83,18 @@ const Product = ({ productData, isNew, normal, dispatch, navigate, location,pid 
         })
       })
       const response = await apiUpdateWithlist({pid: productData._id}) 
+      console.log(response)
       if (response.success){
-        console.log(response)
+       
         dispatch(getCurrent())
-        toast.success(response.mes)
-      }else toast.error(response.mes)
+        toast.success(response.rs)
+      } else toast.error(response.rs)
 
     }
   }
- 
   return (
-    <div className=' relative w-full text-base px-[4px] sm:px-[10px] mb-4'>
-      <div
-       
+    <div className=' relative w-full text-base mx-[1] px-[2px] sm:px-[10px] mb-4'>
+      <div      
         onMouseEnter={(el) => {
           el.stopPropagation()
           setIsShowOption(true)
@@ -96,10 +113,10 @@ const Product = ({ productData, isNew, normal, dispatch, navigate, location,pid 
         </ul>}
         <div className='w-full relative '>
           {isShowOption && <div className='absolute z-20 bottom-[-10px] left-0 right-0 flex justify-center animate__animated animate__fadeInUp gap-2'>
-            <Link to={`http://localhost:3000/${productData?.category?.toLowerCase()}/${productData?._id}/${productData?.title}`}><SelectOption icon={<AiFillEye />} /></Link>
-            {current?.cart?.some(el => el.product === productData._id) ? <span onClick={(e) => handleClickOptions("CART")}><SelectOption icon={<FaCartPlus />} /></span>
-              : <span onClick={() => handleClickOptions("CART")}><SelectOption icon={<FaCartPlus color={blue}/>} /></span>}
-            <span onClick={() => handleClickOptions("WISHLIST")}><SelectOption icon={<FaHeart color={current?.wishlist?.some((i) => i._id === productData.pid) ? 'red' : "gray"}/>} /></span> 
+            <Link to={`${productData?.category?.toLowerCase()}/${productData?._id}/${productData?.title}`}><SelectOption icon={<AiFillEye />} /></Link>
+            {current?.cart?.some(el => el.product === productData._id) ? <span onClick={() => handleClickOptions("REMOTECART")}><SelectOption icon={<FaCartArrowDown />} /></span>
+              : <span onClick={() => handleClickOptions("CART")}><SelectOption icon={<FaCartPlus color={'blue'}/>} /></span>}
+            <span onClick={() => handleClickOptions("WISHLIST")}><SelectOption icon={<FaHeart color={current?.wishList?.some((i) => i._id === productData._id) ? 'red' : "gray"}/>} /></span> 
           </div>}
           <img
             src={productData?.thumb || "https://th.bing.com/th/id/OIP.CaLENRpDWR6DvqXLUqlrJgAAAA?rs=1&pid=ImgDetMain"}
@@ -107,9 +124,9 @@ const Product = ({ productData, isNew, normal, dispatch, navigate, location,pid 
             className='w-[243px] h-[243px] object-cover mx-auto'
           />
           {!normal && (isNew === 1 ?
-            <div className='w-[100px] h-[10px] absolute bg-red left-[0px] top-[-10px] text-red-600 sm:font-extrabold '>
+            <div className='w-[100px] h-[10px] absolute bg-red left-[0px] top-[-10px] text-red-600 sm:font-extrabold font-extralight text-[12px] sm:text-[20px]'>
               <p>HOT</p>
-            </div> : <div className='w-[100px] h-[10px] absolute bg-red left-[0px] top-[-10px] text-red-600 font-extrabold'>
+            </div> : <div className='w-[100px] h-[10px] absolute bg-red left-[0px] top-[-10px] text-red-600 sm:font-extrabold font-extralight text-[12px] sm:text-[20px]'>
               <p>NEW</p>
             </div>
           )}
@@ -123,7 +140,7 @@ const Product = ({ productData, isNew, normal, dispatch, navigate, location,pid 
             ))}
           </span>
           <span className='truncate w-[95%]'>{productData?.title}</span>
-          <span>{`${formatMoney(productData?.price)} VNĐ`}</span>
+          <span className='truncate w-[95%]'>{`${formatMoney(productData?.price)} VNĐ`}</span>
         </div>
       </div>
     </div>

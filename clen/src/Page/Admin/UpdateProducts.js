@@ -238,7 +238,7 @@ const UpdateProducts = ({ editProduct, render, setEditProduct }) => {
                     </div>}
                     <div className=' flex justify-end'>
                         <button className='bg-red-500 px-5 py-2 rounded-lg text-white' onClick={()=>setEditProduct(null)}>Cancel</button>  
-                        <Button style='bg-blue-500 text-white ml-5 px-3 rounded-lg' type='submit'>Update product</Button>             
+                        <Button Style='bg-blue-500 text-white ml-5 px-3 rounded-lg' type='submit'>Update product</Button>             
                     </div>
                 </form>
             </div>

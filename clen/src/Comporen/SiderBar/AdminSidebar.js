@@ -13,7 +13,7 @@ const AdminSidebar = () => {
             else setActived(prev => [...prev,tabID])
     }
     return (
-        <div className=' flex-col  min-h-screen bg-gray-200 items-center py-4 text-black'>
+        <div onClick={(e) => e.stopPropagation()} className=' flex-col  min-h-screen bg-gray-200 items-center py-4 text-black'>
             <Link to={'/'} className='flex flex-col justify-center py-4 items-center gap-2'>
                 <img src="https://digital-world-2.myshopify.com/cdn/shop/files/logo_digital_new_250x.png?v=1613166683" alt='logo' className='w-[200px] object-contain' />
                 <smail>Admin Wordspance</smail>

@@ -17,6 +17,9 @@ module.exports = {
       roman:"upper-roman",
     },
     extend: {
+      gridTemplateColumns: {
+        '13': 'repeat(13, minmax(0, 1fr))',
+      },
       screens: {
         xs: '426px', 
       },

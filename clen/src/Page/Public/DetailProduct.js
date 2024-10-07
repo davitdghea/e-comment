@@ -140,23 +140,37 @@ const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
     }
     else toast.error(response.mes)
   }
-  console.log(currentProduct)
-  console.log(product)
   return (
     <div className='w-full relative'>
       {!isQuickView && <div className='h-[81px] bg-gray-100'>
-        <div ref={titleRef} className='w-main m-auto pt-3'>
+        <div ref={titleRef} className='w-full m-auto pt-3'>
           <p className='text-[20px] font-medium'>{currentProduct?.title || product?.title}</p>
           <Breadcrumb title={currentProduct?.title || product?.title} category={category} />
         </div>
       </div>}
-      <div className='w-main m-auto mt-4 flex '>
-        <div className=' border flex-4 shadow-xl mr-4 rounded-lg'>
-          <div className='w-full h-full max-h-[450px] max-w-[450px] flex justify-center items-center'>
-            <img src={currentProduct?.thumb || currentImage} className='max-h-[430px] max-w-[430px] pl-[20px] object-cover' />
+      <div className='w-full m-auto mt-4 sm:flex '>
+        <div className=' border flex-4 shadow-xl sm:mr-4 rounded-lg'>
+          <div className='w-full h-full max-h-[450px] sm:max-w-[450px] flex justify-center items-center'>
+            <img src={currentProduct?.thumb || currentImage} className='max-h-[430px] sm:max-w-[430px] pl-[20px] object-cover' />
           </div>
         </div>
-        <div className=' border shadow-xl flex-4 mr-4 rounded-lg'>
+        <div className='block sm:hidden w-full max-w-[520px] mt-[20px]'>
+          <Slider className='image-slider' {...settings}>
+            {currentProduct?.images?.length === 0 && product?.images?.length > 1 && product?.images?.map(el => (
+              <div onClick={() => { setCurrentImage(el) }}
+                className={clsx('flex w-[160px]  gap-2 justify-around', variant === el.sku && 'border-red-500')}>
+                <img onClick={() => handleClickImage(el)} src={el} alt="sub-product" className='h-[143px] w-[170px] border border-gray-300 object-cover shadow-xl rounded-xl py-[10px]' />
+              </div>
+            ))}
+            {currentProduct?.images?.length > 2 && currentProduct?.images?.map(el => (
+              <div onClick={() => { setCurrentImage(el) }}
+                className={clsx('flex w-[160px]  gap-2 justify-around', variant === el.sku && 'border-red-500')}>
+                <img src={el} alt="sub-product" className='h-[143px] w-[170px] border border-gray-300 object-cover shadow-xl rounded-xl py-[10px]' />
+              </div>
+            ))}
+          </Slider>
+        </div>
+        <div className=' border shadow-xl flex-4 sm:mr-4 rounded-lg'>
           <div className=' flex justify-between'>
             <h2 className='text-[30px] font-semibold ml-2'>
               {`${formatMoney(currentProduct?.price || product?.price)}  VNĐ`}
@@ -173,7 +187,7 @@ const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
             {product?.description?.length === 1 && <div className='text-sm' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product?.description[0]) }}></div>}
             {product?.description?.length > 1 && product?.description?.map(el => (<li className='leading-6 ml-[20px]' key={el}>{el}</li>))}
           </ul>
-          <div className='my-6 flex items-center gap-4 ml-6'>
+          <div className='my-6 flex items-center gap-4 sm:ml-6'>
             <span className='font-bold'>Color:</span>
             <div className='flex flex-wrap gap-4 items-center '>
               <div
@@ -214,7 +228,7 @@ const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
             </Button>
           </div>
         </div>
-        {!isQuickView && <div className=' border rounded-xl  flex-2 shadow-xl'>
+        {!isQuickView && <div className='hidden sm:block border rounded-xl  flex-2 shadow-xl'>
           {ProductExtraInfoItemTion.map(el => (
             <ProductExtraInfoItem
               key={el.id}
@@ -225,24 +239,24 @@ const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
           ))}
         </div>}
       </div>
-      <div className='w-main m-auto flex'>
-        <div className='w-full max-w-[520px] mt-[20px]'>
+      <div className='w-full m-auto flex'>
+        <div className='w-full hidden sm:block max-w-[440px] mt-[20px]'>
           <Slider className='image-slider' {...settings}>
             {currentProduct?.images?.length === 0 && product?.images?.length > 1 && product?.images?.map(el => (
               <div onClick={() => { setCurrentImage(el) }}
-                className={clsx('flex w-[160px]  gap-2 justify-around', variant === el.sku && 'border-red-500')}>
-                <img onClick={() => handleClickImage(el)} src={el} alt="sub-product" className='h-[143px] w-[170px] border border-gray-300 object-cover shadow-xl rounded-xl py-[10px]'/>
+                className={clsx('flex w-[150px] mb-[10px] gap-2 justify-around', variant === el.sku && 'border-red-500')}>
+                <img onClick={() => handleClickImage(el)} src={el} alt="sub-product" className=' w-[140px] border border-gray-300 object-cover shadow-xl rounded-xl py-[10px]'/>
               </div>
             ))}
             {currentProduct?.images?.length > 2 && currentProduct?.images?.map(el => (
               <div onClick={() => { setCurrentImage(el) }}
-                className={clsx('flex w-[160px]  gap-2 justify-around', variant === el.sku && 'border-red-500')}>
-                <img src={el} alt="sub-product" className='h-[143px] w-[170px] border border-gray-300 object-cover shadow-xl rounded-xl py-[10px]'/>
+                className={clsx('flex w-[150px] pb-[20px] gap-2 justify-around', variant === el.sku && 'border-red-500')}>
+                <img onClick={() => handleClickImage(el)} src={el} alt="sub-product" className=' w-[140px] border border-gray-300 object-cover shadow-xl rounded-xl py-[10px]'/>
               </div>
             ))}
           </Slider>
         </div>
-        <div className='w-full max-w-[67%] shadow-xl border  rounded-xl mt-5 ml-3'>
+        <div className='w-full sm:max-w-[67%] shadow-xl border  rounded-xl mt-5 sm:ml-3'>
           <div className='flex flex-col  py-[5px] bg-blue-300 rounded-t-xl text-white'>
             <span className='ml-[20px] text-[20px] font-semibold'>{`Địa chỉ uy tín mua ${product?.title}`}</span>
           </div>
@@ -254,7 +268,7 @@ const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
           </div>
         </div>
       </div>
-      {!isQuickView  && <div className='w-main m-auto mt-8'>
+      {!isQuickView  && <div className='w-full m-auto mt-8'>
         <ProductInFormate
           totalRatings={product?.totalRatings}
           ratings={product?.ratings}
@@ -263,7 +277,7 @@ const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
           rerender={rerender}
         />
       </div>}
-      {!isQuickView  && <div className='w-main m-auto my-8'>
+      {!isQuickView  && <div className='w-full  sm:mb-0 sm:my-8 mb-[120px]'>
         <h3 className='text-[20px] font-semibold py-[15px] bottom-b-2 border-red-500'>
           Other Customers also buy:
         </h3>
