@@ -15,11 +15,11 @@ const FeatureProduct = () => {
     return (
     <div className='w-full'>
         <h3 className='text-20px py-[15px] border-b-2px uppercase border-black font-medium '>FeatureProduct</h3>
-        <div className='flex flex-wrap mt-[15px]'>
+        <div className='flex flex-wrap mt-[15px] justify-center'>
             {products?.map(el =>(
                 <ProductCart
                 {...el}
-                    style=' w-full xs:max-w-[200px] sm:max-w-[350px] flex shadow ml-2 mt-2 cursor-pointer border rounded-sm '
+                    style=' w-full xs:max-w-[200px] sm:max-w-[300px] md:max-w-[350px] flex shadow ml-2 mt-2 cursor-pointer border rounded-sm '
                 pid={el._id}
                 images={el.thumb}
                key={el._id}

@@ -12,7 +12,7 @@ var orderSchema = new mongoose.Schema({
     }],
    status:{
         type:String,
-        enum:["Cancelled",'Succeed'],
+       enum: ["Cancelled", 'Available', 'Transport', 'Succeed', 'False','Order'],
     },
     total: Number,
     orderBy:{

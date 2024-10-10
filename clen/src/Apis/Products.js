@@ -102,3 +102,25 @@ export const apiGetUserOrder = (params) => {
         }
     })
 }
+export const apiGetUserOrderAdmin = (params) => {
+    const token = getToken();
+    return axios({
+        url: '/order/admin',
+        method: "get",
+        params,
+        headers: {
+            Authorization: token ? `Bearer ${token}` : undefined
+        }
+    })
+}
+export const apiUpdateUserOrderAdmin = (data) => {
+    const token = getToken();
+    return axios({
+        url: '/order/status',
+        method: "put",
+        data,
+        headers: {
+            Authorization: token ? `Bearer ${token}` : undefined
+        }
+    })
+}

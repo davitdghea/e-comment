@@ -1,8 +1,9 @@
 import React from 'react'
 import clsx from 'clsx'
-const InputField = ({ value, setValue, nameKey, placeholder, type, invalidFields, setInvalidFields, style, fullWidth,isShowed }) => {
+
+const InputField = ({ setError,error= false,value, setValue, nameKey, placeholder, type, invalidFields, setInvalidFields, style, fullWidth,isShowed }) => {
   return (
-    <div className={clsx('flex flex-col relative mb-2', fullWidth && 'w-full')}>
+    <div onClick={setError ? () => setError(false) : undefined} className={clsx('flex flex-col relative mb-2', fullWidth && 'w-full')}>
       {/* {!isShowed && value?.trim() !== "" && <label htmlFor={nameKey}>{nameKey.slice(0, 1).toUpperCase() + nameKey.slice(1)}</label>} */}
       <input
         type={type || 'text'}
@@ -12,9 +13,12 @@ const InputField = ({ value, setValue, nameKey, placeholder, type, invalidFields
         onChange={e => setValue(prev => ({ ...prev, [nameKey]: e.target.value }))}
         onFocus={() => setInvalidFields && setInvalidFields([])}
       />
+      
       {invalidFields?.some(el => el.name === nameKey)
         && <small className='text-red-500 italic '>{invalidFields.find(el => el.name === nameKey)?.mes}
         </small>}
+      {error && <small className='text-red-500'>User has existed</small>
+}
     </div>
   )
 }

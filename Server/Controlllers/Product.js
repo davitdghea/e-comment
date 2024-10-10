@@ -67,7 +67,7 @@ const getProducts = ansyncHandler(async (req, res) => {
         }
     }
     const q = { ...colorQueryObject, ...formatedQueries, ...queryObject }
-    let queryCommand = Product.find(q)
+    let queryCommand = Product.find(q).sort({ createdAt: -1 });
     // sắp xếp 
     // abc,efg =>[abc,efg]=>abc efg
 

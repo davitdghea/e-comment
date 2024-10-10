@@ -65,7 +65,7 @@ const ManageProducts = () => {
         />
       </div>
       }
-      {customzeVarriant && <div className='absolute inset-0 min-h-screen z-20'>
+      {customzeVarriant && <div className='w-full absolute inset-0 min-h-screen z-20'>
         <Variants
           customzeVarriant={customzeVarriant}
           render={render}
@@ -126,9 +126,9 @@ const ManageProducts = () => {
                   <td className='sm:grid hidden text-[12px] mt-5'>{el?.variants?.length}</td>
                   <td className='sm:grid hidden text-[12px] mt-5'>{moment(el.updatedAt).format('DD/MM/YYYY')}</td>
                   <td className='flex items-center ml-4 mt-5 sm:mt-0'>
-                    <span onClick={() => setEditProduct(el)} className='text-orange-500 mr-1' title="Edit"><FaEdit/></span>
-                    <span onClick={() => handleDeleteProduct(el._id)} className='text-red-500 mr-1' title="Delete"><AiOutlineDelete/></span>
-                    <span onClick={() => setCustomzeVarriant(el)} className='text-blue-500' title="Variants"><BiAddToQueue/></span>
+                    <span onClick={() => setEditProduct(el)} className='text-orange-500 mr-1 cursor-pointer' title="Edit"><FaEdit/></span>
+                    <span onClick={() => handleDeleteProduct(el._id)} className='text-red-500 mr-1 cursor-pointer' title="Delete"><AiOutlineDelete/></span>
+                    <span onClick={() => setCustomzeVarriant(el)} className='text-blue-500 cursor-pointer' title="Variants"><BiAddToQueue/></span>
                   </td>
                 </tr>
               ))}

@@ -22,7 +22,7 @@ const handleClickMenu = useCallback((e) =>{
       </div>}
       <TopHearder handleClickMenu={handleClickMenu} />
       {styleMenu && <div onClick={() => setStyleMenu(false)} className='absolute top-0 bottom-0 left-0 right-0 bg-gray-400/50 z-50'>
-        <Sideba  Style={'flex flex-col shadow-xl sm:rounded-lg sm:top-[150px] fixed z-100 bg-gray-50 sm:left-[130px] left-0 top-0 sm:bottom-[150px] w-[190px] sm:w-[250px] h-full h-screen sm:max-h-[370px] sm:h-[370px] '} />
+        <Sideba  Style={'flex flex-col shadow-xl sm:rounded-lg sm:top-[150px] fixed z-100 bg-gray-50 sm:left-[130px] left-0 top-0 sm:bottom-[150px] w-[190px] sm:w-[250px] h-full  sm:max-h-[370px] sm:h-[370px] '} />
 
       </div>
       }

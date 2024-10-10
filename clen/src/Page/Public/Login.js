@@ -9,6 +9,8 @@ import { useDispatch } from "react-redux"
 import { toast } from 'react-toastify'
 import { ShowModal } from 'St/App/Appslice'
 import { validate } from 'Ultils/Hellpers'
+import { FaEye } from "react-icons/fa";
+import { IoIosEyeOff } from "react-icons/io";
 
 const Login = () => {
   const navigate = useNavigate()
@@ -16,9 +18,11 @@ const Login = () => {
   const [searchParams] = useSearchParams()
   const [isVerifiedEmail, setIsVeriFieEmail] = useState(false)
   const [isRegister, SetIsRegister] = useState(false)
+  const [error, setError] = useState(false)
   const [invalidFields, setInvalidFields] = useState([])
   const [email, SetEmail] = useState('')
   const [token, setToken] = useState('')
+  const [pass, setPass] = useState('password')
   const [isForgotPass, SetIsForgotPass] = useState(false)
   const [payload, setPayload] = useState({
     email: "",
@@ -45,7 +49,9 @@ const Login = () => {
       toast.info(response.mes, { theme: 'colored' })
     }
   }
-
+const handle = useCallback( (value) =>{
+  setError(value)
+}, [error])
   useEffect(() => {
     resetPayload()
   }, [isRegister])
@@ -54,12 +60,17 @@ const Login = () => {
     const invalids = isRegister ? validate(payload, setInvalidFields) : validate(data, setInvalidFields)
     if (invalids === 0) {
       if (isRegister) {
+        try {
         dispatch(ShowModal({ isShowModal: true, modalChildren: <Loading /> }))
         const response = await apiRegister(payload)
         dispatch(ShowModal({ isShowModal: false, modalChildren: null }))
         if (response?.success) {
           setIsVeriFieEmail(true)
         } else Swal.fire('Oops!', response?.mes, 'error')
+        } catch (error) {
+          
+          setError(true)
+        }
       } else {
         try {
           const res = await apiLogin(data);
@@ -90,19 +101,19 @@ const Login = () => {
       Swal.fire('Congratulation', response.mes, 'success').then(() => {
         SetIsRegister(false)
         resetPayload()
+        setIsVeriFieEmail(false)
       })
     } else {
       Swal.fire('Oops!', response.mes, 'error')
-      setIsVeriFieEmail(false)
       setToken('')
     }
   }
   return (
 
-    <div className='w-screen h-screen bg-gradient-to-t from-violet-400 to-violet-600 relative flex items-center justify-center bg-transparent'>
+    <div className='w-screen h-screen bg-gradient-to-r from-blue-200 via-pink-200 to-orange-200 relative flex items-center justify-center bg-transparent'>
       {isVerifiedEmail &&
         <div onClick={() => setIsVeriFieEmail(false) } className='absolute top-0 left-0 right-0 bottom-0 bg-gray-300/50 flex items-center justify-center z-50'>
-          <div onClick={e => e.stopPropagation()} className=' text-[20px] font-normal w-[500px] bg-white flex flex-col justify-center rounded-md p-8'>
+          <div onClick={e => e.stopPropagation()} className='text-[20px] font-normal w-[500px] bg-white flex flex-col justify-center rounded-md p-8'>
             <h4>we sent a code to your mail. please check your mail and enter your code:</h4>
             <span className='mt-3  mx-auto'>
               <input type="text"
@@ -128,7 +139,9 @@ const Login = () => {
             placeholder='Exp: email@gmail.com'
             value={email}
             onChange={e => SetEmail(e.target.value)}></input>
+          
         </div>
+        
         <div className=' flex items-center justify-end w-[800px] m-[10px] gap-4'>
           <div>
             <Button
@@ -146,8 +159,8 @@ const Login = () => {
           </div>
         </div>
       </div>}
-
-      <div className='absolute shadow-xl bg-white items-center rounded-lg justify-center flex z-10 w-full max-w-[550px]'>
+         
+      <div className=' sm:p-10 top-0 bottom-0 sm:top-20 sm:bottom-20 absolute  shadow-lg bg-white  items-center rounded-lg justify-center flex z-10 max-w-md w-full'>
         {/* <div className='   w-1/2 relative'>
           <img
             src="https://th.bing.com/th/id/OIP.RvOpgYypirRSnWaTgGvDlwHaFj?rs=1&pid=ImgDetMain"
@@ -163,10 +176,11 @@ const Login = () => {
 
         </div> */}
         <div className='p-8  rounded-md min-w-[300px] w-full max-w-[400px] h-full'>
-          <h1 className='text-[28px] text-main mp-[8px] text-blue-500'><p className='text-shadow-md'>{isRegister ? "Register" : "Login"}</p></h1>
+          <h1 className='text-center text-2xl font-bold mb-6'>WELCOME</h1>
           {isRegister &&
             <div className='flex gap-3'>
               <InputField
+                style='p-3 mb-4 border rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-pink-300'
                 value={payload.firstname}
                 setValue={setPayload}
                 nameKey="firstname"
@@ -175,6 +189,7 @@ const Login = () => {
 
               />
               <InputField
+                style=' p-3 mb-4 border rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-pink-300'
                 value={payload.lastname}
                 setValue={setPayload}
                 nameKey="lastname"
@@ -184,21 +199,29 @@ const Login = () => {
             </div>
           }
           <InputField
+            style='w-full p-3 mb-4 border rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-pink-300'
+            setError={handle}
+            error={error}
             value={payload.email}
             setValue={setPayload}
             nameKey="email"
             invalidFields={invalidFields}
             setInvalidFields={setInvalidFields}
           />
-          <InputField
-            value={payload.password}
-            setValue={setPayload}
-            nameKey="password"
-            type="password"
-            invalidFields={invalidFields}
-            setInvalidFields={setInvalidFields}
-          />
-          <Button Style='w-full flex items-center p-3 text-white rounded-sm justify-center bg-green-500'
+          <div className='relative'>
+            <InputField
+              style='w-full p-3 mb-4 border rounded-lg bg-gray-100 focus:outline-none focus:ring-2 focus:ring-pink-300'
+              value={payload.password}
+              setValue={setPayload}
+              nameKey="password"
+              type={pass}
+              invalidFields={invalidFields}
+              setInvalidFields={setInvalidFields}
+            />
+            {pass === 'password' ? <span className='absolute top-5 right-2' onClick={() => setPass('text')}><FaEye /></span> : <span className='absolute top-5 right-2' onClick={() => setPass('password')}><IoIosEyeOff /></span>}
+          </div>
+         
+          <Button Style='w-full bg-pink-500 text-white p-3 rounded-lg hover:bg-pink-600'
             handleOnclick={handleSubmit}
             fw
           >
@@ -221,3 +244,6 @@ const Login = () => {
 }
 
 export default Login
+
+
+  

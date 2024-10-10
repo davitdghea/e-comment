@@ -28,7 +28,7 @@ const ButtonWrapper = ({ currency, showSpinner, payload, setIsSuccess, amount })
 
     const handleSaveOrder = async () => {
         try {
-            const response = await apiCreateOrder({ ...payload, status: "Succeed" });
+            const response = await apiCreateOrder({ ...payload, status: "Order" });
             if (response.success) {
                 setIsSuccess(true);
                 Swal.fire('Chúc mừng!', 'Đơn hàng đã được tạo.', 'success').then(() => {

@@ -100,7 +100,7 @@ const dispatch = useDispatch()
     
     <div>
       <div className='p-4 border-b w-full bg-gray-100 flex justify-between items-center fixed top-0 z-20 '>
-        <h1 className='text-2xl font-bold tracking-tight w-200px ml-10'>CreateProducts</h1>
+        <h1 className='text-2xl font-bold tracking-tight w-200px ml-10 sm:ml-2'>CreateProducts</h1>
       </div>
       {/* const {title, price, description, brand, category, color} = req.body */}
       <div className='p-4 mt-12'>
@@ -155,7 +155,7 @@ const dispatch = useDispatch()
               }}
               placeholder='Color of new product'
               style='flex-auto'
-              type='text'
+              type='color'
 
             />
           </div>
@@ -167,7 +167,7 @@ const dispatch = useDispatch()
               register={register}
               id='category'
               style='flex-auto'
-              validate={{ required: "Need fill thí field" }}
+              validate={{ required: "Need fill this field" }}
               fullWidth
 
             /> 
@@ -178,7 +178,7 @@ const dispatch = useDispatch()
               register={register}
               id='brand'
               style='flex-auto'
-              validate={{ required: "Need fill thí field" }}
+              validate={{ required: "Need fill this field" }}
               fullWidth
 
             />

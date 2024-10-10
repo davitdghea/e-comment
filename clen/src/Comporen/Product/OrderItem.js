@@ -1,30 +1,34 @@
+import { GetProducts } from 'Apis/Products'
 import { SelectQuantity } from 'Comporen/Index'
 import WithRase from 'hocs/withRase'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { updateCart } from 'St/User/Userslice'
 import { formatMoney } from 'Ultils/Hellpers'
 
 const OrderItem = ({ el, defaultQuantity = 1, dispatch, handCallBack, selectedProducts }) => {
-    const { currentCart, current } = useSelector(state => state.user)
-    console.log(currentCart)
-    console.log(current)
     const [quantity, setQuantity] = useState(() => defaultQuantity)
+    const [quantityGoc, setQuantityGoc] = useState(null)
     const [isSelected, setIsSelected] = useState(selectedProducts.includes(el._id))
-
+    const ApiProduct = async () => {
+        const response = await GetProducts(el.product)
+        if (response.success) {
+            setQuantityGoc(response.ProductData.quantity)
+            setQuantity(el.quantity)
+        }
+    }
     useEffect(() => {
-        setQuantity(el.quantity)
-    }, [el])
-
+        ApiProduct()    
+    }, [])  
     const handleQuantity = (number) => {
-        if (!isSelected && +number > 1) setQuantity(number)
+        if (!isSelected && +number > 1 ) setQuantity(number)
     }
 
-    const handleChanGeQuantity = (flag) => {
+    const handleChanGeQuantity = async(flag) => {
+        
         if (!isSelected) {
             if (flag === 'minus' && quantity === 1) return
             if (flag === 'minus') setQuantity(prev => +prev - 1)
-            if (flag === 'plus') setQuantity(prev => +prev + 1)
+            if (flag === 'plus' && quantity < quantityGoc) setQuantity(prev => +prev + 1)
         }
     }
 

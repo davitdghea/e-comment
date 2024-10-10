@@ -31,12 +31,12 @@ const Home = ({ navigate }) => {
                         product={newproduct}
                     />
                 </div>
-                <div className='w-full'>
+                <div className='w-full mb-[100px] sm:mb-0'>
                     <h3 className=' m-auto text-20px py-[15px] border-b-2 uppercase border-black font-bold'>Hot colecttion</h3>
                     <div className='flex flex-wrap  m-auto'>
                         {categories?.filter(el => el.title.toLowerCase() !== 'camera' && el.title.toLowerCase() !== 'speaker').map(el => (
                             <div key={el._id}
-                                className='sm:max-w-[350px] xs:max-w-[300px] w-full flex-initial p-2 shadow border mx-1 my-1'>
+                                className='sm:max-w-[300px] md:max-w-[350px]  w-full flex-initial p-2 shadow border mx-1 my-1'>
                                 <div className='flex w-full'>
                                     <div className='w-full max-w-[62%] flex items-center justify-center'>
                                         <img src={el.image} alt='' className='object-contain flex-1 w-[144px] h-[129px]' />

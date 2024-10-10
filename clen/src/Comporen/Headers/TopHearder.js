@@ -15,7 +15,7 @@ const TopHearder = ({ handleClickMenu, dispatch, navigate }) => {
   const [InformationUser, setInformationUser] = useState(false)
   const [dataSearch, setDataSeach] = useState('')
   const { isLoggedIn, current, mes } = useSelector(state => state.user)
-  const [data, setData] = useState()
+
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (isLoggedIn) dispatch(getCurrent());
@@ -30,34 +30,29 @@ const TopHearder = ({ handleClickMenu, dispatch, navigate }) => {
       navigate(`/${path.LOGIN}`)
     })
   }, [mes])
-
   const Seach = async (dataSearch) => {
     const normalizedSearch = keywordMap[dataSearch.toLowerCase()] || dataSearch.toLowerCase();
     const params = ["smartphone", "tablet", "laptop", "speaker", "television", "printer", "camera", "accessories"].includes(normalizedSearch)
       ? { category: normalizedSearch }
       : { title: normalizedSearch };
-    const response = await apiGetProducts(params)
     const queryParams = new URLSearchParams();
     if (params.category) {
       queryParams.append('category', params.category);
     }
     if (params.title) {
       queryParams.append('title', params.title);
-    }
-    if (response.success) {
-      setData(response.producData)
+    }   
       navigate({
         pathname: `/${path.PRODUCTS }`,
         search: queryParams.toString()
-      })
-    } else navigate({ pathname: `/${path.PRODUCTS}` })
-  }
+      })   
+    }
   const clearLocalStorage = () => {
     localStorage.clear()
   }
   return (
     <div className='sm:h-[100px] h-[70px] sm:w-full bg-white fixed shadow-md z-40 top-0 left-0 right-0 '>
-      <div className='m-auto sm:w-main flex justify-center sm:justify-between sm:py-[35px] py-[10px] sm:h-[110px] h-[70px]'>
+      <div className='m-auto sm:w-full flex justify-center sm:justify-between sm:py-[35px] py-[10px] sm:h-[110px] h-[70px]'>
         <Link to='/' className='mt-1 sm:mt-0 sm:max-w-[340px] w-full max-w-[50px]'>
           <img className='w-full sm:block hidden' src="https://digital-world-2.myshopify.com/cdn/shop/files/logo_digital_new_250x.png?v=1613166683" alt="logo" />
           <p className='block  sm:hidden text-red-500 text-center font-extrabold text-[30px]'>W</p>
@@ -70,10 +65,10 @@ const TopHearder = ({ handleClickMenu, dispatch, navigate }) => {
           <div className='cursor-pointer flex flex-col sm:px-4 px-2 sm:border-r items-center mt-2 sm:mt-0'>
             <span className='flex items-center'>
               <span className='bg-slate-300 sm:p-3 p-2 rounded-l-md' onClick={() => Seach(dataSearch)}><IoIosSearch color='red' size={20} /></span>
-              <input onChange={el => setDataSeach(el.target.value)} placeholder='Bạn cần gì?' className='w-[150px] sm:w-[250px] outline-none  sm:p-3 p-2 rounded-r-md  flex  bg-slate-300 ' value={dataSearch} />
+              <input onChange={el => setDataSeach(el.target.value)} placeholder='Bạn cần gì?' className='w-full max-w-[150px] sm:max-w-[250px] outline-none  sm:p-3 p-2 rounded-r-md  flex  bg-slate-300 ' value={dataSearch} />
             </span>
           </div>
-          <div className='hidden sm:flex flex-col px-4 sm:border-r items-center'>
+          <div className='  flex-col px-4 sm:border-r items-center hidden lg:block'>
             <span className='flex items-center'>
               <RiPhoneFill color="red" />
               <span className='font-semibold ml-3 text-base'> (+1800) 000 8808</span>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import { useParams, useSearchParams, useNavigate, createSearchParams, useLocation } from 'react-router-dom'
+import { useParams, useSearchParams, useNavigate, useLocation } from 'react-router-dom'
 import { Breadcrumb, InputSelect, Product, Seach, Pagination } from '../../Comporen/Index'
 import { apiGetProducts } from '../../Apis/Index'
 import Masonry from 'react-masonry-css'
@@ -29,12 +29,11 @@ const Products = () => {
       setTotalPages(Math.ceil(response.counts / process.env.REACT_APP_PRODUCT_LIMIT));
     } else {
       setProducts([]);
+      console.log("products:" + products?.length)
     }
   }
 
   useEffect(() => {
-    console.log('Current params:', Array.from(params.entries()));
-   
     const queries = Object.fromEntries([...params]);
     let priceQuery = {};
     if (queries.to && queries.from) {
@@ -73,9 +72,9 @@ const Products = () => {
       })
     }
   }, [sort, category, navigate, location.search])
-  
+  console.log(products?.length)
   return (
-    <div className='w-full'>
+    <div className='w-full' onClick={() => { SetactiveClick(null) }}>
       <div className='h-[81px] bg-gray-100 flex justify-center items-center'>
         <div className='w-main m-auto pt-3'>
           <p className='text-[20px] font-medium'>{category}</p>
@@ -122,7 +121,7 @@ const Products = () => {
         </Masonry>
       </div>}
       {products?.length === 0 && <div className='mt-8 w-full mx-auto max-w-[1100px] text-center min-h-[400px]'>
-        <p>không tìm thấy sản phẩm !!!</p>
+        <p>Không tìm thấy sản phẩm !!!</p>
         </div>}
       {products?.length > 0 &&
         <div className=' w-full m-auto my-4 flex justify-end'>

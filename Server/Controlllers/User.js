@@ -10,12 +10,17 @@ const { MessageChannel } = require("worker_threads")
 const register = asyncHend(async (req, res) => {
     const { email, password, firstname, lastname } = req.body
     if (!email || !password || !lastname || !firstname)
-        return res.status(400).json({
+       { return res.status(400).json({
             success: false,
             mes: "missing inputs"
-        })
+        })}
     const user = await User.findOne({ email })
-    if (user) throw new Error("user has existed")
+    if (user) {
+        return res.status(400).json({
+            success: false,
+            mes: "user has existed"
+        })
+    }
     else {
         const token = makeToken()
         const emailEdited = btoa(email) + '@' + token
@@ -281,15 +286,15 @@ const UpdateCart = asyncHend(async (req, res) => {
     console.log(req.body)
     if (!pid || !quantity) throw new Error('missing inputs')
     const user = await User.findById(_id).select('cart')
-    const alreadyProduct = user?.cart?.find(el => el.product.toString() === pid)
+    const alreadyProduct = user?.cart?.find(el => el.product.toString() === pid && el.color === color)
     if (alreadyProduct) {
         const response = await User.updateOne({ cart: { $elemMatch: alreadyProduct } }, {
+            $inc: { 'cart.$.quantity': quantity },
             $set: {
-                "cart.$.quantity": quantity,
                 'cart.$.price': price,
                 'cart.$.thumb': thumb,
                 'cart.$.title': title,
-                'cart.$.color': color
+                
             }
         }, { new: true })
         return res.status(200).json({
@@ -325,7 +330,6 @@ const updateWishList = asyncHend(async (req, res) => {
     const { _id } = req.user
     const user = await User.findById(_id)
     const alreadyInWishlist = user.wishList?.find(el => el.toString() === pid)
-    console.log(alreadyInWishlist)
     if (alreadyInWishlist) {
         const response = await User.findByIdAndUpdate(
             _id,

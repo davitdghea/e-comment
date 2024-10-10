@@ -45,7 +45,7 @@ const Pesonal = ({navigate}) => {
         </header>
       </div>
     
-      <form className='mt-5 sm:ml-20 ml-2' onSubmit={handleSubmit(handleUpdateInform)}>
+      <form className='mt-5 ml-2 sm:ml-20 ' onSubmit={handleSubmit(handleUpdateInform)}>
         <p className='flex '><span className='w-[120px]'>Email address:</span> <span>{current?.email}</span></p>
         <InputFrom
           layoutUser

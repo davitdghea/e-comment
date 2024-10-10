@@ -34,7 +34,11 @@ const Product = ({ productData, isNew, normal, dispatch, navigate, location,pid 
       else toast.error(response.MessageChannel)
 
     }
-    
+    if (flag === 'DElTAL'){
+      navigate({
+        pathname: `/${productData?.category.toLowerCase()}/${productData?._id}/${productData?.title}`
+      })
+    }
     if (flag ==='CART'){
       if (!current) return Swal.fire({
         title: 'Almost...',
@@ -55,13 +59,10 @@ const Product = ({ productData, isNew, normal, dispatch, navigate, location,pid 
         color: productData.color,
         price: productData.price,
         thumb: productData.thumb,
-        title: productData.title
+        title: productData.title,
       })
       
     if(response.success) {
-      console.log("Current:", current);
-      console.log("cart:", current?.cart);
-      console.log(current?.cart?.some(el => el.product === productData._id))
       toast.success(response.MessageChannel)
       dispatch(getCurrent())
     }
@@ -92,8 +93,9 @@ const Product = ({ productData, isNew, normal, dispatch, navigate, location,pid 
 
     }
   }
+  //Link to={`${category}/${productData?._id}/${productData?.title}`}>;
   return (
-    <div className=' relative w-full text-base mx-[1] px-[2px] sm:px-[10px] mb-4'>
+    <div onClick={() => handleClickOptions("DElTAL")} className=' cursor-pointer relative w-full text-base mx-[1] px-[2px] sm:px-[10px] mb-4'>
       <div      
         onMouseEnter={(el) => {
           el.stopPropagation()
@@ -105,18 +107,12 @@ const Product = ({ productData, isNew, normal, dispatch, navigate, location,pid 
         }}
         className='w-full border sm:p-[15px] p-[10px] flex flex-col items-center shadow-lg rounded-xl my-3'
       >
-        {isShowOption && <ul className='rounded-xl sm:mx-3 pt-2  top-0 bottom-0 left-0 right-0 absolute z-10 bg-slate-300'>
-         
-            {productData?.description?.length === 1 && <div className='text-sm' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(productData?.description[0]) }}></div>}
-            {productData?.description?.length > 1 && productData?.description?.map(el => (<li className='leading-6 ml-[20px]' key={el}>{el}</li>))}
-          
-        </ul>}
+        
         <div className='w-full relative '>
           {isShowOption && <div className='absolute z-20 bottom-[-10px] left-0 right-0 flex justify-center animate__animated animate__fadeInUp gap-2'>
-            <Link to={`${productData?.category?.toLowerCase()}/${productData?._id}/${productData?.title}`}><SelectOption icon={<AiFillEye />} /></Link>
-            {current?.cart?.some(el => el.product === productData._id) ? <span onClick={() => handleClickOptions("REMOTECART")}><SelectOption icon={<FaCartArrowDown />} /></span>
-              : <span onClick={() => handleClickOptions("CART")}><SelectOption icon={<FaCartPlus color={'blue'}/>} /></span>}
-            <span onClick={() => handleClickOptions("WISHLIST")}><SelectOption icon={<FaHeart color={current?.wishList?.some((i) => i._id === productData._id) ? 'red' : "gray"}/>} /></span> 
+            {current?.cart?.some(el => el.product === productData._id) ? <span onClick={(e) => {handleClickOptions("REMOTECART");e.stopPropagation()}}><SelectOption icon={<FaCartArrowDown />} /></span>
+              : <span onClick={(e) => {handleClickOptions("CART");e.stopPropagation()}}><SelectOption icon={<FaCartPlus color={'blue'}/>} /></span>}
+            <span onClick={(e) => {handleClickOptions("WISHLIST");e.stopPropagation()}}><SelectOption icon={<FaHeart color={current?.wishList?.some((i) => i._id === productData._id) ? 'red' : "gray"}/>} /></span> 
           </div>}
           <img
             src={productData?.thumb || "https://th.bing.com/th/id/OIP.CaLENRpDWR6DvqXLUqlrJgAAAA?rs=1&pid=ImgDetMain"}

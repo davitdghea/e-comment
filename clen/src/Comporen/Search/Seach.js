@@ -77,11 +77,11 @@ const Seach = ({ type, name, activeClick, changeActiveFitler }) => {
   return (
     <div
       className=' cursor-pointer items-center text-gray-400 p-3 gap-6 border border-gay-800 flex justify-between relative text-xs'
-      onClick={() => { changeActiveFitler(name) }}
+      onClick={(e) => { changeActiveFitler(name);e.stopPropagation() }}
     >
       <span className='capitalize'>{name}</span>
       <AiOutlineDown />
-      {activeClick === name && <div className='absolute bottom-[-1px] top-full border z-50 left-0 w-fit p-4 bg-white min-w-[150px] min-h-[400px]'>
+      {activeClick === name && <div onClick={e => e.stopPropagation()} className='absolute bottom-[-1px] top-full border z-50 left-0 w-fit p-4 bg-white min-w-[150px] min-h-[400px]'>
         {type === 'checkbox' && <div className=''>
           <div className='bg-white p-4 items-center flex justify-between gap-8'>
             <span className='whitespace-nowrap '>{`${selected.length} selected`}</span>
@@ -120,7 +120,7 @@ const Seach = ({ type, name, activeClick, changeActiveFitler }) => {
               }} className='underline cursor-pointer hover:text-red-500'>Reset</span>
 
           </div>
-          <div className='flex items-center p-2 gap-2'>
+          <div onClick={e => e.stopPropagation()} className='flex items-center p-2 gap-2'>
             <div className='flex item-center gap-2' >
               <label htmlFor='from'>from</label>
               <input

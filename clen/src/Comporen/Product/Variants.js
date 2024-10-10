@@ -1,4 +1,4 @@
-import { apiAddVarriant, apiCreateProduct } from 'Apis/Products'
+import { apiAddVarriant } from 'Apis/Products'
 import { Button, InputFrom, Loading } from 'Comporen/Index'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -74,15 +74,12 @@ const Variants = ({ customzeVarriant, setCustomzeVarriant, render }) => {
     return (
         <div className='w-full h-full flex flex-col gap-4 relative bg-slate-200'>
             <div div className='h-[69px] w-full' ></div>
-            <div className='p-4 border-b w-full max-w-[1360px] bg-gray-100 flex justify-between items-center fixed top-0 z-50'>
-                <h1 className='text-2xl font-bold tracking-tight w-200px'>Variants</h1>
-                <span
-                    onClick={() => { setCustomzeVarriant(null) }}>
-                    Cancel
-                </span>
+            <div className='p-4 border-b w-full max-w-[1160px] bg-gray-100 flex justify-between items-center fixed top-0 z-50'>
+                <h1 className='text-2xl font-bold tracking-tight ml-10 sm:ml-0'>Variants</h1>
+                
             </div>
             <form onSubmit={handleSubmit(handleAddVarriant)}>
-                <div className='ml-5 w-main'>
+                <div className='ml-5 '>
                     <InputFrom
                         label="Name product"
                         register={register}
@@ -98,7 +95,7 @@ const Variants = ({ customzeVarriant, setCustomzeVarriant, render }) => {
                     
                 </div>
                 <div className='flex flex-col gap-4 ml-5'>
-                    <div className='flex'>
+                    <div className='sm:flex block'>
                         <InputFrom
                             label="Price product"
                             register={register}
@@ -123,6 +120,7 @@ const Variants = ({ customzeVarriant, setCustomzeVarriant, render }) => {
                             fullWidth
                             placeholder='Color of new product'
                             style='flex-auto ml-2'
+                            type='color'
                         />
                     </div>
                    
@@ -155,13 +153,18 @@ const Variants = ({ customzeVarriant, setCustomzeVarriant, render }) => {
                             <div 
                                 key={idx}
                                 
-                                className='w-fit relative mx-1 '>
-                                <img key={idx} src={el} alt='product' className='cursor-pointer w-[200px] object-contain' />
+                                className=' relative mx-1 '>
+                                <img key={idx} src={el} alt='product' className='cursor-pointer  object-contain' />
                                 
                             </div>
                         ))}
                     </div>}
-                    <div><Button type='submit'>Create new product</Button></div>
+                    <div className='flex'>
+                        <button className='px-3 py-2 bg-red-500 text-white rounded-md mr-10'
+                            onClick={() => { setCustomzeVarriant(null) }}>
+                            Cancel
+                        </button>
+                        <Button type='submit'>Create new product</Button></div>
                 </div>
             </form>
         </div>

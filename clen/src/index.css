@@ -159,3 +159,9 @@
 code {
   white-space: initial;
 }
+@media (max-width: 320px) {
+  .pagination {
+    margin-right: 2px;
+    
+  }
+}

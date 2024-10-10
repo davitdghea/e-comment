@@ -1,6 +1,6 @@
 const router = require("express").Router()
 const ctrls = require("../Controlllers/Product")
-const {verifileAccessToken, isAdmin} = require("../Anthi/virifiletoken")
+const {verifileAccessToken, isAdmin} = require("../Anthi/Virifiletoken")
 const uploader = require('../Config/Cloudinary.config')
 
 router.post("/",[verifileAccessToken, isAdmin],uploader.fields([

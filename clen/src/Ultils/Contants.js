@@ -169,7 +169,7 @@ export const adminSidebar = [
     {
         id: 3,
         type: "Parent",
-        text: "Manage users",
+        text: "Manage product",
         icon: <TbBrandProducthunt />,
         subMenu:[
             {
@@ -185,7 +185,7 @@ export const adminSidebar = [
      {
         id: 4,
         type: "Single",
-        text: "Manage users",
+        text: "Manage orders",
         path: `/${path.ADMIN}/${path.MANAGE_ORDER}`,
          icon: <AiFillGift />
     },
@@ -250,5 +250,21 @@ export const statusOrders=[
     {
         label: "Succeed",
         value: "Succeed"
+    },
+    {
+        label: "Order",
+        value: "Order"
+    },
+    {
+        label: "False", 
+        value: "False"
+    },
+    {
+        label: "Available",
+        value: "Available"
+    }, 
+    {
+        label: "Transport",
+        value: "Transport" 
     }
 ]

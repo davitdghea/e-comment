@@ -25,7 +25,7 @@ const UpdateProducts = ({ editProduct, render, setEditProduct }) => {
             quantity: editProduct?.quantity || '',
             color: editProduct?.color || '',      
             category: editProduct?.category || '',
-            brand: editProduct?.brand.toLowerCase() || '',
+            brand: editProduct?.brand || '',
         })
         setPreview({
             thumb: editProduct.thumb || '',
@@ -72,46 +72,51 @@ const UpdateProducts = ({ editProduct, render, setEditProduct }) => {
 
     
     const handleUpdateProduct = async (data) => {
-        const invalids = validate(payload, setInvalidFields)
+        const invalids = validate(payload, setInvalidFields);
         if (invalids === 0) {
-            if (data.category)
-            { data.category = categories?.find(el => el.title === data.category)?.title }            
-            const finalPayload = { ...data, ...payload}
-            const formData = new FormData()
-            for (let i of Object.entries(finalPayload)) formData.append(i[0], i[1])
-            if (finalPayload?.thumb) {
-                formData.append('thumb', data?.thumb?.length === 0 ? preview.thumb : finalPayload.thumb[0]);
+            if (data.category) {
+                data.category = categories?.find(el => el.title === data.category)?.title;
+            }
+            const finalPayload = { ...data, ...payload };
+            const formData = new FormData();
+            for (let [key, value] of Object.entries(finalPayload)) {
+                if (key !== 'images' && key !== 'thumb') {
+                    formData.append(key, value);
+                }
+            }          
+            if (finalPayload?.thumb?.length > 0) {  
+                formData.append('thumb', finalPayload.thumb[0]);
             } else {
                 formData.append('thumb', preview.thumb);
             }
-            if (finalPayload.images) {
-               const images = finalPayload?.images?.length === 0 ? preview.images : finalPayload.images
-                for (let image of images) formData.append('images', image)
-            }
-            dispatch(ShowModal({ isShowModal: true, moDalChildren: <Loading /> }))
-            const obj = {};
-            formData.forEach((value, key) => {
-                obj[key] = value;
-            });
-            console.log(obj);
-            const response = await apiUpdateProduct(formData,editProduct._id)
-            dispatch(ShowModal({ isShowModal: false, moDalChildren: null }))
-            if (response.success) {
-                toast.success(response.mes)
-                render()
-                setEditProduct(null)
+            if (finalPayload?.images?.length > 0) {
                 
-            } else toast.error(response.mes)
+                for (let img of finalPayload.images) {
+                    formData.append('images', img);
+                }
+            } else {            
+                for (let img of preview.images) {
+                    formData.append('images', img);
+                }
+            }
+            dispatch(ShowModal({ isShowModal: true, moDalChildren: <Loading /> }));        
+            const response = await apiUpdateProduct(formData, editProduct._id);
+            dispatch(ShowModal({ isShowModal: false, moDalChildren: null }));
+            if (response.success) {
+                toast.success(response.mes);
+                render();
+                setEditProduct(null);
+            } else {
+                toast.error(response.mes);
+            }
         }
+    };
 
-
-    }
-    console.log(preview)
     return (
         <div className='w-full flex flex-col gap-4 relative bg-slate-200'>
         <div className='h-[69px] w-full'></div>
         <div className='p-4 border-b w-full bg-gray-100 flex justify-between items-center fixed top-0 z-50'>
-            <h1 className='text-2xl font-bold tracking-tights'>UpdateProducts</h1>
+            <h1 className='text-2xl font-bold tracking-tights sm:ml-0 ml-10'>UpdateProducts</h1>
         </div>
             <div className='p-4 '>
                 <form onSubmit={handleSubmit(handleUpdateProduct)}>
@@ -128,7 +133,7 @@ const UpdateProducts = ({ editProduct, render, setEditProduct }) => {
                         fullWidth
 
                     />
-                    <div className='w-full my-6 flex gap-2'>
+                    <div className='w-full my-6 sm:flex gap-2 block'>
                         <InputFrom
                             label="Price"
                             register={register}
@@ -165,7 +170,7 @@ const UpdateProducts = ({ editProduct, render, setEditProduct }) => {
                             }}
                             placeholder='Color of new product'
                             style='flex-auto'
-                            type='text'
+                            type='color'
 
                         />
                     </div>
@@ -229,9 +234,8 @@ const UpdateProducts = ({ editProduct, render, setEditProduct }) => {
                         {preview.images?.map((el, idx) => (
                             <div
                                 key={idx}
-                
-                                className='w-fit relative mx-1 '>
-                                <img key={idx} src={el} alt='product' className='cursor-pointer w-[200px] object-contain' />
+                                className='w-fit relative mx-1 flex flex-wrap'>
+                                <img key={idx} src={el} alt='product' className='cursor-pointer w-[200px] object-contain' onError={(e) => e.target.src = el.path} />
                                
                             </div>
                         ))}
