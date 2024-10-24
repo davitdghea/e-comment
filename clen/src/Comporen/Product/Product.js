@@ -3,7 +3,7 @@ import { formatMoney } from '../../Ultils/Hellpers'
 import { renderStarFromNumber } from "../../Ultils/Hellpers"
 import SelectOption from '../Search/SelectOption'
 import icons from '../../Ultils/Icons'
-import { createSearchParams, Link } from 'react-router-dom'
+import { createSearchParams } from 'react-router-dom'
 import 'animate.css'
 import { apiRemoteCart, apiUpdateCart, apiUpdateWithlist } from 'Apis/User'
 import {  useSelector } from 'react-redux'
@@ -12,11 +12,10 @@ import { getCurrent } from 'St/User/AsyncAction'
 import Swal from 'sweetalert2'
 import path from 'Ultils/Path'
 import WithRase from 'hocs/withRase'
-import DOMPurify from 'dompurify'
 import { FaCartArrowDown } from "react-icons/fa";
 
-const { AiFillEye, FaCartPlus, FaHeart } = icons
-const Product = ({ productData, isNew, normal, dispatch, navigate, location,pid }) => {
+const { FaCartPlus, FaHeart } = icons
+const Product = ({ productData, isNew, normal, dispatch, navigate, location, Style, pid }) => {
  const {current} = useSelector(state => state.user)  
   const [isShowOption, setIsShowOption] = useState(false)
   const handleClickOptions = async (flag) =>{
@@ -25,13 +24,10 @@ const Product = ({ productData, isNew, normal, dispatch, navigate, location,pid 
       const color = productData.color
       const response = await apiRemoteCart(pid,color)
       if (response.success) {
-        console.log("Current:", current);
-        console.log("cart:", current?.cart);
-        console.log(current?.cart?.some(el => el.product === productData._id))
-        toast.success(response.MessageChannel)
+        toast.success(response.message)
         dispatch(getCurrent())
       }
-      else toast.error(response.MessageChannel)
+      else toast.error(response.message)
 
     }
     if (flag === 'DElTAL'){
@@ -63,10 +59,10 @@ const Product = ({ productData, isNew, normal, dispatch, navigate, location,pid 
       })
       
     if(response.success) {
-      toast.success(response.MessageChannel)
+      toast.success(response.message)
       dispatch(getCurrent())
     }
-    else toast.error(response.MessageChannel)
+    else toast.error(response.message)
    
     }
     if (flag === 'WISHLIST'){
@@ -83,8 +79,8 @@ const Product = ({ productData, isNew, normal, dispatch, navigate, location,pid 
           search: createSearchParams({ redirect: location.pathname }).toString()
         })
       })
-      const response = await apiUpdateWithlist({pid: productData._id}) 
-      console.log(response)
+      const response = await apiUpdateWithlist({ pid: productData._id, thumb: productData.thumb, title: productData.title, category: productData.category, price: productData.price, color: productData.color }) 
+      
       if (response.success){
        
         dispatch(getCurrent())
@@ -93,9 +89,10 @@ const Product = ({ productData, isNew, normal, dispatch, navigate, location,pid 
 
     }
   }
-  //Link to={`${category}/${productData?._id}/${productData?.title}`}>;
+  console.log(productData)
+  console.log(current)
   return (
-    <div onClick={() => handleClickOptions("DElTAL")} className=' cursor-pointer relative w-full text-base mx-[1] px-[2px] sm:px-[10px] mb-4'>
+    <div onClick={() => handleClickOptions("DElTAL")} className={Style}>
       <div      
         onMouseEnter={(el) => {
           el.stopPropagation()
@@ -112,7 +109,7 @@ const Product = ({ productData, isNew, normal, dispatch, navigate, location,pid 
           {isShowOption && <div className='absolute z-20 bottom-[-10px] left-0 right-0 flex justify-center animate__animated animate__fadeInUp gap-2'>
             {current?.cart?.some(el => el.product === productData._id) ? <span onClick={(e) => {handleClickOptions("REMOTECART");e.stopPropagation()}}><SelectOption icon={<FaCartArrowDown />} /></span>
               : <span onClick={(e) => {handleClickOptions("CART");e.stopPropagation()}}><SelectOption icon={<FaCartPlus color={'blue'}/>} /></span>}
-            <span onClick={(e) => {handleClickOptions("WISHLIST");e.stopPropagation()}}><SelectOption icon={<FaHeart color={current?.wishList?.some((i) => i._id === productData._id) ? 'red' : "gray"}/>} /></span> 
+            <span onClick={(e) => {handleClickOptions("WISHLIST");e.stopPropagation()}}><SelectOption icon={<FaHeart color={current?.wishList?.some((i) => i.pid === productData._id) ? 'red' : "gray"}/>} /></span> 
           </div>}
           <img
             src={productData?.thumb || "https://th.bing.com/th/id/OIP.CaLENRpDWR6DvqXLUqlrJgAAAA?rs=1&pid=ImgDetMain"}
@@ -120,10 +117,10 @@ const Product = ({ productData, isNew, normal, dispatch, navigate, location,pid 
             className='w-[243px] h-[243px] object-cover mx-auto'
           />
           {!normal && (isNew === 1 ?
-            <div className='w-[100px] h-[10px] absolute bg-red left-[0px] top-[-10px] text-red-600 sm:font-extrabold font-extralight text-[12px] sm:text-[20px]'>
-              <p>HOT</p>
-            </div> : <div className='w-[100px] h-[10px] absolute bg-red left-[0px] top-[-10px] text-red-600 sm:font-extrabold font-extralight text-[12px] sm:text-[20px]'>
+            <div className='w-[500px] h-[25px] flex justify-center absolute rounded-t-md rounded-bl-md left-[-15px] top-[-15px] bg-red-500 text-white sm:font-extrabold font-extralight text-[12px] sm:text-[15px]'>
               <p>NEW</p>
+            </div> : <div className='w-[50px] flex justify-center h-[25px] rounded-t-md rounded-bl-md absolute bg-red-500 left-[-15px] top-[-15px] text-white sm:font-extrabold font-extralight text-[12px] sm:text-[15px]'>
+              <p>HOT</p>
             </div>
           )}
 

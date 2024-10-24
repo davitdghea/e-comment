@@ -18,8 +18,8 @@ readOnly
 }) => {
   
   return (
-    <div className={className}>
-      {label && <label className='mb-1 w-[120px]' htmlFor={id}>{label}:</label>}
+    <div className={label === 'Color' ? 'flex justify-start items-center' : className }>
+      {label && <label className={`mb-1 w-[120px] ${label === 'Color' && 'flex'}`} htmlFor={id}>{label}:</label>}
       <input
         type={type}
         id={id}

@@ -9,6 +9,19 @@
   /* Internet Explorer và Edge */
 }
 
+/* .slick-arrow {
+  z-index: 10;
+  background-color: gray !important;
+ border-radius: 20px !important;
+}
+.slick-prev{
+  margin-left: 40px !important; 
+  color: black !important;
+}
+.slick-next{
+margin-right: 40px !important;
+  color: black !important;
+} */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
   /* Ẩn thanh cuộn trong Chrome, Safari và Opera */

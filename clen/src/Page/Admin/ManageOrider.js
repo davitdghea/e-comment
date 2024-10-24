@@ -45,10 +45,18 @@ const ManageOrider = ({ navigate, location }) => {
   }, [params, currentPage, queriesDebounce,  updateOrders ])
   const handleSearchStatus = (selectedOption) => {
     const value = selectedOption?.value || '';
-    navigate({
-      pathname: location.pathname,
-      search: createSearchParams({ status: value }).toString()
-    })
+    if (value === '') {
+      navigate({
+        pathname: location.pathname,
+
+      })
+    }
+    else {
+      navigate({
+        pathname: location.pathname,
+        search: createSearchParams({ status: value }).toString()
+      })
+    }
   }
   const updateOrder = async ({ oid, status, order }) =>{
     
@@ -60,6 +68,9 @@ const ManageOrider = ({ navigate, location }) => {
         toast.success(response.mes)
       }
       else toast.error(response.mes)
+    }
+    if (order === 'Order') {
+      toast.error('vui lòng ấn đã chuẩn bị hàng trc khi giao')
     }
     if (order === 'Available' ){
       const response = await apiUpdateUserOrderAdmin({ oid, status:'Transport'})
@@ -113,8 +124,9 @@ const ManageOrider = ({ navigate, location }) => {
           <thead>
             <tr className='border-b pb-5'>
               <th className='text-[12px] sm:text-[15px]'>STT</th>
+              <th className='text-center text-[12px] sm:text-[15px]'> Code Unique</th>
               <th className='text-center text-[12px] sm:text-[15px]'>Product</th>
-              <th className='text-[12px] sm:text-[15px]'>Total</th>
+              <th className='text-[12px] sm:text-[15px] text-center'>Total</th>
               <th className='text-[12px] sm:text-[15px]'>Status</th>
               <th className='text-[12px] sm:text-[15px]'>Order date</th>
               <th className='text-[12px] sm:text-[15px]'>Update Status</th>
@@ -127,6 +139,7 @@ const ManageOrider = ({ navigate, location }) => {
                   {(+params.get("page") > 1 ? +params.get("page") - 1 : 0) *
                     process.env.REACT_APP_LIMIT +
                     idx + 1}</td>
+                <td className=' text-center'>{el._id}</td>
                 <td className=' text-center py-2 max-w-[500px] relative'>
                   <span className='flex justify-center'>
                     <img src={el.products[0].thumb} alt='thumb' className='w-8 h-8 rounded-md object-cover' />
@@ -135,13 +148,13 @@ const ManageOrider = ({ navigate, location }) => {
                     +{el.products.length}
                   </span>
                 </td>
-                <td className='text-[12px] sm:text-[15px]'>{formatMoney(Math.round(el.total))}</td>
-                <td className='text-[12px] sm:text-[15px]'>{el.status}</td>
+                <td className='text-[12px] sm:text-[15px] text-center'>{formatMoney(Math.round(el.total))}</td>
+                <td className={`text-[12px] ${(el.status === 'Cancelled' || el.status === 'False') && 'text-red-500'} ${(el.status === 'Order' || el.status === 'Available' || el.status === 'Transport') && 'text-yellow-400'} ${(el.status === 'Succeed') && 'text-blue-500'  } sm:text-[15px]`} >{el.status}</td>
                 <td className='text-[12px] sm:text-[15px]'>{moment(el.updatedAt).format('DD/MM/YYYY')}</td>
                 {el.status !== 'Succeed' && el.status !== 'Cancelled' && el.status !== 'False' && el.status !== 'Transport' && 
-                  <td className='text-[12px] sm:text-[15px]' onClick={() => { updateOrder({ oid: el._id, order: el.status }) }}><span className='bg-red-500 px-2 py-1 rounded-md text-white'>Update</span> </td>}
+                  <td className='text-[12px] sm:text-[15px]' onClick={() => { updateOrder({ oid: el._id, order: el.status }) }}><span className='bg-red-500 cursor-pointer px-2 py-1 text-center rounded-md text-white'>Update</span> </td>}
                 {el.status === 'Transport' &&
-                  <td className='text-[12px] sm:text-[15px]' ><span className='bg-red-500 px-2 py-1 rounded-md text-white' onClick={() => { updateOrder({ oid: deilProduct.orderId, order: el.status, status: 'False' }) }}>False</span> <span onClick={() => { updateOrder({ oid: el._id, order: el.status, status: 'Succeed' }) }} className='bg-blue-500 px-2 py-1 rounded-md text-white ml-2'>Succeed</span></td>}
+                  <td className='text-[12px] sm:text-[15px]' ><span className='bg-red-500 cursor-pointer px-2 py-1 rounded-md text-white' onClick={() => { updateOrder({ oid: deilProduct.orderId, order: el.status, status: 'False' }) }}>False</span> <span onClick={() => { updateOrder({ oid: el._id, order: el.status, status: 'Succeed' }) }} className='bg-blue-500 px-2 py-1 rounded-md cursor-pointer text-white ml-2'>Succeed</span></td>}
               </tr>
             ))}
           </tbody>

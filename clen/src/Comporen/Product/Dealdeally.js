@@ -82,7 +82,7 @@ const Dealdeally = ({ dispatch }) => {
     }, [hour, minute, second, dealDaily]);
 
     return (
-        <div className='border w-full flex-auto rounded-lg'>
+        <div className='border w-full  rounded-lg mt-5'>
             <div className='flex items-center justify-between'>
                 <span className='flex-2 flex justify-center mt-[4px] '>
                     <AiFillStar size={20} color='#DD1111' />
@@ -106,8 +106,8 @@ const Dealdeally = ({ dispatch }) => {
                     <span>{`${formatMoney(dealdaily?.price)} VNĐ`}</span>
                 </div>
             )}
-            <div className='px-4 mt-4'>
-                <div className='flex gap-2 justify-center items-center mb-4'>
+            <div className='px-4 mt-2'>
+                <div className='flex gap-2 justify-center items-center mb-2'>
                     <Countdown unit={"Hours"} number={hour} />
                     <Countdown unit={"Minutes"} number={minute} />
                     <Countdown unit={"Seconds"} number={second} />
@@ -115,7 +115,7 @@ const Dealdeally = ({ dispatch }) => {
                 <Link to={`${dealdaily?.category?.toLowerCase()}/${dealdaily?._id}/${dealdaily?.title}`}>
                     <button
                         type="button"
-                        className='flex gap-2 items-center justify-center w-full bg-blue-500 hover:bg-gray-800 text-white py-2 mb-4'>
+                        className='flex gap-2 items-center justify-center w-full bg-blue-500 hover:bg-gray-800 text-white py-2 mb-2'>
                         <AiFillHome />
                         <span>Options</span>
                     </button>

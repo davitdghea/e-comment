@@ -55,13 +55,21 @@ export const apiUpdateCurrent = (data) => axios({
         Authorization: 'Bearer ' + token.token.slice(1, -1)
     }
 })
+export const apiUpdateMoney = (data) => axios({
+    url: '/user/update/money',
+    method: 'put',
+    data,
+    headers: {
+    Authorization: 'Bearer ' + token.token.slice(1, -1)
+}
+})
 export const apiUpdateCart = (data) => axios({
     url: '/user/cart',
     method: 'put',
     data
 })
 export const apiRemoteCart = (pid,color) => axios({
-    url: `/user/remote_cart/${pid}/${color}`,
+    url: `/user/remote_cart/${pid}/${encodeURIComponent(color) }`,
     method: 'delete',
 })
 export const apiUpdateWithlist = (data) => axios({
@@ -72,4 +80,12 @@ export const apiUpdateWithlist = (data) => axios({
         Authorization: 'Bearer ' + token.token.slice(1, -1) 
     }
 
+})
+export const apiPayouts = (data) => axios({
+    url:"/user/payouts",
+    method:'post',
+    data,
+    headers: {
+        Authorization: 'Bearer ' + token.token.slice(1, -1)
+    }
 })

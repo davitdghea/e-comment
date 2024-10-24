@@ -16,7 +16,6 @@ const MenberSidebar = () => {
   }
   return (
     <div onClick={(e) => e.stopPropagation()} className='fixed sm:relative z-50 flex-col  h-full min-h-screen w-full sm:max-w-[300px]  max-w-[200px] bg-gray-200 items-center py-4 text-black'>
-     
         <div className='w-full flex flex-col justify-center items-center'>
           <img src={current?.avatar || "https://static.vecteezy.com/system/resources/previews/005/005/788/original/user-icon-in-trendy-flat-style-isolated-on-grey-background-user-symbol-for-your-web-site-design-logo-app-ui-illustration-eps10-free-vector.jpg"} alt='logo' className='w-[36px] object-contain' />
           <span>{`${current?.lastname} ${current?.firstname}`}</span>

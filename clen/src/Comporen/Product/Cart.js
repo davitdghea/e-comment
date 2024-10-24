@@ -3,7 +3,7 @@ import { AiFillCloseCircle } from 'react-icons/ai'
 import WithRase from 'hocs/withRase'
 import { ShowCart } from 'St/App/Appslice'
 import { useSelector } from 'react-redux'
-import { formatMoney } from 'Ultils/Hellpers'
+import { closestColor, formatMoney } from 'Ultils/Hellpers'
 import { Button } from 'Comporen/Index'
 import { IoMdBusiness } from 'react-icons/io'
 import { apiRemoteCart } from 'Apis/User'
@@ -35,12 +35,12 @@ const Cart = ({ dispatch, navigate }) => {
               <img src={el?.thumb} alt='thumb' className='w-24 h-25 object-cover mx-2'></img>
               <div className='flex flex-col gap-1'>
                 <span className='text-bold'>Title: {el.title}</span>
-                {el.color && <span className='text-bold'>Color: {el.color}</span>}
+                {el.color && <span className='text-bold'>Color: {closestColor(el.color)}</span>}
                 <span className='text-bold'>Price: {formatMoney(+el.price * +el.quantity)} VNĐ</span>
                 <span className='text-bold'>Quantity: {el.quantity}</span>
               </div>
             </div>
-            <span onClick={() => RemoteCart(el.product,el.color)} className='h-8 rounded-full flex  justify-center hover:bg-gray-200 cursor-pointer mr-2'><IoMdBusiness size={20} /></span>
+            <span onClick={() => RemoteCart(el.product,el.color)} className='h-8 rounded-full flex items-center justify-center hover:bg-gray-200 px-1 cursor-pointer mr-2'><IoMdBusiness size={20} /></span>
           </div>
         ))}
       </section>

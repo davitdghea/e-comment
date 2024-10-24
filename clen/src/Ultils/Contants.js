@@ -240,12 +240,19 @@ export const memberSidebar = [
         path: `/${path.MEMBER}/${path.WISHLIST}`,
         icon: <AiFillGift size={24} />
     },
+    {
+        id: 5,
+        type: "Single",
+        text: "Wallet",
+        path: `/${path.MEMBER}/${path.WALLET}`,
+        icon: <AiOutlineDashboard size={24} />
+    },
 
 ]
 export const statusOrders=[
     {
-        label:"Cancalled",
-        value:"Cancalled"
+        label:"Cancelled",
+        value:"Cancelled"
     },
     {
         label: "Succeed",

@@ -43,7 +43,7 @@ export const slides = [
         imgSrc: 'https://digital-world-2.myshopify.com/cdn/shop/files/slideshow3-home2_1920x.jpg?v=1613166679',
         name: 'Background Image',
         content: (
-            <div className='absolute flex flex-col top-[35%] text-white justify-center items-center left-[20%] w-max-[550px]'>
+            <div className='absolute flex flex-col top-[35%] text-white justify-center items-center left-[20%] '>
                 <p className='text-[42px] font-semibold'>ALIQUAM ERAT VOLUTPAT</p>
                 <p className='py-[20px]'>Praesent posuere sagittis auguac aliquet</p>
                 <p className='py-[5px] border border-white px-[20px] flex items-center justify-center'>Readmore</p>

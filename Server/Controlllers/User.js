@@ -5,35 +5,41 @@ const jwt = require("jsonwebtoken")
 const crypto = require("crypto")
 const sendMail = require("../Anthi/sendMail")
 const makeToken = require("uniqid")
-const { MessageChannel } = require("worker_threads")
+const paypal = require('@paypal/payouts-sdk');
+const { default: mongoose } = require("mongoose")
 
 const register = asyncHend(async (req, res) => {
     const { email, password, firstname, lastname } = req.body
     if (!email || !password || !lastname || !firstname)
        { return res.status(400).json({
             success: false,
-            mes: "missing inputs"
+            mes: "Missing inputs"
         })}
     const user = await User.findOne({ email })
     if (user) {
         return res.status(400).json({
             success: false,
-            mes: "user has existed"
+            mes: "User has existed"
         })
     }
     else {
         const token = makeToken()
         const emailEdited = btoa(email) + '@' + token
         const newUser = await User.create({
-            email: emailEdited, password, firstname, lastname
+            email: emailEdited, password, firstname, lastname, money: 0
         })
         if (newUser) {
             const html = `<h2>REGISTER Code:</h2><br/><Blockquote>${token}</Blockquote>`
             await sendMail({ email, html, subject: "config, register acccount in digital word" })
         }
         setTimeout(async () => {
-            await User.deleteOne({ email: emailEdited })
-        }, 200000)
+            try {
+                await User.deleteOne({ email: emailEdited })
+                console.log(`User with email ${emailEdited} has been deleted`)
+            } catch (error) {
+                console.error('Failed to delete user:', error)
+            }
+        }, 180000)
         return res.json({
             success: newUser ? true : false,
             mes: newUser ? "please check your email to action account" : "some went wrong, please try later"
@@ -252,8 +258,8 @@ const deleteUsers = asyncHend(async (req, res) => {
 })
 const UpdateUsers = asyncHend(async (req, res) => {
     const { _id } = req.user
-    const { firstname, lastname,  mobile, address } = req.body
-    const data = { firstname, lastname,  mobile, address }
+    const { firstname, lastname,  mobile, address,money } = req.body
+    const data = { firstname, lastname, mobile, address, money }
     if (req.file) data.avatar = req.file.path
     if (!_id || Object.keys(req.body).length === 0) throw new Error("missing input")
     const response = await User.findByIdAndUpdate(_id, data, req.body, { new: true }).select('-password -role -refreshToken')
@@ -281,35 +287,89 @@ const UpdateUserAddress = asyncHend(async (req, res) => {
     })
 })
 const UpdateCart = asyncHend(async (req, res) => {
-    const { _id } = req.user
-    const { pid, quantity = 1, color, price, thumb, title } = req.body
-    console.log(req.body)
-    if (!pid || !quantity) throw new Error('missing inputs')
-    const user = await User.findById(_id).select('cart')
-    const alreadyProduct = user?.cart?.find(el => el.product.toString() === pid && el.color === color)
-    if (alreadyProduct) {
-        const response = await User.updateOne({ cart: { $elemMatch: alreadyProduct } }, {
-            $inc: { 'cart.$.quantity': quantity },
-            $set: {
-                'cart.$.price': price,
-                'cart.$.thumb': thumb,
-                'cart.$.title': title,
-                
-            }
-        }, { new: true })
-        return res.status(200).json({
-            success: response ? true : false,
-            MessageChannel: response ? 'update success' : 'no update'
-        })
-    } else {
-        const response = await User.findByIdAndUpdate(_id, { $push: { cart: { product: pid, quantity, color, price, thumb,title } } }, { new: true })
-        return res.status(200).json({
-            success: response ? true : false,
-            MessageChannel: response ? 'Update your cart' : 'no update'
-        })
+    const { _id } = req.user;
+    const { sol, pid, quantity = 1, color, price, thumb, title, updateQuantity } = req.body;
+    if (updateQuantity) {
+        const user = await User.findById(_id).select('cart');
+        const productIndex = user?.cart?.findIndex(el => el.product.toString() === pid && el.color === color);
+
+        if (productIndex !== -1) {
+            // Tìm thấy sản phẩm, thay thế quantity bằng giá trị mới
+            user.cart[productIndex].quantity = quantity; // Thay số lượng hiện tại bằng số lượng mới
+
+            // Lưu lại thay đổi
+            await user.save();
+
+            return res.status(200).json({
+                success: true,
+                message: 'Update successful'
+            });
+        } else {
+            return res.status(400).json({
+                success: false,
+                message: 'Product not found in cart'
+            });
+        }
     }
-}
-)
+
+
+    if (!pid || !quantity) throw new Error('missing inputs');
+
+    const user = await User.findById(_id).select('cart');
+    const alreadyProduct = user?.cart?.find(el => el.product.toString() === pid && el.color === color);
+
+    // Nếu sản phẩm đã có trong giỏ hàng
+    if (alreadyProduct) {
+        const currentQuantity = alreadyProduct.quantity; // Số lượng hiện tại trong giỏ hàng
+        const totalQuantity = currentQuantity + quantity; // Tổng số lượng sau khi thêm
+
+        // Kiểm tra nếu tổng số lượng vượt quá kho
+        if (totalQuantity > sol) {
+            return res.status(400).json({
+                success: false,
+                message: 'Total quantity exceeds available stock'
+            });
+        }
+
+        const response = await User.updateOne(
+            { cart: { $elemMatch: alreadyProduct } },
+            {
+                $inc: { 'cart.$.quantity': quantity },
+                $set: {
+                    'cart.$.price': price,
+                    'cart.$.thumb': thumb,
+                    'cart.$.title': title,
+                }
+            },
+            { new: true }
+        );
+
+        return res.status(200).json({
+            success: response ? true : false,
+            message: response ? 'Update success' : 'No update'
+        });
+    } else {
+        // Nếu sản phẩm chưa có trong giỏ hàng
+        if (quantity > sol) {
+            return res.status(400).json({
+                success: false,
+                message: 'Quantity exceeds available stock'
+            });
+        }
+
+        const response = await User.findByIdAndUpdate(
+            _id,
+            { $push: { cart: { product: pid, quantity, color, price, thumb, title } } },
+            { new: true }
+        );
+
+        return res.status(200).json({
+            success: response ? true : false,
+            message: response ? 'Added to cart' : 'No update'
+        });
+    }
+});
+
 const removeProductInCart = asyncHend(async (req, res) => {
     const { _id } = req.user
     const { pid, color } = req.params
@@ -325,40 +385,146 @@ const removeProductInCart = asyncHend(async (req, res) => {
         MessageChannel: response ? 'update your cart' : 'no update'
     })
 })
+
+
 const updateWishList = asyncHend(async (req, res) => {
-    const { pid } = req.body
+    const { pid, thumb, title, category,price,color } = req.body
     const { _id } = req.user
+
+    // Tìm người dùng
     const user = await User.findById(_id)
-    const alreadyInWishlist = user.wishList?.find(el => el.toString() === pid)
+
+    // Kiểm tra nếu wishlist tồn tại và không rỗng
+    const alreadyInWishlist = user.wishList?.find(el => el.pid && el.pid.toString() === pid)
+
     if (alreadyInWishlist) {
+        // Nếu sản phẩm đã có trong danh sách, thì xoá nó
         const response = await User.findByIdAndUpdate(
             _id,
-            { $pull: { wishList: pid } },
+            { $pull: { wishList: { pid: pid } } }, // Chỉ khớp pid để xoá
             { new: true }
         )
         return res.json({
-            success: response ? true : false,
-            tem: user,
-            rs: response ? 'Removed from wishlist' : 'false to update wishlist',
+            success: !!response,
+            tem: response, // Trả về danh sách cập nhật
+            rs: response ? 'Đã xoá khỏi danh sách yêu thích' : 'Không thể cập nhật danh sách yêu thích',
         })
     } else {
+        // Nếu sản phẩm chưa có trong danh sách, thì thêm vào
         const response = await User.findByIdAndUpdate(
             _id,
-            { $push: { wishList: pid } },
+            { $push: { wishList: { pid: pid, thumb, title, category, price, color } } }, // Thêm đầy đủ thông tin sản phẩm
             { new: true }
         )
-        console.log(response)
         return res.status(200).json({
-            success: response ? true : false,
-            tem:pid,
-            _id,
-            rs: response ? 'updated your wishlist' : 'false to update wishlist',
+            success: !!response,
+            tem: response, // Trả về danh sách cập nhật
+            rs: response ? 'Đã thêm vào danh sách yêu thích' : 'Không thể cập nhật danh sách yêu thích',
         })
     }
+})
 
+
+const UpdateMoney = asyncHend(async (req, res) => {
+    const { _id } = req.user;
+    const { nap, rut } = req.body;
+
+    try {
+        const response = await User.findByIdAndUpdate(
+            _id,
+            { $push: { history: { nap, rut } } },
+            { new: true }
+        );
+
+        if (response) {
+            const totalNap = response.history.reduce((acc, transaction) => {
+                return acc + (transaction.nap || 0);
+            }, 0);
+            const totalRut = response.history.reduce((acc, transaction) => {
+                return acc + (transaction.rut || 0);
+            }, 0);
+            response.money = totalNap - totalRut;
+            await response.save();
+
+            return res.status(200).json({
+                success: true,
+                message: 'Updated your cart and money',
+                money: response.money,
+            });
+        } else {
+            return res.status(400).json({
+                success: false,
+                message: 'No update',
+            });
+        }
+    } catch (error) {
+        console.error('Error updating money:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Server error',
+        });
+    }
+});
+
+const createPayout = asyncHend(async ( req,res) => {
+    const environment = new paypal.core.SandboxEnvironment('AdET-ar8Aqq7_4VMR07z4N3pIrrK-6QtSgbsPPsZZhFAHXsjm73rtrtQJTsA7wB7b6UORjcU-n0ELaNJ', 'EIo0rKPPDtm6bD7vn2Rj8RMkDs7w5T3j6w7yp9BvBWEjdU-3Q51n0Ma0bPSUhkx-AZsByDIzPWac-BfV');
+    const client = new paypal.core.PayPalHttpClient(environment);
+    const { emailPayPal, amount, money } = req.body
+    const { _id } = req.user;
+    const DO = Math.round(amount / 25350 )
+    const request = new paypal.payouts.PayoutsPostRequest();
+
+    // Định cấu hình nội dung cho Payout
+    request.requestBody({
+        sender_batch_header: {
+            sender_batch_id: `Payout-${Math.random().toString(36).substring(7)}`,
+            email_subject: "Bạn đã nhận được tiền từ cửa hàng của chúng tôi!",
+        },
+        items: [{
+            recipient_type: "EMAIL",
+            amount: {
+                value: DO,
+                currency: "USD"
+            },
+            receiver: emailPayPal,  // Email PayPal của người dùng
+            note: "Cảm ơn bạn đã sử dụng dịch vụ!",
+            sender_item_id: `Item-${Math.random().toString(36).substring(7)}`
+        }]
+    });
+
+    try {
+        const response = await client.execute(request);
+        if (response){
+            const response = await User.findByIdAndUpdate(
+                _id,
+                { $push: { history: { rut: amount } },
+                  $set: { money: money - amount }
+                },
+                { new: true }
+            );
+            if (response) { 
+                await response.save();
+                return res.status(200).json({
+                    success: true,
+                    message: 'Updated your cart and money',
+                    money: response.money,
+                });
+            } else {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No update',
+                });
+            }
+        }
+    } catch (err) {
+        console.error("Lỗi khi thực hiện payout:", err);
+        throw err;
+    }
 })
 
 module.exports = {
+    createPayout,
+    UpdateMoney,
     updateWishList,
     removeProductInCart,
     finalRegister,

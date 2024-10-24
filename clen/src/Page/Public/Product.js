@@ -75,7 +75,7 @@ const Products = () => {
   console.log(products?.length)
   return (
     <div className='w-full' onClick={() => { SetactiveClick(null) }}>
-      <div className='h-[81px] bg-gray-100 flex justify-center items-center'>
+      <div className='h-[81px] bg-gray-100 flex justify-center items-center mt-5'>
         <div className='w-main m-auto pt-3'>
           <p className='text-[20px] font-medium'>{category}</p>
           <Breadcrumb category={category} />

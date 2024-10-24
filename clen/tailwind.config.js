@@ -17,11 +17,16 @@ module.exports = {
       roman:"upper-roman",
     },
     extend: {
+      screens: {
+        'xs'    : '480px',  
+        'md'    : '900px',  
+        'w1230' : '1230px',
+        'w-1200':'1200px',
+        'w-800' : "800px",
+        'w-1000': '1000px'
+      },
       gridTemplateColumns: {
         '13': 'repeat(13, minmax(0, 1fr))',
-      },
-      screens: {
-        xs: '426px', 
       },
       width: {
         main: "1320px"

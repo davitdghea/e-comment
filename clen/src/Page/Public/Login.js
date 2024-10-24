@@ -24,14 +24,41 @@ const Login = () => {
   const [token, setToken] = useState('')
   const [pass, setPass] = useState('password')
   const [isForgotPass, SetIsForgotPass] = useState(false)
-  const [payload, setPayload] = useState({
+  const [payload, setPayload] = useState({ 
     email: "",
     password: "",
     firstname: "",
     lastname: ""
   })
+  const [minute, setMinute] = useState(2);
+  const [second, setSecond] = useState(59);
+
+  useEffect(() => {
+    if (isVerifiedEmail)
+   { const timerId = setTimeout(() => {
+      if (second > 0) {
+        setSecond(second => second - 1);
+      } else if (second === 0) {
+        if (minute > 0) {
+          setMinute(minute => minute - 1);
+          setSecond(59); // Reset lại giây về 59 khi giảm phút
+        }
+      }
+    }, 1000);
+
+    // Xóa bộ đếm khi không cần thiết (cleanup)
+    return () => clearTimeout(timerId)};
+  }, [second, minute, isVerifiedEmail]);
+
+  // Nếu minute và second đều là 0, hiển thị "Hết giờ!"
+  useEffect(() => {
+    if (minute === 0 && second === 0) {
+      setIsVeriFieEmail(false)
+    }
+  }, [minute, second]);
 
 
+ 
   const resetPayload = () => {
     setPayload({
       email: "",
@@ -109,12 +136,11 @@ const handle = useCallback( (value) =>{
     }
   }
   return (
-
     <div className='w-screen h-screen bg-gradient-to-r from-blue-200 via-pink-200 to-orange-200 relative flex items-center justify-center bg-transparent'>
       {isVerifiedEmail &&
-        <div onClick={() => setIsVeriFieEmail(false) } className='absolute top-0 left-0 right-0 bottom-0 bg-gray-300/50 flex items-center justify-center z-50'>
-          <div onClick={e => e.stopPropagation()} className='text-[20px] font-normal w-[500px] bg-white flex flex-col justify-center rounded-md p-8'>
-            <h4>we sent a code to your mail. please check your mail and enter your code:</h4>
+        <div className='absolute top-0 left-0 right-0 bottom-0 bg-gray-300/50 flex items-center justify-center z-50'>
+          <div className='text-[20px] font-normal w-[500px] bg-white flex flex-col justify-center rounded-md p-8'>
+            <h4>We sent a code to your mail. Please check your gmail and enter your code within 3 minutes {minute} : {second}</h4>
             <span className='mt-3  mx-auto'>
               <input type="text"
                 value={token}
@@ -124,7 +150,7 @@ const handle = useCallback( (value) =>{
               <button onClick={finalRegister} type="button" className='ml-2 px-4 py-2 bg-blue-500 font-semibold text-white rounded-lg'>
                 Submit
               </button>
-
+             
             </span>
           </div>
         </div>
@@ -160,22 +186,8 @@ const handle = useCallback( (value) =>{
         </div>
       </div>}
          
-      <div className=' sm:p-10 top-0 bottom-0 sm:top-20 sm:bottom-20 absolute  shadow-lg bg-white  items-center rounded-lg justify-center flex z-10 max-w-md w-full'>
-        {/* <div className='   w-1/2 relative'>
-          <img
-            src="https://th.bing.com/th/id/OIP.RvOpgYypirRSnWaTgGvDlwHaFj?rs=1&pid=ImgDetMain"
-            alt=''
-            className='rounded-l-lg h-[420px]  w object-cover'
-          />
-          <div className='absolute  top-0 bottom-0 left-[20px] right-0'>
-            <img className='mb-[50px] mt-[20px] ' src="https://digital-world-2.myshopify.com/cdn/shop/files/logo_digital_new_250x.png?v=1613166683" alt="logo" />
-            <h1><span className='text-[26px]  font-bold'>WELCOME TO DIGITAL WORLD</span></h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua </p>
-            <p className='mt-[180px] mb-[10px]'>Lorem ipsum dolor sit amet</p>
-          </div>
-
-        </div> */}
-        <div className='p-8  rounded-md min-w-[300px] w-full max-w-[400px] h-full'>
+      <div className=' sm:p-10   absolute  shadow-lg bg-white  items-center rounded-lg justify-center flex z-10 max-w-md w-full'>
+        <div className='  rounded-md min-w-[300px] w-full max-w-[400px] h-full'>
           <h1 className='text-center text-2xl font-bold mb-6'>WELCOME</h1>
           {isRegister &&
             <div className='flex gap-3'>

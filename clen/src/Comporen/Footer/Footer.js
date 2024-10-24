@@ -58,7 +58,7 @@ const Footer = ({ dispatch, navigate, handleClickMenu }) => {
     }
     return (
         <div className='relative w-full'>
-            <div className='hidden sm:block w-full bg-main'>
+            <div className='hidden sm:block w-full bg-slate-300'>
                 <div className='flex items-center justufy-center h-[103px]  w-full'>
                  
                     {/* <div className='flex-1 flex '>

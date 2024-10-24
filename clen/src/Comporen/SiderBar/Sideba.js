@@ -1,16 +1,17 @@
 import React from 'react'
+import { IoIosMenu } from "react-icons/io";
 import {NavLink} from "react-router-dom"
 import {useSelector} from 'react-redux'
 import {creactSlug} from '../../Ultils/Hellpers'
 import icons from '../../Ultils/Icons'
 import path from 'Ultils/Path'
 
-const {   CiCamera, TfiPrinter, IoIosPhonePortrait, IoIosTabletPortrait, AiOutlineLaptop, BsFillSpeakerFill, FaHeadphones, PiTelevisionSimpleBold } = icons
+const { CiCamera, TfiPrinter, IoIosPhonePortrait, IoIosTabletPortrait, AiOutlineLaptop, BsFillSpeakerFill, FaHeadphones, PiTelevisionSimpleBold } = icons
 const array = {
   IoIosTabletPortrait, IoIosPhonePortrait, AiOutlineLaptop, BsFillSpeakerFill, CiCamera, FaHeadphones, PiTelevisionSimpleBold, TfiPrinter
 }
 
-const Sideba = ({ Style = 'sm:flex flex-col shadow-xl rounded-lg mt-6 hidden ' }) => {
+const Sideba = ({ Style = 'sm:flex flex-col rounded-lg mt-6 hidden border shadow-xl' }) => {
 const {categories} = useSelector(state => state.app)  
   const iconKeys = Object.keys(array);
   const result = categories?.map((item, index) => {
@@ -26,7 +27,7 @@ const {categories} = useSelector(state => state.app)
 
 return (   
     <div className={Style} onClick={e => {e.stopPropagation()}}>
-      <p className='bg-slate-400 font-black text-[20px] flex justify-center py-4 sm:hidden'>MENU</p>
+    <p className='pl-4 bg-blue-500 text-white rounded-tr-lg rounded-tl-lg items-center font-black text-[20px] flex py-4 '><span className='mr-2'><IoIosMenu size={35}/></span> Shop Categories</p>
     {result?.map(el => {
       const IconComponent = el.icon;
       return (
@@ -34,9 +35,9 @@ return (
           key={creactSlug(el.product.title)}
           to={`${path.PRODUCTS}?category=${el.product.title}`}
 
-          className={"flex items-center pl-4 py-[11px] text-sm hover:bg-slate-200 hover:text-red-500"}
+          className={"flex items-center border pl-4 py-[11px] text-sm hover:bg-slate-200 hover:text-blue-500"}
         >
-          <span className='pr-4'> {IconComponent && <IconComponent size={24}/>}</span> <span className='text-[15px]  '>{el.product.title}</span>
+          <span className='pr-4'> {IconComponent && <IconComponent size={24}/>}</span> <span className='text-[15px] font-medium '>{el.product.title}</span>
         </NavLink>
       );
     })}</div>

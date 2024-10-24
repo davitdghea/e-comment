@@ -6,21 +6,6 @@ const asyncHandler = require('express-async-handler');
 const Product = require("../Models/Product");
 
 
-// const NewOrder = asyncHandler(async(req,res)=>{
-//     const{ _id} = req.user
-//     const {products,total,address,status} = req.body
-//     if(address){
-//         await User.findByIdAndUpdate(_id, { address,cart: [] })
-//     }
-//     const data = { products, address, total, orderBy:_id,}
-//     if(status) data.status = status
-//     const rs = await Order.create(data)
-//    return res.json({
-//         success:rs ? true :false,
-//         Order:rs ? rs:"something went wrong",
-        
-//     })
-// })
 const NewOrder = asyncHandler(async (req, res) => {
     const { _id } = req.user;
     const { products, total, address, status } = req.body;
@@ -38,11 +23,13 @@ const NewOrder = asyncHandler(async (req, res) => {
     try {
             
             for (const product of products) {
+                
                 const updatedProduct = await Product.findOneAndUpdate(
                     { _id: product.product }, 
                     { $inc: 
                         { soId: +product.quantity,
-                          quantity: -(+product.quantity)
+                          quantity: -(+product.quantity),
+                          
                         } 
                     },    
                     { new: true }  
@@ -52,34 +39,28 @@ const NewOrder = asyncHandler(async (req, res) => {
                     return res.status(400).json({ success: false, message: `Product with ID ${product.product} not found.` });
                 }
             }
-
         const user = await User.findById(_id);
         if (!user) {
             return res.status(404).json({ success: false, message: "User not found." });
         }
         const updatedCart = user.cart.filter(cartItem =>
             !products.some(product => product._id.toString() === cartItem._id.toString())
-        );
-
-        // Cập nhật giỏ hàng của người dùng
+        );    
         user.cart = updatedCart;
-        user.address = address;  // Cập nhật địa chỉ nếu cần
+        user.address = address;  
         await user.save();
-
-        // Tạo đơn hàng mới
-        const data = { products, address, total, orderBy: _id };
+        const lastProduct = products[products.length - 1];
+        const lastSixChars = lastProduct.product.slice(-6);
+        const data = { products, address, total, orderBy: _id, deliveryCode: lastSixChars };
         if (status) data.status = status;
-
         const rs = await Order.create(data);
         if (!rs) {
             throw new Error("Failed to create order.");
         }
-
         return res.json({
             success: true,
             order: rs
         });
-
     } catch (error) {
         console.error("Error creating order:", error);
         return res.status(500).json({
@@ -98,14 +79,6 @@ const updateStatus = asyncHandler(async(req,res)=>{
        mes: response ? 'update Status':"something went wrong",   
     })
 })
-// const getUserOrder = asyncHandler(async(req,res)=>{
-//     const{ oid} = req.user
-//         const response = await Order.find({orderBy: oid})
-//    return res.json({
-//         success:response ? true :false,
-//         Order:response ? response:"something went wrong",   
-//     })
-// })
 const getUserOrder = asyncHandler(async (req, res) => {
     const queries = { ...req.query };
     const { _id } = req.user;

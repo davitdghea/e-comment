@@ -1,21 +1,58 @@
+import { apiCreateOrder } from 'Apis/Products'
+import { apiUpdateMoney } from 'Apis/User'
 import { Congrat, Paypal } from 'Comporen/Index'
 import WithRase from 'hocs/withRase'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { createSearchParams } from 'react-router-dom'
 import { getCurrent } from 'St/User/AsyncAction'
+import Swal from 'sweetalert2'
 import { formatMoney } from 'Ultils/Hellpers'
+import path from 'Ultils/Path'
 
-const Checkout = ({ dispatch }) => {
+const Checkout = ({ dispatch, navigate, location }) => {
   const { current } = useSelector(state => state.user)
   const value = localStorage.getItem('selectedProductDetails');
   const selectedProductDetailsArray = value ? JSON.parse(value) : [];
   const [isSuccess, setIsSuccess] = useState(false)
+  const [checkout, setCheckout] = useState(false)
   useEffect(() => {
     if (isSuccess) dispatch(getCurrent())
   }, [isSuccess, dispatch])
-
+  const moneyvi = current.money
   const sum = selectedProductDetailsArray.reduce((acc, el) => acc + el.price * el.quantity, 0);
   const amount = (Math.round(+sum / 25350))
+  const thanhtoan = async() =>{
+    try {
+      if (moneyvi - sum < 0) return Swal.fire({
+        icon: "info",
+        title: 'Almost!',
+        text: "Vui lòng nạp thêm tiền vào tài khoản để thanh toán.",
+        showCancelButton: true,
+        showConfirmButton: true,
+        confirmButtonText: "Go update",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate({
+            pathname: `/${path.MEMBER}/${path.PERSONAL}`,
+            search: createSearchParams({ redirect: location?.pathname }).toString()
+          })
+        }
+      })
+      else
+      {const respse = await apiUpdateMoney({ rut: sum })
+      const response = await apiCreateOrder({ products: selectedProductDetailsArray, total: +sum, address: current?.address, status: "Order" });
+      if (respse.success && response.success) {
+        setIsSuccess(true);
+        Swal.fire('Chúc mừng!', 'Đơn hàng đã được tạo.', 'success').then(() => {
+          navigate('/');
+        });
+      }}
+    } catch (error) {
+      console.error("Error creating order:", error);
+    }
+  }
+  
   return (
     <div className='w-full overflow-y-auto sm:p-8 grip gap-6 '>
       {isSuccess && < Congrat />}
@@ -49,14 +86,23 @@ const Checkout = ({ dispatch }) => {
           <span className='text-xl'><strong>Phone:</strong> {current?.mobile}</span>
           <span className='text-xl font-bold'><strong>Subtotal:</strong> {formatMoney(+sum)} VND</span>
         </div>
-       
-        <div className='flex justify-center mt-8 w-full'>
+       <div>
+        <button onClick={() => setCheckout(true)}>
+          chọn hình tức thanh toán  
+           
+        </button>
+       </div>
+    { checkout &&  (+amount >= 1 ? <div className='flex flex-col justify-center mt-8 w-full'>
+          <div className='flex flex-col'>
+            <span onClick={() => thanhtoan()}>Thanh toán bằng ví ứng dụng</span>
+            {moneyvi - sum < 0 && <span className='text-red-500'>Số tiền trong ví không đủ</span>}
+          </div>
           <Paypal
             payload={{ products: selectedProductDetailsArray, total: +sum, address: current?.address }}
             amount={+amount}
             setIsSuccess={setIsSuccess}
           />
-        </div>
+        </div> : <div className='mt-8'><p className=' italic text-red-500'>Chỉ thanh toán đối với đơn lớn hơn 50.000</p></div>)}
       </div>
 
 

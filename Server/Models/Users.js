@@ -20,6 +20,9 @@ var userSchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
+    money:{
+        type: Number,
+    },
     avatar: {
         type: String,
     },
@@ -41,8 +44,20 @@ var userSchema = new mongoose.Schema({
         title: String,
 
     }],
+    history:[{
+         nap: Number,     
+         rut: Number,
+         time: { type: Date, default: Date.now }
+    }],
     address: String,
-    wishList: [{ type: mongoose.Types.ObjectId, ref: "Product" }],
+    wishList: [{
+        pid: { type: mongoose.Types.ObjectId, ref: 'Product' },
+        thumb: String,
+        title: String,
+        category: String,
+        price: Number,
+        color: String
+    }],
     isBlocked: {
         type: Boolean,
         default: false,

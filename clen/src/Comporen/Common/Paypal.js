@@ -4,8 +4,10 @@ import {
     usePayPalScriptReducer
 } from "@paypal/react-paypal-js";
 import { apiCreateOrder } from "Apis/Products";
+import {  apiUpdateMoney } from "Apis/User";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 
 const style = { "layout": "vertical" };
@@ -14,10 +16,9 @@ const ButtonWrapper = ({ currency, showSpinner, payload, setIsSuccess, amount })
    
     const navigate = useNavigate();
     const [{ isPending, options }, dispatch] = usePayPalScriptReducer();
-    console.log(payload)
     useEffect(() => {
         dispatch({
-            type: 'reserOptions',
+            type: 'resetOptions',
             value: {
                 ...options, currency: currency
             }
@@ -27,7 +28,8 @@ const ButtonWrapper = ({ currency, showSpinner, payload, setIsSuccess, amount })
     const [errorMessage, setErrorMessage] = useState('');
 
     const handleSaveOrder = async () => {
-        try {
+        if (payload.products)
+            {try {
             const response = await apiCreateOrder({ ...payload, status: "Order" });
             if (response.success) {
                 setIsSuccess(true);
@@ -38,9 +40,19 @@ const ButtonWrapper = ({ currency, showSpinner, payload, setIsSuccess, amount })
         } catch (error) {
             console.error("Error creating order:", error);
             setErrorMessage('Có lỗi xảy ra khi tạo đơn hàng: ' + error.message);
-        }
+        }}
+        else {try {
+            const vnAmount = Math.round(+amount / 25350); 
+            const response = await apiUpdateMoney({ nap: +vnAmount });
+            if (response.success) {
+                setIsSuccess(true);
+                toast.success(`Nạp thành công ${vnAmount} VNĐ`)
+            }
+        } catch (error) {
+            console.error("Error creating order:", error);
+            setErrorMessage('Có lỗi xảy ra khi tạo nạp: ' + error.message);
+        }}
     };
-
     // Trong JSX
     { errorMessage && <div className="error">{errorMessage}</div> }
 
@@ -58,7 +70,7 @@ const ButtonWrapper = ({ currency, showSpinner, payload, setIsSuccess, amount })
                         { amount: { currency_code: currency, value: amount },
                             shipping: {
                                 address: {
-                                    address_line_1: payload.address,
+                                    address_line_1: payload?.address || 'nạp tiền',
                                     address_line_2: "",
                                     admin_area_2: "ninh binh",
                                     admin_area_1: "NB",
@@ -76,7 +88,7 @@ const ButtonWrapper = ({ currency, showSpinner, payload, setIsSuccess, amount })
                 onApprove={(data, actions) => actions.order.capture().then(async (response) => {
                     if (response.status === "COMPLETED") {
                         await handleSaveOrder();
-                    }
+                    } 
                 })}
             />
         </>
@@ -87,7 +99,7 @@ export default function Paypal({ payload, setIsSuccess, amount }) {
     return (
         <div style={{width:"100%", maxWidth: "750px", minHeight: "200px", margin: 'auto' }}>
             <PayPalScriptProvider options={{ clientId:`Aeyhld3gudnXmK6ENvvCEV_Wr2LFG-kB1U-4mQf6sRy3DBIlKmoAXnGi9gtY8cNwsVMux870fAbFDj1r` , components: "buttons", currency: "USD" }}>
-                <ButtonWrapper amount={+amount / 100} payload={payload} setIsSuccess={setIsSuccess} currency={'USD'} showSpinner={false} />
+                <ButtonWrapper amount={+amount * 100 / 100} payload={payload} setIsSuccess={setIsSuccess} currency={'USD'} showSpinner={false} />
             </PayPalScriptProvider>
         </div>
     );

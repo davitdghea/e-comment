@@ -19,7 +19,7 @@ const FeatureProduct = () => {
             {products?.map(el =>(
                 <ProductCart
                 {...el}
-                    style=' w-full xs:max-w-[200px] sm:max-w-[300px] md:max-w-[350px] flex shadow ml-2 mt-2 cursor-pointer border rounded-sm '
+                    style=' w-full xs:max-w-[200px] truncate sm:max-w-[300px] md:max-w-[350px] flex shadow ml-2 mt-2 cursor-pointer border rounded-sm '
                 pid={el._id}
                 images={el.thumb}
                key={el._id}

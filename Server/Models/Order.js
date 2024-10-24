@@ -19,6 +19,9 @@ var orderSchema = new mongoose.Schema({
         type:mongoose.Types.ObjectId,
         ref:'User'
     },
+    deliveryCode:{
+        type:String
+    },
     address:{
         type:String
     }

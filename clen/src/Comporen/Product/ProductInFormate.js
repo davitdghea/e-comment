@@ -10,8 +10,10 @@ import Swal from "sweetalert2"
 import path from "Ultils/Path"
 import { useNavigate } from "react-router-dom"
 import VoteOptions from "Comporen/Vote/VoteOptions"
+import CommentList from "Comporen/Vote/Comment"
 
 const ProductInFormate = ({ rerender, totalRatings, ratings, nameProduct, pid }) => {
+  const [tab, setTab] = useState(1)
   const navigate = useNavigate()
   const [activetion, setActivetion] = useState(1)
   const dispatch = useDispatch()
@@ -51,8 +53,12 @@ const ProductInFormate = ({ rerender, totalRatings, ratings, nameProduct, pid })
   }
 
   return (
-    <div >
-      <div className="shadow-xl w-full mt-[20px] border min-h-[420px] rounded-xl">
+    <div className="border flex flex-col justify-center items-center ">
+      <div className="mt-10">
+        <span className={`border rounded-[50px] font-semibold p-2 ${tab === 1 && 'bg-blue-500 text-white'}`} onClick={()=>setTab(1)}>Product details</span>
+        <span className={`ml-10 border rounded-[50px] p-2 font-semibold  ${tab === 2 && 'bg-blue-500 text-white'}`} onClick={() => setTab(2)}>Review ({ratings?.length || 0})</span>
+      </div>
+      {tab === 1 && <div className="shadow-xl w-full mt-[20px]  min-h-[420px] rounded-xl">
         <div className="flex items-center gap-2 relative bottom-[-1px] ml-[13px] mt-[10px]">
           {tabs.map(el => (
             <span
@@ -71,9 +77,9 @@ const ProductInFormate = ({ rerender, totalRatings, ratings, nameProduct, pid })
 
 
         </div>
-      </div>
+      </div>}
 
-      <div className="flex flex-col pb-8 w-full sm:max-w-[1360px] shadow-xl rounded-xl mt-[20px] sm:mt-[80px] border">
+      {tab === 2 && <div className="flex flex-col pb-8 w-full sm:max-w-[1360px] shadow-xl rounded-xl mt-[20px] sm:mt-[80px] ">
         <span className={`py-2  px-4  bg-[#f7f7f7] `}>
           CUSTOMER REVIEW
         </span>
@@ -105,18 +111,11 @@ const ProductInFormate = ({ rerender, totalRatings, ratings, nameProduct, pid })
           </Button>
         </div>
         <div className="flex flex-col gap-4 border w-[97%] m-auto rounded-xl">
-          {ratings?.map(el => (
-            <Comment
-              key={el._id}
-              content={el.comment}
-              updatedAt={el.updatedAt}
-              star={el.star}
-              name={el?.postedBy?.lastname && el?.postedBy?.firstname ? `${el.postedBy.lastname} ${el.postedBy.firstname}` : "ẩn danh"} />
-          ))}
+          <CommentList comments={ratings}/>
         </div>
-      </div>
+      </div>}
     </div>
   )
 }
 
-export default memo(ProductInFormate)
+ export default memo(ProductInFormate)

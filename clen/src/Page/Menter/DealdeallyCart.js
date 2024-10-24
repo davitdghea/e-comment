@@ -10,7 +10,6 @@ import path from 'Ultils/Path'
 
 const DealdeallyCart = ({ location, navigate, dispatch }) => {
   const [selectedProducts, setSelectedProducts] = useState([]);
-  console.log(selectedProducts)
   const handCallBack = useCallback((id)=>{
     setSelectedProducts(id)
   })
@@ -62,9 +61,9 @@ const DealdeallyCart = ({ location, navigate, dispatch }) => {
       </div>
       <div className='sm:mt-[50px] mt-[100px]'>
         <div className='w-full  mt-8 border py-3  font-bold grid grid-cols-10  opacity-70'>
-          <span className='sm:col-span-6 col-span-5 w-full ml-1 text-[12px] sm:text-[20px]'>Products</span>
+          <span className='sm:col-span-5 col-span-4 w-full ml-1 text-[12px] sm:text-[20px]'>Products</span>
           <span className='col-span-2 sm:col-span-1 w-full text-[12px] sm:text-[20px]'>Quantity</span>
-          <span className='col-span-2 w-full text-[12px] sm:text-[20px]'>Price</span>
+          <span className='col-span-3 w-full text-[12px] sm:text-[20px]'>Price</span>
           <span className='col-span-1 w-full text-[12px] sm:text-[20px]'>Paypal</span>
         </div>
         {effectiveCart?.map(el => (

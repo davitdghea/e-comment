@@ -23,6 +23,7 @@ const path = {
     CREATE_PRODUCTS: 'create_products',
 
     // Menber
+    WALLET:"wallet",
     MEMBER: 'member',
     PERSONAL: "personal",
     MY_CART: "my_cart",

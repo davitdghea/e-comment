@@ -77,3 +77,72 @@ export const keywordMap = {
     "phụ kiện":"accessories"
     
 };
+const colorMap = {
+    Black: "#000000",
+    White: "#FFFFFF",
+    Red: "#FF0000",
+    Green: "#00FF00",
+    Blue: "#0000FF",
+    Yellow: "#FFFF00",
+    Purple: "#800080",
+    Cyan: "#00FFFF",
+    Magenta: "#FF00FF",
+    Brown: "#A52A2A",
+    Orange: "#FFA500",
+    Pink: "#FFC0CB",
+    Gray: "#808080",
+    Indigo: "#4B0082", 
+    Teal: "#008080",
+    Olive: "#808000",
+    Gold: "#FFD700",
+    Silver: "#C0C0C0",
+    Beige: "#F5F5DC",
+    Ivory: "#FFFFF0",
+    Coral: "#FF7F50",
+    Maroon: "#800000",
+    Navy: "#000080",
+    Lime: "#00FF00",
+    Turquoise: "#40E0D0",
+    Violet: "#EE82EE",
+    Khaki: "#F0E68C",
+    Peach: "#FFE5B4",
+    Mint: "#98FF98",
+    Lavender: "#E6E6FA",
+    Crimson: "#DC143C",
+    Plum: "#DDA0DD",
+};
+
+function hexToRgb(hex) {
+    hex = hex.replace(/^#/, '');
+    if (hex.length === 3) {
+        hex = hex.split('').map(h => h + h).join('');
+    }
+    const bigint = parseInt(hex, 16);
+    return { r: (bigint >> 16) & 255, g: (bigint >> 8) & 255, b: bigint & 255 };
+}
+
+function colorDistance(color1, color2) {
+    return Math.sqrt(
+        Math.pow(color1.r - color2.r, 2) +
+        Math.pow(color1.g - color2.g, 2) +
+        Math.pow(color1.b - color2.b, 2)
+    );
+}
+
+export function closestColor(hex) {
+    const inputColor = hexToRgb(hex);
+    let minDistance = Infinity;
+    let closestColorName = '';
+
+    for (const [colorName, hexValue] of Object.entries(colorMap)) {
+        const targetColor = hexToRgb(hexValue);
+        const distance = colorDistance(inputColor, targetColor);
+
+        if (distance < minDistance) {
+            minDistance = distance;
+            closestColorName = colorName;
+        }
+    }
+
+    return closestColorName;
+}
