@@ -1,5 +1,6 @@
 const Product = require('../Models/Product')
 const slugify = require('slugify')
+const mongoose = require('mongoose');
 const ansyncHandler = require('express-async-handler')
 const makeSKU = require('uniqid')
 const creatProduct = ansyncHandler(async (req, res) => {
@@ -18,6 +19,28 @@ const creatProduct = ansyncHandler(async (req, res) => {
 
     })
 })
+const updateProducts = async () => {
+    try {
+        // Kết nối đến MongoDB
+        await mongoose.connect('mongodb://localhost:27017/yourdbname', {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+
+        // Tìm tất cả các sản phẩm và thêm trường repList nếu chưa tồn tại
+        await Product.updateMany(
+            { "ratings.repList": { $exists: false } }, // Chỉ chọn những ratings không có repList
+            { $set: { "ratings.$[].repList": [] } }    // Thêm repList là một mảng rỗng
+        );
+
+        console.log("Update successful!");
+    } catch (error) {
+        console.error("Error updating products:", error);
+    } finally {
+        // Đóng kết nối
+        await mongoose.connection.close();
+    }
+};
 const getProduct = ansyncHandler(async (req, res) => {
     const { pid } = req.params
     const product = await Product.findById(pid).populate({
@@ -148,25 +171,26 @@ const ratings = ansyncHandler(async (req, res) => {
     const { star, comment, pid, updatedAt } = req.body
 
     if (!star || !pid) throw new Error("missing inputs")
-    const ratingProduct = await Product.findById(pid)
-    const alreadyRating = ratingProduct?.ratings?.find(el => el.postedBy.toString() === _id)
+    // const ratingProduct = await Product.findById(pid)
+    // const alreadyRating = ratingProduct?.ratings?.find(el => el.postedBy.toString() === _id)
 
-    if (alreadyRating) {
-        await Product.updateOne({
-            ratings: { $elemMatch: alreadyRating }
-        }, {
-            $set: { "ratings.$.star": star, "ratings.$.comment": comment, "ratings.$.updatedAt": updatedAt }
-        }, { new: true })
-    } else {
+    // if (alreadyRating) {
+    //     await Product.updateOne({
+    //         ratings: { $elemMatch: alreadyRating }
+    //     }, {
+    //         $set: { "ratings.$.star": star, "ratings.$.comment": comment, "ratings.$.updatedAt": updatedAt }
+    //     }, { new: true })
+    // } else {
         // add Star & comment
         await Product.findByIdAndUpdate(pid, {
             $push: { ratings: { star, comment, postedBy: _id, updatedAt } }
         }, { new: true })
-    }
+    // }
     //sum ratings
     const updatedProduct = await Product.findById(pid)
     const ratingCount = updatedProduct.ratings.length
     if (ratingCount === 0) {
+        
         updatedProduct.totalRatings = 0
     }
     else {
@@ -179,6 +203,35 @@ const ratings = ansyncHandler(async (req, res) => {
         updatedProduct
     })
 })
+const Updaterating = ansyncHandler(async (req, res) => {
+    updateProducts()
+    const { content, pid, rid } = req.body;
+
+    // Tìm sản phẩm theo id
+    const ratingProduct = await Product.findById(pid);
+
+    // Tìm bình luận có id là rid
+    const alreadyRating = ratingProduct?.ratings?.find(el => el._id.toString() === rid);
+
+    if (alreadyRating) {
+        // Sử dụng $push để thêm phản hồi (repList) vào bình luận đã có
+        await Product.updateOne(
+            { _id: pid, "ratings._id": rid },  // Tìm sản phẩm và bình luận cụ thể
+            {
+                $push:{
+                    "ratings.$.repList": {
+                        comment: content,  // Thêm phản hồi mới
+                        updatedAt: new Date()  // Cập nhật thời gian hiện tại
+                    }
+                }
+            },
+            { new: true }  // Trả về tài liệu mới nhất sau khi cập nhật
+        );
+    }
+
+    res.status(200).json({success:true, message: "RepList updated successfully" });
+});
+
 const uploadImagesProduct = ansyncHandler(async (req, res) => {
     const { pid } = req.params
     if (!req.files) throw new Error('mising input')
@@ -191,6 +244,7 @@ const uploadImagesProduct = ansyncHandler(async (req, res) => {
 
 module.exports = {
     addVariant,
+    Updaterating,
     ratings,
     uploadImagesProduct,
     getProducts,

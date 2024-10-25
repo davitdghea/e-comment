@@ -42,7 +42,6 @@ const DealdeallyCart = ({ location, navigate, dispatch }) => {
         icon: "info",
         title: 'Almost!',
         text: "Please select payment product.",
-        
         showConfirmButton: true,
         confirmButtonText: "OK",
       })

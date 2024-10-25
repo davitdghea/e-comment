@@ -70,7 +70,7 @@ const ManageOrider = ({ navigate, location }) => {
       else toast.error(response.mes)
     }
     if (order === 'Order') {
-      toast.error('vui lòng ấn đã chuẩn bị hàng trc khi giao')
+      toast.error('Vui lòng ấn đã chuẩn bị hàng trc khi giao')
     }
     if (order === 'Available' ){
       const response = await apiUpdateUserOrderAdmin({ oid, status:'Transport'})
@@ -124,8 +124,8 @@ const ManageOrider = ({ navigate, location }) => {
           <thead>
             <tr className='border-b pb-5'>
               <th className='text-[12px] sm:text-[15px]'>STT</th>
-              <th className='text-center text-[12px] sm:text-[15px]'> Code Unique</th>
               <th className='text-center text-[12px] sm:text-[15px]'>Product</th>
+              <th className='text-center text-[12px] sm:text-[15px]'>Code Unique</th>
               <th className='text-[12px] sm:text-[15px] text-center'>Total</th>
               <th className='text-[12px] sm:text-[15px]'>Status</th>
               <th className='text-[12px] sm:text-[15px]'>Order date</th>
@@ -135,24 +135,24 @@ const ManageOrider = ({ navigate, location }) => {
           <tbody>
             {orders?.map((el, idx) => (
               <tr key={el._id} className='border-b py-2'>
-                <td className='text-center'>
+                <td className=''>
                   {(+params.get("page") > 1 ? +params.get("page") - 1 : 0) *
                     process.env.REACT_APP_LIMIT +
                     idx + 1}</td>
-                <td className=' text-center'>{el._id}</td>
                 <td className=' text-center py-2 max-w-[500px] relative'>
                   <span className='flex justify-center'>
                     <img src={el.products[0].thumb} alt='thumb' className='w-8 h-8 rounded-md object-cover' />
                   </span>
-                  <span onClick={() => { setDeilProduct({ deilProduct: el.products, order: el.status, orderId: el._id })}} className='text-gray-100 cursor-pointer absolute top-0 bottom-0 left-0 right-0 bg-overlay flex items-center justify-center'>
+                  <span onClick={() => { setDeilProduct({ deilProduct: el.products, order: el.status, orderId: el._id }) }} className='text-gray-100 cursor-pointer absolute top-0 bottom-0 left-0 right-0 bg-overlay flex items-center justify-center'>
                     +{el.products.length}
                   </span>
                 </td>
+                <td className=' text-center'>{el.deliveryCode}</td>
                 <td className='text-[12px] sm:text-[15px] text-center'>{formatMoney(Math.round(el.total))}</td>
                 <td className={`text-[12px] ${(el.status === 'Cancelled' || el.status === 'False') && 'text-red-500'} ${(el.status === 'Order' || el.status === 'Available' || el.status === 'Transport') && 'text-yellow-400'} ${(el.status === 'Succeed') && 'text-blue-500'  } sm:text-[15px]`} >{el.status}</td>
                 <td className='text-[12px] sm:text-[15px]'>{moment(el.updatedAt).format('DD/MM/YYYY')}</td>
                 {el.status !== 'Succeed' && el.status !== 'Cancelled' && el.status !== 'False' && el.status !== 'Transport' && 
-                  <td className='text-[12px] sm:text-[15px]' onClick={() => { updateOrder({ oid: el._id, order: el.status }) }}><span className='bg-red-500 cursor-pointer px-2 py-1 text-center rounded-md text-white'>Update</span> </td>}
+                  <td className='text-[12px] ml-4 sm:text-[15px]' onClick={() => { updateOrder({ oid: el._id, order: el.status }) }}><span className='bg-red-500 cursor-pointer px-2 py-1 text-center rounded-md text-white'>Update</span> </td>}
                 {el.status === 'Transport' &&
                   <td className='text-[12px] sm:text-[15px]' ><span className='bg-red-500 cursor-pointer px-2 py-1 rounded-md text-white' onClick={() => { updateOrder({ oid: deilProduct.orderId, order: el.status, status: 'False' }) }}>False</span> <span onClick={() => { updateOrder({ oid: el._id, order: el.status, status: 'Succeed' }) }} className='bg-blue-500 px-2 py-1 rounded-md cursor-pointer text-white ml-2'>Succeed</span></td>}
               </tr>
@@ -168,36 +168,39 @@ const ManageOrider = ({ navigate, location }) => {
           order:null,
           orderId: null,
         }) }} className='flex justify-center items-center  h-full absolute top-0 bottom-0 left-0 right-0 bg-overlay' >
-        <table onClick={e => e.stopPropagation()} className='bg-slate-200 py-10 px-5 rounded-sm'>
-          <tr>
-            <th className='p-2'>Product</th>
-            <th className='p-2'>Color</th>
-            <th className='p-2'>Quantity</th>
-            <th className='p-2'>Price</th>
-            <th className='p-2'>Supported</th>
-          </tr>
-            {deilProduct.deilProduct?.map(item => (
-            <tr key={item?._id} className='gap-2 '>
-              <td className='px-2 py-3'>
-                <span className='flex'>
-                  <img src={item.thumb} alt='thumb' className='w-8 h-8  object-cover' />
-                  <span className='flex items-center text-xs ml-2'>{item.title}</span>
-                </span>
-              </td>
-              <td className='text-center px-2 py-3'>
-                <span className='text-[12px] text-center'>{item.color}</span>
-              </td>
-              <td className='text-center px-2 py-3'>
-                <span>{item.quantity}</span>
-              </td>
-              <td>
-                <span>{item.price}</span>
-              </td>
-                <td onClick={() => updateOrder({ oid: deilProduct.orderId })} className='text-center cursor-pointer text-blue-500 hover:underline px-2 py-3'>
-                Đã chuẩn bị hàng
-              </td>
-            </tr>))}
-        </table>
+          <div onClick={e => e.stopPropagation()} className='bg-slate-200 py-10 px-5 rounded-sm '>
+            <table>
+              <tr className='mt-4'>
+                <th className='p-2'>Product</th>
+                <th className='p-2'>Color</th>
+                <th className='p-2'>Quantity</th>
+                <th className='p-2'>Price</th>
+              </tr>
+              {deilProduct.deilProduct?.map(item => (
+                <tr key={item?._id} className='gap-2 '>
+                  <td className='px-2 py-3'>
+                    <span className='flex'>
+                      <img src={item.thumb} alt='thumb' className='w-8 h-8  object-cover' />
+                      <span className='flex items-center text-xs ml-2'>{item.title}</span>
+                    </span>
+                  </td>
+                  <td className='text-center px-2 py-3'>
+                    <span className='text-[12px] text-center'>{item.color}</span>
+                  </td>
+                  <td className='text-center px-2 py-3'>
+                    <span>{item.quantity}</span>
+                  </td>
+                  <td>
+                    <span>{item.price}</span>
+                  </td>
+                </tr>))}
+
+            </table>
+            <div className='flex justify-end'>
+              <span onClick={() => updateOrder({ oid: deilProduct.orderId })} className=' text-center cursor-pointer flex justify-end text-white bg-blue-500 rounded-md px-2 py-3'> Đã chuẩn bị hàng</span>
+            </div>
+
+        </div>
 
       </div >}
       <div className='w-full text-center mr-[26px] mt-1'>

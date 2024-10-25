@@ -8,6 +8,7 @@ router.post("/",[verifileAccessToken, isAdmin],uploader.fields([
     { name: "thumb", maxCount:1   }
 ]), ctrls.creatProduct)
 router.get("/", ctrls.getProducts)
+router.put('/ratings/replist', [verifileAccessToken, isAdmin], ctrls.Updaterating)
 router.put("/ratings",[verifileAccessToken], ctrls.ratings)
 router.put("/:pid", [verifileAccessToken, isAdmin], uploader.fields([
     { name: 'images', maxCount: 10 },

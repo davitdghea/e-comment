@@ -53,9 +53,14 @@ var productSchema = new mongoose.Schema({
         postedBy:{type:mongoose.Types.ObjectId,ref:'User'},
         comment:{type:String},
         updatedAt:{
-            type:Date,
-            
-        }
+            type:Date,   
+        },
+        repList:[{
+            comment:{type:String},
+            updatedAt:{
+                type:Date
+            }
+        }]
     }],
     totalRatings:{
         type:Number,

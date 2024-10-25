@@ -120,7 +120,7 @@ const dispatch = useDispatch()
           />
           <div className='w-full my-6 flex flex-col  gap-2'>
             <InputFrom
-              label="Price"
+              label="Price (nhập hai số thập thân VD: 14 000 000 là 1400000000)"
               register={register}
               errors={errors}
               id="price"
@@ -145,19 +145,7 @@ const dispatch = useDispatch()
               type='number'
 
             />
-            <InputFrom
-              label="Color"
-              register={register}
-              errors={errors}
-              id="color"
-              validate={{
-                required: 'Need fill this field'
-              }}
-              placeholder='Color of new product'
-              style='flex-auto'
-              type='color'
-
-            />
+            
           </div>
          <div className='w-full my-6 flex gap-4'>
              <Select
@@ -190,6 +178,21 @@ const dispatch = useDispatch()
             invalidFields={invalidFields}
             setInvalidFields={setInvalidFields}
           />
+          <div className='mt-5'>
+            <InputFrom
+              label="Color"
+              register={register}
+              errors={errors}
+              id="color"
+              validate={{
+                required: 'Need fill this field'
+              }}
+              placeholder='Color of new product'
+              style='flex-auto'
+              type='color'
+            />
+          </div>
+          
           <div className='flex flex-col gap-2 my-2'>
             <label className='font-semibold' htmlFor='thumb'>Upload thumb</label>
             <input

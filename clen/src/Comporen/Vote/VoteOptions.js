@@ -19,7 +19,7 @@ const VoteOptions = ({ nameProduct, handleSubmitVoteOption }) => {
       className='bg-white w-[700px] rounded-md p-4 flex-col h-[500px]'
     >
       <img
-        src="https://digital-world-2.myshopify.com/cdn/shop/files/logo_digital_new_250x.png?v=1613166683"
+        src="https://ecomall-be87.kxcdn.com/ecomall/wp-content/themes/ecomall/images/logo.png"
         alt='logo'
         className='w-[300px] object-contain my-8'
       />

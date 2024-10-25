@@ -13,7 +13,6 @@ const verifileAccessToken = asyncHend(async(req,res,next)=>{
             success:false,
             mes:"invalid access token"
         })
-        console.log('Token provided:', token);
         req.user = docode
         next()
     })

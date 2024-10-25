@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import { createSearchParams } from 'react-router-dom'
 import { getCurrent } from 'St/User/AsyncAction'
 import Swal from 'sweetalert2'
+import 'animate.css'
 import { formatMoney } from 'Ultils/Hellpers'
 import path from 'Ultils/Path'
 
@@ -34,7 +35,7 @@ const Checkout = ({ dispatch, navigate, location }) => {
       }).then((result) => {
         if (result.isConfirmed) {
           navigate({
-            pathname: `/${path.MEMBER}/${path.PERSONAL}`,
+            pathname: `/${path.MEMBER}/${path.WALLET}`,
             search: createSearchParams({ redirect: location?.pathname }).toString()
           })
         }
@@ -87,22 +88,27 @@ const Checkout = ({ dispatch, navigate, location }) => {
           <span className='text-xl font-bold'><strong>Subtotal:</strong> {formatMoney(+sum)} VND</span>
         </div>
        <div>
-        <button onClick={() => setCheckout(true)}>
-          chọn hình tức thanh toán  
+        <button className='w-full bg-blue-500 rounded-lg py-2 flex mt-4 text-white justify-center' onClick={() => setCheckout(true)}>
+            <span>Chọn hình tức thanh toán </span>  
            
         </button>
        </div>
-    { checkout &&  (+amount >= 1 ? <div className='flex flex-col justify-center mt-8 w-full'>
-          <div className='flex flex-col'>
-            <span onClick={() => thanhtoan()}>Thanh toán bằng ví ứng dụng</span>
-            {moneyvi - sum < 0 && <span className='text-red-500'>Số tiền trong ví không đủ</span>}
+        {checkout && (+amount >= 1 ? <div onClick={() => setCheckout(false)} className='absolute top-0 bottom-0 bg-overlay left-0 right-0 flex  justify-center items-end mt-8 w-full'>
+          <div onClick={e => e.stopPropagation()} className='bg-white animate__animated animate__fadeInUp  w-full max-w-[672px]   '>
+            <div className=' w-full max-w-[95%] mx-auto bg-blue-500 rounded-[5px] py-4 flex my-4 text-white  flex-col'>
+              <span onClick={() => thanhtoan()} className='text-center text-[18px]'>Thanh toán bằng ví ứng dụng</span>
+              {moneyvi - sum < 0 && <span className='text-red-500'>Số tiền trong ví không đủ</span>}
+            </div>
+            <div className='w-full max-w-[95%] mx-auto'>
+              <Paypal
+                payload={{ products: selectedProductDetailsArray, total: +sum, address: current?.address }}
+                amount={+amount}
+                setIsSuccess={setIsSuccess}
+              />
+            </div>
+            
           </div>
-          <Paypal
-            payload={{ products: selectedProductDetailsArray, total: +sum, address: current?.address }}
-            amount={+amount}
-            setIsSuccess={setIsSuccess}
-          />
-        </div> : <div className='mt-8'><p className=' italic text-red-500'>Chỉ thanh toán đối với đơn lớn hơn 50.000</p></div>)}
+            </div> : <div className='mt-8'><p className=' italic text-red-500'>Chỉ thanh toán đối với đơn lớn hơn 50.000</p></div>)}
       </div>
 
 

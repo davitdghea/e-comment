@@ -17,8 +17,7 @@ const InputField = ({ setError,error= false,value, setValue, nameKey, placeholde
       {invalidFields?.some(el => el.name === nameKey)
         && <small className='text-red-500 italic '>{invalidFields.find(el => el.name === nameKey)?.mes}
         </small>}
-      {error && <small className='text-red-500'>User has existed</small>
-}
+      {error && <small className='text-red-500'>User has existed</small>}
     </div>
   )
 }

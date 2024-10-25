@@ -12,7 +12,7 @@ import Swal from "sweetalert2";
 
 const style = { "layout": "vertical" };
 
-const ButtonWrapper = ({ currency, showSpinner, payload, setIsSuccess, amount }) => {
+const ButtonWrapper = ({ currency, showSpinner, payload, setIsSuccess, amount, isSuccess }) => {
    
     const navigate = useNavigate();
     const [{ isPending, options }, dispatch] = usePayPalScriptReducer();
@@ -42,11 +42,11 @@ const ButtonWrapper = ({ currency, showSpinner, payload, setIsSuccess, amount })
             setErrorMessage('Có lỗi xảy ra khi tạo đơn hàng: ' + error.message);
         }}
         else {try {
-            const vnAmount = Math.round(+amount / 25350); 
-            const response = await apiUpdateMoney({ nap: +vnAmount });
+            
+            const response = await apiUpdateMoney({ nap: +payload.total });
             if (response.success) {
-                setIsSuccess(true);
-                toast.success(`Nạp thành công ${vnAmount} VNĐ`)
+                setIsSuccess(!isSuccess);
+                toast.success(`Nạp thành công ${payload.total} VNĐ`)
             }
         } catch (error) {
             console.error("Error creating order:", error);
@@ -95,11 +95,11 @@ const ButtonWrapper = ({ currency, showSpinner, payload, setIsSuccess, amount })
     );
 };
 
-export default function Paypal({ payload, setIsSuccess, amount }) {
+export default function Paypal({ payload, setIsSuccess, amount, isSuccess }) {
     return (
         <div style={{width:"100%", maxWidth: "750px", minHeight: "200px", margin: 'auto' }}>
             <PayPalScriptProvider options={{ clientId:`Aeyhld3gudnXmK6ENvvCEV_Wr2LFG-kB1U-4mQf6sRy3DBIlKmoAXnGi9gtY8cNwsVMux870fAbFDj1r` , components: "buttons", currency: "USD" }}>
-                <ButtonWrapper amount={+amount * 100 / 100} payload={payload} setIsSuccess={setIsSuccess} currency={'USD'} showSpinner={false} />
+                <ButtonWrapper amount={+amount * 100 / 100} payload={payload} isSuccess={isSuccess} setIsSuccess={setIsSuccess} currency={'USD'} showSpinner={false} />
             </PayPalScriptProvider>
         </div>
     );

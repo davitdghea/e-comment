@@ -5,7 +5,14 @@ const Coupon = require('../Models/Coupon')
 const asyncHandler = require('express-async-handler');
 const Product = require("../Models/Product");
 
-
+function generateRandomString(length) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+        result += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return result;
+}
 const NewOrder = asyncHandler(async (req, res) => {
     const { _id } = req.user;
     const { products, total, address, status } = req.body;
@@ -49,8 +56,7 @@ const NewOrder = asyncHandler(async (req, res) => {
         user.cart = updatedCart;
         user.address = address;  
         await user.save();
-        const lastProduct = products[products.length - 1];
-        const lastSixChars = lastProduct.product.slice(-6);
+        const lastSixChars = generateRandomString(8);
         const data = { products, address, total, orderBy: _id, deliveryCode: lastSixChars };
         if (status) data.status = status;
         const rs = await Order.create(data);
@@ -96,6 +102,7 @@ const getUserOrder = asyncHandler(async (req, res) => {
    
     const searchCondition = searchKeyword ? {
         $or: [
+            { "products.deliveryCode": { $regex: searchKeyword, $options: 'i' } },
             { "products.color": { $regex: searchKeyword, $options: 'i' } },
             { "products.title": { $regex: searchKeyword, $options: 'i' } }
         ]
@@ -143,7 +150,6 @@ const getUserOrder = asyncHandler(async (req, res) => {
 
 const getOrders = asyncHandler(async (req, res) => {
     const queries = { ...req.query };
-    const { _id } = req.user;
     const searchKeyword = queries.q;
 
 
@@ -158,6 +164,7 @@ const getOrders = asyncHandler(async (req, res) => {
 
     const searchCondition = searchKeyword ? {
         $or: [
+            { "deliveryCode": { $regex: searchKeyword, $options: 'i' } },
             { "products.color": { $regex: searchKeyword, $options: 'i' } },
             { "products.title": { $regex: searchKeyword, $options: 'i' } }
         ]

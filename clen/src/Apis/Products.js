@@ -26,7 +26,6 @@ export const apiRatings = (data) => {
 }
 export const apiCreateProduct = (data) => {
     const token = getToken();
-    console.log(data)
     return axios({
         url: '/product/',
         method: "post",
@@ -36,9 +35,19 @@ export const apiCreateProduct = (data) => {
         }
     })
 }
+export const apiupdateReplist = (data) => {
+    const token = getToken();
+    return axios({
+        url: '/product/ratings/replist',
+        method: "put",
+        data,
+        headers: {
+            Authorization: token ? `Bearer ${token}` : undefined
+        }
+    })
+}
 export const apiUpdateProduct = (data, pid) => {
     const token = getToken();
-    console.log(data)
     return axios({
         url: '/product/' + pid,
         method: "put",

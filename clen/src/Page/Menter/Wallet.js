@@ -7,6 +7,7 @@ import { toast } from 'react-toastify'
 import { getCurrent } from 'St/User/AsyncAction'
 import { format } from 'date-fns';
 import Swal from 'sweetalert2'
+import 'animate.css'
 import { formatMoney } from 'Ultils/Hellpers'
 const Wallet = ({dispatch}) => {
     const [moneynap,setMoneynap] = useState(0)
@@ -14,6 +15,7 @@ const Wallet = ({dispatch}) => {
     const amount = (Math.round(+moneynap / 25350))
     const [isSuccess, setIsSuccess] = useState(false)
     const[ruttien,setRuttien]=useState(false)
+  const [nap,setNap] = useState(false)
   const [moneyrut, setMoneyrut] = useState(null)
   const [naptien, setNaptien] = useState(false)
   const [tkrap, setTkrap] = useState(null)
@@ -42,7 +44,6 @@ const Wallet = ({dispatch}) => {
       setIsSuccess(!isSuccess)
       Swal.fire('Rút tiền thành công!', 'Vui lòng check tài khoản paypal của bạn.', 'success')
   }
-  console.log(current)
   return (
       <div className='w-full relative'>
         <div className='w-full bg-slate-400'>
@@ -51,7 +52,7 @@ const Wallet = ({dispatch}) => {
           </header>
       </div>
       <div className='relative mt-[50px]'>
-          <div className='bg-orange-500  min-h-[200px] text-white text-[25px] font-extrabold flex justify-center items-center'>
+          <div className='bg-orange-500 min-h-[200px] text-white text-[25px] font-extrabold flex justify-center items-center'>
           <span>Money: {formatMoney(Math.round(current.money))}</span>
           </div>
           <div>
@@ -67,39 +68,53 @@ const Wallet = ({dispatch}) => {
             <div className=''>
             {current.history.slice().reverse().map(el => (
               <div className='flex justify-around py-2 border-b-2 border-gray-300'>
-                <span>{el.nap ? '+': "-" } {el.nap || el.rut}</span>
+                {el.rut && <span> - {formatMoney(Math.round(+el.rut))} </span>}
+                {el.nap && <span> + {formatMoney(Math.round(+el.nap))}</span>}
                 <span>{format(new Date(el.time), 'dd/MM/yyyy HH:mm:ss')}</span>
               </div>
             )) }
             </div>
-          {naptien && <div onClick={(e) => { setNaptien(!naptien); e.stopPropagation() }} className='bg-overlay  absolute flex  justify-center  top-0 bottom-0 right-0 left-0'>
-            <div onClick={(e) => e.stopPropagation()} className='bg-white p-5 rounded-md  h-full max-h-[200px] mt-[200px] w-full max-w-[300px]'>
+          {naptien && <div onClick={(e) => { setNaptien(!naptien); e.stopPropagation(); setNap(false); setMoneynap(0) }} className='bg-overlay  absolute flex min-h-screen justify-center  top-0 bottom-0 right-0 left-0'>
+            <div onClick={(e) => e.stopPropagation()} className='bg-white relative p-5 rounded-md  h-full max-h-[400px] mt-[200px] w-full max-w-[600px]'>
               <h1 className='text-center text-[20px] font-extrabold'>Nạp tiền</h1>
               <div className='flex flex-col mt-5'>
+                <img className='h-full max-h-[150px]' src="https://res-console.cloudinary.com/dpdta6mey/thumbnails/v1/image/upload/v1729828642/Y2FzaGJhY2staWNvbi13aXRoLXdhbGxldC1jYXNoYmFjay1tb25leS1iYWNrLWxhYmVsXzM0ODItMTE3OTItcmVtb3ZlYmctcHJldmlld193YW51bmg=/drilldown" />
                 <span>Nhập số tiền:</span>
-                <input className='outline-none border-2 border-gray-400' onChange={(el) => setMoneynap(el.target.value)} placeholder='Nhập tối thiểu 50000' />
+                <input className='outline-none mt-2 border-2 border-gray-400 py-3 pl-2 rounded-md' onChange={(el) => setMoneynap(el.target.value)} placeholder='Nhập tối thiểu 50000' />
               </div> 
-              {+amount >= 1 ? <div className='flex justify-center mt-8 w-full'>
-                <Paypal
-                  payload={{ total: +moneynap, uid: current._id }}
-                  amount={+amount}
-                  setIsSuccess={setIsSuccess}
-                />
-              </div> : <div className='mt-2'><p className=' italic text-red-500'>Chỉ thanh toán đối với đơn lớn hơn 50.000</p></div>}
+
+              {+amount >= 1 ? 
+                <div onClick={() => setNap(true)} className='cursor-pointer w-full mt-5 flex py-2 rounded-md justify-center items-center bg-blue-500'>
+                  <span  className='text-white'> Xác nhận </span>
               </div>
+               : <div className='mt-2'>
+                <p className=' italic text-red-500'>Chỉ thanh toán đối với đơn lớn hơn 50.000</p></div>}
+              </div>
+            {nap && <div className='animate__animated animate__fadeInUp absolute top-0 bottom-0 flex justify-center items-end left-0 right-0 bg-overlay'>
+              <div className=' flex justify-center pt-8 w-full bg-white bottom-0 max-w-[600px] mx-auto'>
+              <div className='w-full max-w-[95%]'>
+                  <Paypal
+                    payload={{ total: (+moneynap * 100), uid: current._id }}
+                    amount={+amount}
+                    isSuccess={isSuccess}
+                    setIsSuccess={setIsSuccess}
+                  />
+              </div>
+            </div></div>}
             </div>}
-          {ruttien && <div onClick={() => setRuttien(!ruttien)} className='bg-overlay  absolute flex  justify-center  top-0 bottom-0 right-0 left-0'>
-            <div onClick={(e) => e.stopPropagation()} className='bg-white p-5   rounded-md  h-full max-h-[300px] mt-[200px] w-full max-w-[300px]'>
+          {ruttien && <div onClick={() => setRuttien(!ruttien)} className='bg-overlay  absolute flex min-h-screen justify-center  top-0 bottom-0 right-0 left-0'>
+            <div onClick={(e) => e.stopPropagation()} className='bg-white p-5   rounded-md  h-full max-h-[480px] mt-[150px] w-full max-w-[600px]'>
               <h1 className='text-center text-[20px] font-extrabold'>Rút tiền</h1>
-              <div className='flex flex-col'>
+              <div className='flex flex-col justify-center'>
+                <img className='h-full max-h-[150px]' src="https://res-console.cloudinary.com/dpdta6mey/thumbnails/v1/image/upload/v1729828642/Y2FzaGJhY2staWNvbi13aXRoLXdhbGxldC1jYXNoYmFjay1tb25leS1iYWNrLWxhYmVsXzM0ODItMTE3OTItcmVtb3ZlYmctcHJldmlld193YW51bmg=/drilldown"/>
                 <span className='my-2'>Nhập số tiền:</span>
-                <input className='outline-none border-2 border-gray-400 px-2 py-1' onChange={(el) => setMoneyrut(el.target.value)} placeholder='Nhập tối thiểu 50000' />
+                <input className='outline-none border-2 border-gray-400 px-2 py-3' onChange={(el) => setMoneyrut(el.target.value)} placeholder='Nhập tối thiểu 50000' />
               </div>
               <div className='flex flex-col'>
                 <span className='my-2'>Nhập tài khoản Paypal:</span>
-                <input className='outline-none border-2 border-gray-400 px-2 py-1' type='email' onChange={(el) => setTkrap(el.target.value)} placeholder='Nhập  tài khoản nhận tiền' />
+                <input className='outline-none border-2 border-gray-400 px-2 py-3' type='email' onChange={(el) => setTkrap(el.target.value)} placeholder='Nhập  tài khoản nhận tiền' />
              </div>
-              <button onClick={(tkrap && moneyrut) ? () => payouts({ emailPayPal: tkrap, amount: moneyrut, money: current.money }) : undefined} className={`${(tkrap && moneyrut) ? 'bg-blue-500 text-white ' : 'bg-gray-500 text-white'} p-2 mt-8 rounded-sm`}>Xác nhận rút tiền</button>    
+              <button onClick={(tkrap && moneyrut) ? () => payouts({ emailPayPal: tkrap, amount: (moneyrut * 100), money: current.money }) : undefined} className={`${(tkrap && moneyrut) ? 'bg-blue-500 text-white ' : 'bg-gray-500 text-white'} p-2 mt-8 rounded-sm`}>Xác nhận rút tiền</button>    
             </div>
             </div>}
           </div>

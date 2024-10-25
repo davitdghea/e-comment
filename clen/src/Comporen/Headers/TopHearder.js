@@ -101,7 +101,7 @@ const TopHearder = ({ handleClickMenu, dispatch, navigate }) => {
             </Fragment>}
           </div>) :
             <Link to={`${path.LOGIN}`}>
-              <div className='mt-5 mr-4 w1234:mt-0 flex items-center rounded-lg justify-center '>
+              <div className=' mr-4 w1234:mt-0 flex items-center rounded-lg justify-center '>
                 <LuUser  size={30} />
                 <span className='flex flex-col mx-2'>
                   <span className='text-[12px]'>My Account</span>

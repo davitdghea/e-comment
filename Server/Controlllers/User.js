@@ -171,9 +171,7 @@ const resetPassword = asyncHend(async (req, res) => {
     const { password, token } = req.body
     if (!password || !token) throw new Error("missing input")
     const passwordResetToken = crypto.createHash('sha256').update(token).digest('hex')
-
     const user = await User.findOne({ passwordResetToken, passwordResetExpires: { $gt: Date.now() } })
-
     if (!user) throw new Error("invalid reset token")
     user.password = password
     user.passwordResetToken = undefined

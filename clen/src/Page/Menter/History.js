@@ -161,7 +161,9 @@ const History = ({ navigate, location }) => {
                 <span>{item.price}</span>
               </td>
               <td  className='text-center cursor-pointer text-red-500 hover:underline px-2 py-3'>
-                Support
+                <a href="https://www.facebook.com/profile.php?id=61555505181329" target="_blank" rel="noopener noreferrer">
+                  Support
+                </a>
               </td>
             </tr>))}
         </table>

@@ -1,5 +1,4 @@
-import icons from "./Icons"
-const { AiFillStar, AiOutlineStar } = icons
+import { MdStarHalf, MdStar, MdStarBorder } from "react-icons/md";
 export const creactSlug = string => {
     string.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "").split().join('-')
 }
@@ -7,14 +6,30 @@ export const formatMoney = number => {
     const adjustedNumber = number / 100;
     return Number(adjustedNumber.toFixed(2)).toLocaleString();
 };
-export const renderStarFromNumber = (number) => {
-    // if(!Number(number)) return
-    const stars = []
 
-    for (let i = 0; i < +number; i++) stars.push(<AiFillStar color="orange" />)
-    for (let i = 5; i > +number; i--) stars.push(<AiOutlineStar color="orange" />)
-    return stars
-}
+
+export const renderStarFromNumber = (number) => {
+    const stars = [];
+    const integerPart = Math.floor(number); // Phần nguyên
+    const decimalPart = number - integerPart; // Phần thập phân
+
+    // Thêm các sao vàng
+    for (let i = 0; i < integerPart; i++) {
+        stars.push(<MdStar color="orange" key={i} />);
+    }
+
+    // Thêm 1 sao nửa vàng nửa đen nếu có phần thập phân
+    if (decimalPart > 0) {
+        stars.push(<MdStarHalf color="orange" key={integerPart} />);
+    }
+
+    // Thêm các sao đen còn lại
+    for (let i = stars.length; i < 5; i++) {
+        stars.push(<MdStarBorder color="orange" key={i} />);
+    }
+
+    return stars;
+};
 
 export const generateRange = (start, end) => {
     const length = end + 1 - start

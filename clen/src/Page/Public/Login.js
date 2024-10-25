@@ -177,7 +177,6 @@ const handle = useCallback( (value) =>{
           </div>
           <div>
             <Button
-
               handleOnclick={() => SetIsForgotPass(false)}
             >
               Back

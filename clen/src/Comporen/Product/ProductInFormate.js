@@ -86,7 +86,7 @@ const ProductInFormate = ({ rerender, totalRatings, ratings, nameProduct, pid })
         <div className="flex w-[98%] mx-auto mt-[10px]">
           <div className="w-4/12 flex flex-col items-center justify-center border border-red-500">
             <span className="font-semibold text-3xl">{`${totalRatings}/5`}</span>
-            <span className="flex items-center gap-1">{renderStarFromNumber(totalRatings)?.map((el, index) => (
+            <span className="flex items-center gap-1">{renderStarFromNumber(totalRatings).map((el, index) => (
               <span key={index}>{el}</span>
             ))}</span>
             <span className="text-sm">{`${ratings?.length} reviewer and commetntors`}</span>
@@ -111,7 +111,7 @@ const ProductInFormate = ({ rerender, totalRatings, ratings, nameProduct, pid })
           </Button>
         </div>
         <div className="flex flex-col gap-4 border w-[97%] m-auto rounded-xl">
-          <CommentList comments={ratings}/>
+          <CommentList comments={ratings} pid={pid}/>
         </div>
       </div>}
     </div>
