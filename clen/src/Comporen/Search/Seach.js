@@ -74,6 +74,29 @@ const Seach = ({ type, name, activeClick, changeActiveFitler }) => {
   useEffect(() => {
     if (type === 'input') fetchBestPriceProduct()
   }, [type])
+  const Reset = () => {
+    const queries = {};
+    for (let param of params.entries()) {
+      queries[param[0]] = param[1];
+    }
+
+    // Giữ lại `title` và `category` nếu chúng tồn tại
+    const resetParams = {};
+    if (queries.title) resetParams.title = queries.title;
+    if (queries.category) resetParams.category = queries.category;
+
+    // Xóa các lựa chọn và điều kiện giá
+    setPrice({ from: '', to: '' });
+    changeActiveFitler(null);
+
+    // Điều hướng URL chỉ giữ lại `category` và `title`
+    navigate({
+      pathname: `/${category}`,
+      search: createSearchParams(resetParams).toString(),
+    });
+  };
+
+
   return (
     <div
       className=' cursor-pointer items-center text-gray-400 p-3 gap-6 border border-gay-800 flex justify-between relative text-xs'
@@ -88,7 +111,7 @@ const Seach = ({ type, name, activeClick, changeActiveFitler }) => {
             <span
               onClick={e => {
                 e.stopPropagation()
-                setSelected([])
+                Reset()
                 changeActiveFitler(null)
               }} className='underline cursor-pointer hover:text-red-500'>Reset</span>
 
@@ -115,8 +138,7 @@ const Seach = ({ type, name, activeClick, changeActiveFitler }) => {
             <span
               onClick={e => {
                 e.stopPropagation()
-                setPrice({from:'',to:''})
-                setSelected([])
+               Reset()
               }} className='underline cursor-pointer hover:text-red-500'>Reset</span>
 
           </div>

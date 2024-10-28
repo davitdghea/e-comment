@@ -18,8 +18,7 @@ const OrderItem = ({ el, defaultQuantity = 1, dispatch, handCallBack, selectedPr
         }
     }
     const updateQuantity = async() =>{
-        const response = await apiUpdateCart({ updateQuantity: true, pid: el.product, quantity, color: el.color })
-        console.log(response)
+       await apiUpdateCart({ updateQuantity: true, pid: el.product, quantity, color: el.color })
     }
    
     useEffect(() => {

@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form'
 import { createSearchParams, useSearchParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { statusOrders } from 'Ultils/Contants'
-import { formatMoney } from 'Ultils/Hellpers'
+import { closestColor, formatMoney } from 'Ultils/Hellpers'
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 
 const History = ({ navigate, location }) => {
@@ -70,7 +70,6 @@ const History = ({ navigate, location }) => {
       else toast.error(response.mes)
     }
   }
-  console.log(deilProduct)
   return (
     <div>
       <header className='top-0 z-30 right-0 left-0 fixed sm:relative text-3xl font-semibold py-4 bg-gray-100 border-b border-b-blue-200'>
@@ -152,7 +151,7 @@ const History = ({ navigate, location }) => {
                 </span>                
               </td>              
               <td className='text-center px-2 py-3'>
-                <span className='text-[12px] text-center'>{item.color}</span>
+                <span className='text-[12px] text-center'>{closestColor(item.color)}</span>
               </td>
               <td className='text-center px-2 py-3'>                
                 <span>{item.quantity}</span>

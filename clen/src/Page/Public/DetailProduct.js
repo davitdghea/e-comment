@@ -6,6 +6,7 @@ import Slider from 'react-slick'
 import { formatMoney, renderStarFromNumber } from '../../Ultils/Hellpers'
 import DOMPurify from 'dompurify'
 import clsx from 'clsx'
+import { FaAnglesDown, FaAnglesUp } from "react-icons/fa6";
 import { getCurrent } from 'St/User/AsyncAction'
 import { useSelector } from 'react-redux'
 import Swal from 'sweetalert2'
@@ -23,9 +24,11 @@ const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
     slidesToShow: 3,
     slidesToScroll: 3,
     autoplaySpeed: 7000,
+    arrows: false
   };
   const titleRef = useRef()
   const params = useParams()
+  const [isExpanded, setIsExpanded] = useState(false);
   const [quantity, setQuantity] = useState(1)
   const { current } = useSelector(state => state.user)
   const [variant, setVariant] = useState(null)
@@ -55,11 +58,14 @@ const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
   }, [data, params])
   const fetchProductData = async () => {
     if (!pid) return;
-    const response = await GetProducts(pid)
 
+   try{ const response = await GetProducts(pid)
     if (response?.success) {
       setProduct(response.ProductData)
       setCurrentImage(response?.ProductData?.thumb)
+    }}
+    catch{
+     setProduct(null)
     }
   }
 
@@ -136,13 +142,13 @@ const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
     })
     try {
       const response = await apiUpdateCart({
-        sol: product.quantity,
+        sol: product?.quantity,
         pid,
-        color: currentProduct.color || product?.color,
+        color: currentProduct?.color || product?.color,
         quantity,
-        price: currentProduct.price || product?.price,
-        thumb: currentProduct.thumb || product?.thumb,
-        title: currentProduct.title || product?.title
+        price: currentProduct?.price || product?.price,
+        thumb: currentProduct?.thumb || product?.thumb,
+        title: currentProduct?.title || product?.title
       })
       if (response.success) {
         toast.success(response.message)
@@ -180,13 +186,13 @@ const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
     }
   return (
     <div className='w-full  relative my-10'>
-      {!isQuickView && <div className='h-[81px] bg-gray-100'>
+      {!isQuickView && <div className='h-[81px] hidden sm:block bg-gray-100'>
         <div ref={titleRef} className='w-full m-auto pt-3 px-3'>
           <p className='text-[20px] font-medium'>{currentProduct?.title || product?.title}</p>
           <Breadcrumb title={currentProduct?.title || product?.title} category={category} />
         </div>
       </div>}
-      <div className='sm:max-w-[1150px] sm:mx-auto'>
+      {product !== null && <div className='sm:max-w-[1150px] sm:mx-auto'>
         <div className='w-full  mt-4 w-800:flex block mb-10'>
           <div className='w-full max-w-[550px] mx-auto h-full max-h-[950px]'>
             <div className=' border flex-4 sm:mr-4 rounded-lg'>
@@ -254,8 +260,22 @@ const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
             <h2 className='text-[30px] font-normal ml-2 text-red-500'>
               {`${formatMoney(currentProduct?.price || product?.price)}  VNĐ`}
             </h2>
-            <ul className=' ml-2 text-sm text-gray-500'>
-              {product?.description?.length === 1 && <div className='text-sm' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product?.description[0]) }}></div>}
+            <ul className=' overflow-hidden relative ml-2 text-sm text-gray-500'>
+              {product?.description?.length === 1 && (
+                <div className={`${isExpanded ? 'max-h-none' : 'max-h-[250px] '} flex flex-col justify-center transition-all duration-300`}>
+                  <p className='mb-5' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product?.description[0]) }} />
+                  <button
+                    className="absolute bottom-0 right-0 py-2 px-4"
+                    onClick={() => setIsExpanded(!isExpanded)}
+                  >
+                    {isExpanded ? (
+                      <span className='flex'>Thu gọn <span className='ml-2'><FaAnglesUp /></span></span>
+                    ) : (
+                      <span className='flex'>Xem thêm <span className='ml-2'><FaAnglesDown /></span></span>
+                    )}
+                  </button>
+                </div>
+              )}
               {product?.description?.length > 1 && product?.description?.map(el => (<li className='leading-6 ml-[20px]' key={el}>{el}</li>))}
             </ul>
             <div className='my-6 flex items-center gap-4 sm:ml-6'>
@@ -296,7 +316,7 @@ const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
                 <li>18 months warranty at Genuine Warranty Center.</li>
                 <li>Whats in the box: charging cable and block</li>
               </ul>
-              {product?.quantity === 0 ? <p>Sản phẩm hiện đang hết hàng</p> : <Button handleOnclick={handleAddToCart} fw >
+              {product?.quantity === 0 ? <p className='text-red-500'>Sản phẩm hiện đang hết hàng!!!</p> : <Button handleOnclick={handleAddToCart} fw >
                 Add To Cart
               </Button>}
               <div onClick={() => addWishlist('WISHLIST')} className='flex border-b pb-3'>
@@ -310,20 +330,7 @@ const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
               </div>
             </div>
           </div>
-         
         </div>
-        {/* {!isQuickView && <div className='hidden sm:block border rounded-xl  flex-2 shadow-xl'>
-            {ProductExtraInfoItemTion.map(el => (
-              <ProductExtraInfoItem
-                key={el.id}
-                title={el.title}
-                sub={el.sub}
-                icon={el.icon}
-              />
-            ))}
-          </div>} */}
-        {/* <div className='w-full m-auto flex'> 
-        </div> */}
         {!isQuickView && <div className='w-full m-auto mt-8'>
           <ProductInFormate
             totalRatings={product?.totalRatings}
@@ -339,7 +346,12 @@ const DetailProduct = ({ isQuickView, data, location, navigate, dispatch }) => {
           </h3>
           <CustomSlider normal={true} product={relateProducts} />
         </div>}
+      </div>}
+      {product === null && <div className='flex h-[300px] items-start justify-center'>
+        <span className='mt-5'>Không tìm thấy sản phẩm!!!</span>
       </div>
+
+      }
     </div>
   )
 }

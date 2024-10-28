@@ -1,10 +1,14 @@
 import path from "./Path"
 import icons from "./Icons"
 import { AiOutlineDashboard} from "react-icons/ai"
-import { MdGroups } from "react-icons/md";
+import { FaShoppingCart } from "react-icons/fa";
 import { TbBrandProducthunt } from "react-icons/tb";
 import { AiFillGift } from "react-icons/ai";
-
+import { FaCartArrowDown } from "react-icons/fa6";
+import { MdGroups } from "react-icons/md";
+import { FaWallet } from "react-icons/fa";
+import { FaRegListAlt } from "react-icons/fa";
+import { FaHeartCircleCheck } from "react-icons/fa6";
 export const navigation = [{
     id: 1,
     value: `HOME ▾`,
@@ -187,7 +191,7 @@ export const adminSidebar = [
         type: "Single",
         text: "Manage orders",
         path: `/${path.ADMIN}/${path.MANAGE_ORDER}`,
-         icon: <AiFillGift />
+         icon: <FaRegListAlt />
     },
     
 ]
@@ -224,28 +228,28 @@ export const memberSidebar = [
         type: "Single",
         text: "My cart",
         path: `/${path.MEMBER}/${path.MY_CART}`,
-        icon: <MdGroups size={24} />
+        icon: <FaShoppingCart size={24} />
     },
     {
         id: 3,
         type: "Single",
         text: "Buy histories",
         path: `/${path.MEMBER}/${path.HISTORY}`,
-        icon: <AiFillGift size={24} />
+        icon: <FaCartArrowDown size={24} />
     },
     {
         id: 4,
         type: "Single",
         text: "Wislist",
         path: `/${path.MEMBER}/${path.WISHLIST}`,
-        icon: <AiFillGift size={24} />
+        icon: <FaHeartCircleCheck size={24} />
     },
     {
         id: 5,
         type: "Single",
         text: "Wallet",
         path: `/${path.MEMBER}/${path.WALLET}`,
-        icon: <AiOutlineDashboard size={24} />
+        icon: <FaWallet size={24} />
     },
 
 ]

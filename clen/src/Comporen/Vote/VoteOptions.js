@@ -16,16 +16,16 @@ const VoteOptions = ({ nameProduct, handleSubmitVoteOption }) => {
     <div
       onClick={e => e.stopPropagation()}
       ref={modalRef}
-      className='bg-white w-[700px] rounded-md p-4 flex-col h-[500px]'
+      className='bg-white max-w-[700px] w-full rounded-md p-4 flex-col h-full max-h-[550px]'
     >
       <img
         src="https://ecomall-be87.kxcdn.com/ecomall/wp-content/themes/ecomall/images/logo.png"
         alt='logo'
-        className='w-[300px] object-contain my-8'
+        className='w-full max-w-[200px] object-contain my-8'
       />
       <h2 className='text-center text-medium text-lg'>{`Voting the product ${nameProduct}`}</h2>
       <textarea
-        className='h-[150px] mt-[10px] form-textarea w-full border'
+        className='h-full  max-h-[150px] mt-[10px] form-textarea w-full border'
         value={comment}
         onChange={e => setComment(e.target.value)}
       ></textarea>

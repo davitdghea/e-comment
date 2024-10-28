@@ -115,7 +115,7 @@ const ManageProducts = () => {
                   <td className='sm:grid'>
                     <img src={el.thumb} alt='thumb' className='w-10 h-14 object-cover py-2' />
                   </td>
-                  <td className='sm:grid text-[12px] mt-3'>{el.title}</td>
+                  <td className='sm:grid text-[12px] mt-3 line-clamp-3 overflow-hidden text-ellipsis max-h-[3.3em]' title={el.title}>{el.title}</td>
                   <td className='sm:grid hidden text-[12px] mt-5'>{el.brand}</td>
                   <td className='sm:grid hidden text-[12px] mt-5'>{el.category}</td>
                   <td className='sm:grid hidden text-[12px] mt-5'>{el.price}</td>

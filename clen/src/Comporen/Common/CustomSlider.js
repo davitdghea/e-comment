@@ -12,6 +12,7 @@ const CustomSlider = ({ product, activedtab, normal, dispatch, so = 3, Css = 'fl
     autoplay: true,
     arrows: window.innerWidth >= 900,
     autoplaySpeed: 7000,
+    arrows: false,
     responsive: [
       {
         breakpoint: 500,
@@ -56,7 +57,7 @@ const CustomSlider = ({ product, activedtab, normal, dispatch, so = 3, Css = 'fl
           {
             product?.map((el) => (
               <Product
-                Style='cursor-pointer mx-auto relative w-full w1230:max-w-[250px] md:max-w-[280px] w-1000:max-w-[330px]  w-1200:max-w-[350px]  max-w-[220px] text-base mx-2 px-[2px] sm:px-[10px] pb-4'
+                Style='cursor-pointer mx-auto relative w-full w1230:max-w-[250px] md:max-w-[280px] w-1000:max-w-[330px] w350:max-w-[150px]  w-1200:max-w-[350px]  max-w-[220px] text-base mx-2 px-[2px] sm:px-[10px] pb-4'
                 pid={el._id}
                 dispatch={dispatch}
                 key={el.id}

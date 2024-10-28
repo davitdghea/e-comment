@@ -19,14 +19,14 @@ readOnly
   
   return (
     <div className={label === 'Color' ? 'flex justify-start items-center' : className }>
-      {label && <label className={`mb-1 ${label === 'Color' && 'flex'}`} htmlFor={id}>{label}:</label>}
+      {label && <label className={`mb-1 ${label === 'Price (nhập hai số thập thân VD: 14 000 000 là 1400000000)' || label === 'Name product' ? 'w-full' : 'w-[100px]'}  `} htmlFor={id}>{label}:</label>}
       <input
         type={type}
         id={id}
         {...register(id, validate)}
         disabled={disabled}
         placeholder={placeholder}
-        className={clsx("form-input my-auto", FullWidth && 'w-full', 'p-1 outline-none border-2', layoutUser && 'w-[80%]')}
+        className={clsx("form-input my-auto", FullWidth && 'w-full', ' p-1 outline-none border-2 ', layoutUser && 'w-[80%]')}
         defaultValue={defaultValue}
         readOnly={readOnly}
       />

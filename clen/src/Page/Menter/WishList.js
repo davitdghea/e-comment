@@ -1,6 +1,6 @@
 import { apiUpdateCart, apiUpdateWithlist } from 'Apis/User'
 import WithRase from 'hocs/withRase'
-import React, { memo, useState } from 'react'
+import React, { memo} from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -8,7 +8,6 @@ import { getCurrent } from 'St/User/AsyncAction'
 import { closestColor, formatMoney } from 'Ultils/Hellpers'
 
 const WishList = ({ dispatch }) => {
-  const [update,setUpdate] = useState(false)
   const { current } = useSelector(s => s.user)
   console.log(current)
   const handleClickOptions = async(data)=>{
@@ -32,7 +31,7 @@ const WishList = ({ dispatch }) => {
       <header className='fixed top-0 left-0 right-0 sm:relative z-30 text-3xl font-semibold bg-gray-100 py-4 border-b-2'>
         <p className='ml-[55px] sm:ml-0'>My Wishlist</p> 
       </header>
-      <table className='p-4 w-full gap-4 sm:mt-0 mt-[80px]' >
+      {current?.wishList >= 1 ?  <table className='p-4 w-full gap-4 sm:mt-0 mt-[80px]' >
         <tr>
           <th>Product</th>
           <th>Price</th>
@@ -50,11 +49,13 @@ const WishList = ({ dispatch }) => {
             </Link>
             <td className='text-center'>{formatMoney(el.price)}</td>
             <td className='text-center'>{closestColor(el.color)}</td>
-            <td className='text-blue-500 hover:underline' onClick={() => handleClickCart({ id: el.pid, color:el.color, price:el.price, thumb:el.thumb, title:el.title })}>Add to cart</td>
-            <td className='text-red-500 hover:underline'  onClick={() =>  handleClickOptions(el.pid)}>Xóa</td>
+            <td className='text-blue-500 hover:underline cursor-pointer' onClick={() => handleClickCart({ id: el.pid, color:el.color, price:el.price, thumb:el.thumb, title:el.title })}>Add to cart</td>
+            <td className='text-red-500 hover:underline cursor-pointer'  onClick={() =>  handleClickOptions(el.pid)}>Xóa</td>
           </tr>
         ))}
-      </table>
+      </table> : <div className='w-full flex justify-center mt-5'>
+        <p >Rỗng!!!</p>
+      </div>}
     </div>
   )
 }

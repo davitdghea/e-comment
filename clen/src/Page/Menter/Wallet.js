@@ -22,7 +22,17 @@ const Wallet = ({dispatch}) => {
     useEffect(() => {
         dispatch(getCurrent())
     }, [isSuccess, dispatch])
+  function isNumber(value) {
+    return !isNaN(value) && Number.isFinite(parseFloat(value));
+  }
   const payouts = async (emailPayPal, amount, money) =>{
+    if (!(isNumber(moneyrut))){
+      toast.error("vui lòng nhập đúng số tiền muốn rút")
+      setMoneyrut(null)
+      setTkrap(null)
+      setRuttien(!ruttien)
+      return;
+    }
     if (moneyrut > current.money){
       toast.error("số tiền rút vượt qua tiền trong ví")
       return;
