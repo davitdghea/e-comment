@@ -27,7 +27,6 @@ export const apiResetPassWord = (data) => axios({
 })
 const token = JSON.parse(localStorage.getItem('persist:shop/user'));
 export const apiGetCurrent = () => axios({
-    
     url: '/user/current',
     method: 'get',
     headers: {

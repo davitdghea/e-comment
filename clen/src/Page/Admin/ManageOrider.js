@@ -3,6 +3,7 @@ import { CustomSelect, InputFrom, Pagination } from 'Comporen/Index'
 import WithRase from 'hocs/withRase'
 import useDebounce from 'Hooks/UseDebounce'
 import moment from 'moment'
+import Swal from "sweetalert2";
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -10,6 +11,7 @@ import { createSearchParams, useSearchParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { statusOrders } from 'Ultils/Contants'
 import { formatMoney } from 'Ultils/Hellpers'
+import { apiUpdateMoney } from 'Apis/User'
 
 const ManageOrider = ({ navigate, location }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -58,7 +60,7 @@ const ManageOrider = ({ navigate, location }) => {
       })
     }
   }
-  const updateOrder = async ({ oid, status, order }) =>{
+  const updateOrder = async ({ oid, status, order, money }) =>{
     
     
     if (deilProduct?.order === 'Order') {
@@ -73,7 +75,7 @@ const ManageOrider = ({ navigate, location }) => {
       toast.error('Vui lòng ấn đã chuẩn bị hàng trc khi giao')
     }
     if (order === 'Available' ){
-      const response = await apiUpdateUserOrderAdmin({ oid, status:'Transport'})
+      const response = await apiUpdateUserOrderAdmin({ oid, status: 'Transport' })
       if (response.success) {
         setUpdateOrders(!updateOrders)
         toast.success(response.mes)
@@ -88,19 +90,38 @@ const ManageOrider = ({ navigate, location }) => {
       }
       else toast.error(response.mes)
     }
+    if (order === 'False'){
+      Swal.fire({
+        title: 'Almost...',
+        text: "Bạn chắc chắn đã nhận lại đơn hàng chứ ???",
+        icon: "info",
+        showCancelButton: true,
+        cancelButtonText: 'Not',
+        confirmButtonText: "Xác nhận"
+      }).then(async(rs) => {
+        if (rs.isConfirmed) {
+          const response1 = await apiUpdateUserOrderAdmin({ oid, status: 'Refund' })
+          const res = await apiUpdateMoney({ nap: +money })
+          if (response1.success && res.success) {
+            setUpdateOrders(!updateOrders)
+            toast.success("Đã hoàn tiền về cho khách hàng")
+          }
+        }
+      })
+    }
     
    
 }
   console.log(orders)
   return (
-    <div>
-      <header className='top-0 z-30 right-0 left-0 fixed sm:relative text-3xl font-semibold py-4 bg-gray-100 border-b border-b-blue-200'>
-        <p className='ml-[55px] sm:ml-0'>ManageOrider</p>
+    <div className='relative'>
+      <header className='top-0 z-30 right-0 left-0 sticky  text-3xl font-semibold py-4 bg-gray-100 border-b border-b-blue-200'>
+        <p className='ml-[55px] sm:ml-3'>ManageOrider</p>
       </header>
 
-      <div className='mt-10'>
+      <div className='mt-14'>
         <div className='flex justify-end items-center mt-3'>
-          <form className='w-[45%] flex items-center gap-4'>
+          <form className='w-[45%] flex items-center justify-around gap-4'>
             <div className='col-span-1'>
               <InputFrom
                 id='q'
@@ -149,12 +170,15 @@ const ManageOrider = ({ navigate, location }) => {
                 </td>
                 <td className=' text-center'>{el.deliveryCode}</td>
                 <td className='text-[12px] sm:text-[15px] text-center'>{formatMoney(Math.round(el.total))}</td>
-                <td className={`text-[12px] ${(el.status === 'Cancelled' || el.status === 'False') && 'text-red-500'} ${(el.status === 'Order' || el.status === 'Available' || el.status === 'Transport') && 'text-yellow-400'} ${(el.status === 'Succeed') && 'text-blue-500'  } sm:text-[15px]`} >{el.status}</td>
+                <td className={`text-[12px] ${(el.status === 'Cancelled' || el.status === 'False' || el.status === 'Refund') && 'text-red-500'} ${(el.status === 'Order' || el.status === 'Available' || el.status === 'Transport') && 'text-yellow-400'} ${(el.status === 'Succeed') && 'text-blue-500'  } sm:text-[15px]`} >{el.status}</td>
                 <td className='text-[12px] sm:text-[15px]'>{moment(el.updatedAt).format('DD/MM/YYYY')}</td>
-                {el.status !== 'Succeed' && el.status !== 'Cancelled' && el.status !== 'False' && el.status !== 'Transport' && 
-                  <td className='text-[12px] ml-4 sm:text-[15px]' onClick={() => { updateOrder({ oid: el._id, order: el.status }) }}><span className='bg-red-500 cursor-pointer px-2 py-1 text-center rounded-md text-white'>Update</span> </td>}
+                {el.status !== 'Refund' && el.status !== 'Succeed' && el.status !== 'Cancelled'  && el.status !== 'Transport' && 
+                  <td className='text-[12px] ml-4 sm:text-[15px]' onClick={() => { updateOrder({ oid: el._id, order: el.status, money: el.total }) }}><span className='bg-red-500 cursor-pointer px-2 py-1 text-center rounded-md text-white'>Update</span> </td>}
                 {el.status === 'Transport' &&
-                  <td className='text-[12px] sm:text-[15px]' ><span className='bg-red-500 cursor-pointer px-2 py-1 rounded-md text-white' onClick={() => { updateOrder({ oid: deilProduct.orderId, order: el.status, status: 'False' }) }}>False</span> <span onClick={() => { updateOrder({ oid: el._id, order: el.status, status: 'Succeed' }) }} className='bg-blue-500 px-2 py-1 rounded-md cursor-pointer text-white ml-2'>Succeed</span></td>}
+                  <td className='text-[12px] sm:text-[15px]' ><span className='bg-red-500 cursor-pointer px-2 py-1 rounded-md text-white' onClick={() => { updateOrder({ oid: el._id, order: el.status, status: 'False' }) }}>False</span> 
+                    <span className='bg-blue-500 px-2 py-1 rounded-md cursor-pointer text-white ml-2' onClick={() => { updateOrder({ oid: el._id, order: el.status, status: 'Succeed' }) }} >Succeed</span>
+                  </td>}
+                 
               </tr>
             ))}
           </tbody>
@@ -167,7 +191,8 @@ const ManageOrider = ({ navigate, location }) => {
           deilProduct: [],
           order:null,
           orderId: null,
-        }) }} className='flex justify-center items-center  h-full absolute top-0 bottom-0 left-0 right-0 bg-overlay' >
+        })
+        }} className='flex justify-center min-h-screen  items-center  h-full absolute top-0 bottom-0 left-0 right-0 bg-overlay' >
           <div onClick={e => e.stopPropagation()} className='bg-slate-200 py-10 px-5 rounded-sm '>
             <table>
               <tr className='mt-4'>

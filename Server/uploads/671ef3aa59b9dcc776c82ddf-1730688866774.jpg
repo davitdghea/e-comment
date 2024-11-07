@@ -1,0 +1,76 @@
+<div class="container" id="news-content" style="text-align: justify">
+    <div class="row wow fadeInUp" data-wow-delay="0.2s">
+        <div class="col-sm-6 detail_head middel wow fadeIn" data-wow-delay="0.2s"></div>
+        <div class="col-sm-6 detail_head middel wow fadeIn" data-wow-delay="0.2s"></div>
+    </div>
+    <!-- Title: fadeInLeft -->
+    <div class="detail_head middel">
+        <p class="detail_head middel wow fadeInLeft" data-wow-delay="0.2s" style="text-align: center">
+            <i>
+                <b>
+
+                </b>
+            </i>
+        </p>
+    </div>
+    <!-- ContentI: fadeInLeft -->
+    <div class="detail_head middel" style="margin-top: 16px">
+        <p class="detail_head middel wow fadeInLeft" data-wow-delay="0.2s">
+            Trong bối cảnh công nghệ thông tin (CNTT) trở thành động lực chính cho sự phát triển của nhiều ngành, việc xây dựng một
+            nguồn nhân lực vững mạnh là điều vô cùng quan trọng để Việt Nam hội nhập cùng xu thế toàn cầu. Với mong muốn đóng góp
+            cho mục tiêu này, JVB Việt Nam hợp tác cùng Đại học Hoa Lư – một ngôi trường giàu truyền thống tại Ninh Bình – để cùng
+            đào tạo và phát triển thế hệ nhân lực trẻ trong lĩnh vực CNTT. Chương trình hợp tác giữa hai bên không chỉ tập trung vào
+            việc truyền tải kiến thức lý thuyết, mà còn hướng đến việc trang bị cho sinh viên những kỹ năng thực tiễn đồng thời phát
+            triển những kỹ năng mềm quan trọng để thích ứng trong thời đại 4.0.
+        </p>
+    </div>
+    <!-- ImageII: fadeInLeft -->
+    <div class="row">
+        <div class="col-sm-6">
+            <img style="height: 100%; max-height: 405px;" src="/uploads/attachment/202410/462839021_482623278074092_2689926214275516359_n.jpg"
+                class="img-responsive fancybox img-po wow fadeInLeft z-depth-2" data-wow-delay="0.2s" alt="news" />
+        </div>
+        <div class="col-sm-6" >
+            <img style="height: 100%; max-height: 405px;" src="/uploads/attachment/202410/462896885_482623441407409_2530434625737559428_n.jpg"
+                class="img-responsive fancybox img-po wow fadeInLeft z-depth-2" data-wow-delay="0.2s" alt="news" />
+        </div>
+    </div>
+    <!-- ContentI: fadeInLeft -->
+    <div class="detail_head middel" style="margin-top: 32px">
+        <p class="detail_head middel wow fadeInLeft" data-wow-delay="0.2s">
+            Vào ngày 12/10/2024, sự kiện tọa đàm "Vị trí và Cơ hội việc làm đối với sinh viên ngành Công nghệ thông tin trong giai
+            đoạn Cách mạng công nghiệp 4.0" đã diễn ra thành công tốt đẹp.
+            Link:<a href="http://hluv.edu.vn/vi/page/knnth/detail/61610" target="_blank" style="color:blue">http://hluv.edu.vn/vi/page/knnth/detail/61610.</a>
+            Hy vọng rằng sự hợp tác này sẽ mang lại những giá trị bền vững, tạo nền tảng vững chắc cho sự phát triển nhân
+            lực CNTT tại Việt Nam, đồng thời mang đến những cơ hội mới cho sinh viên trong một lĩnh vực đầy triển vọng.
+        </p>
+    </div>
+    <!-- ImgII: fadeInRight -->
+    <div class="row">
+        <div class="col-sm-6">
+            <img src="/uploads/attachment/202410/462859228_482623561407397_7492705047715134952_n.jpg"
+                class="img-responsive fancybox img-po wow fadeInRight z-depth-2" data-wow-delay="0.2s" alt="news" />
+        </div>
+        <div class="col-sm-6">
+            <img src="/uploads/attachment/202410/462971753_482623541407399_6259427576676918201_n.jpg"
+            class="img-responsive fancybox img-po wow fadeInRight z-depth-2"
+                data-wow-delay="0.2s" alt="news" />
+        </div>
+    </div>
+    <!-- ImageII: fadeInLeft -->
+    <div class="row">
+        <div class="col-sm-6">
+            <img style="height: 100%; max-height: 405px;" src="/uploads/attachment/202410/463114352_482623661407387_7375409372564198349_n.jpg"
+                class="img-responsive fancybox img-po wow fadeInLeft z-depth-2" data-wow-delay="0.2s" alt="news" />
+        </div>
+        <div class="col-sm-6">
+            <img style="height: 100%; max-height: 405px;" src="/uploads/attachment/202410/463153142_482623281407425_5159288178612820964_n.jpg"
+            class="img-responsive fancybox img-po wow fadeInLeft z-depth-2"
+                data-wow-delay="0.2s" alt="news" />
+        </div>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    
+    

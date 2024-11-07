@@ -7,7 +7,7 @@ import { useDispatch,useSelector } from 'react-redux'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Modal from './Comporen/Common/Modal';
-import {AdminLayout,Dashboard,ManageOrider,ManageProducts,CreateProducts, ManageUser} from './Page/Admin/Index'
+import {AdminLayout,Dashboard,ManageOrider,ManageProducts,CreateProducts, ManageUser,Message} from './Page/Admin/Index'
 import { MenberLayout, Pesonal, History, Mycart, WishList, Checkout, DealdeallyCart, Wallet }from './Page/Menter/Index'
 
 
@@ -38,6 +38,7 @@ function App() {
           <Route path={path.MANAGE_PRODUCTS} element={<ManageProducts />} />
           <Route path={path.CREATE_PRODUCTS} element={<CreateProducts />} />
           <Route path={path.MANAGE_USER} element={<ManageUser />} />
+          <Route path={path.MESSAGE} element={<Message />} />
 
         </Route>
         <Route path={path.MEMBER} element={<MenberLayout />}>
@@ -53,8 +54,8 @@ function App() {
 
       </Routes>
       <ToastContainer
-        position="top-right"
-        autoClose={5000}
+        position="top-center"
+        autoClose={2000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -63,6 +64,7 @@ function App() {
         draggable
         pauseOnHover
         theme="light"
+        closeButton={false}
       />
       {/* Same as */}
       {/* <ToastContainer /> */}

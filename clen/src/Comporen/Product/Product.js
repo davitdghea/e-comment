@@ -16,18 +16,18 @@ import { FaCartArrowDown } from "react-icons/fa";
 
 const { FaCartPlus, FaHeart } = icons
 const Product = ({ productData, isNew, normal, dispatch, navigate, location, Style, pid }) => {
- const {current} = useSelector(state => state.user)  
-  const [isShowOption, setIsShowOption] = useState(false)
+const {current} = useSelector(state => state.user)  
+const [isShowOption, setIsShowOption] = useState(false)
   const handleClickOptions = async (flag) =>{
     if(flag === 'REMOTECART'){
       const pid = productData._id
       const color = productData.color
       const response = await apiRemoteCart(pid,color)
       if (response.success) {
-        toast.success(response.message)
+        toast.success( "Đã xóa sản phẩm khỏi giỏ hàng!!!")
         dispatch(getCurrent())
       }
-      else toast.error(response.message)
+      else toast.error("Lỗi khi xóa sản phẩm khỏi giỏ hàng!!!"); 
 
     }
     if (flag === 'DElTAL'){
@@ -89,8 +89,7 @@ const Product = ({ productData, isNew, normal, dispatch, navigate, location, Sty
 
     }
   }
-  console.log(productData)
-  console.log(current)
+ 
   return (
     <div onClick={() => handleClickOptions("DElTAL")} className={Style}>
       <div      

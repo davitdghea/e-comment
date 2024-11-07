@@ -3,7 +3,7 @@ import clsx from 'clsx'
 const Select = ({label,options=[],register,errors,id,validate,style,fullWidth,defaultValue}) => {
   return (
     <div className='flex flex-col gap-0.5rem'>
-      {label && <label className='mb-1' htmlFor={id}>{label}</label>}
+      {label && <label className='mb-1 font-medium' htmlFor={id}>{label}</label>}
       <select defaultValue={defaultValue} className={clsx('form-select',fullWidth && 'w-full',style,'py-1')}
        id={id} {...register(id,validate)}>
         <option value=''>----CHOOSE----</option>

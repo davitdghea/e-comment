@@ -62,23 +62,30 @@ const Products = () => {
   const changeValue = useCallback((value) => {
     setSort(value)
   }, [ setSort])
+  
   useEffect(() => {
     if (sort) {
       const params = new URLSearchParams(location.search);
       params.set('sort', sort);
       navigate({
         pathname: `/${category}`,
-        search: params.toString() 
+        search: params.toString()
+        
       })
     }
   }, [sort, category, navigate, location.search])
-  console.log(products?.length)
+  const useQuery = () => {
+    return new URLSearchParams(useLocation().search);
+  }
+  const query = useQuery();
+  const categoryget = query.get('category');
+
   return (
     <div className='w-full' onClick={() => { SetactiveClick(null) }}>
       <div className='h-[81px] bg-gray-100 flex justify-center items-center mt-5'>
         <div className='w-main m-auto pt-3'>
-          <p className='text-[20px] font-medium'>{category}</p>
-          <Breadcrumb category={category} />
+          <p className='text-[20px] font-medium mt-2'>{categoryget}</p>
+          <Breadcrumb category={categoryget} />
         </div>
       </div>
       <div className='w-full max-w-[1100px] border p-4 sm:flex  justify-between mt-8 m-auto'>
@@ -99,9 +106,9 @@ const Products = () => {
             />
           </div>
         </div>
-        <div className='sm:w-1/5 flex sm:flex-col gap-3 mt-2'>
+        <div className='sm:w-1/5 flex items-center gap-3 mt-2'>
           <span className='font-semibold text-sm'>Sort by:</span>
-          <div className=' ml-1'>
+          <div className=' ml-1 border'>
             <InputSelect changeValue={changeValue} value={sort} options={sorts} />
           </div>
         </div>

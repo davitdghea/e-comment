@@ -12,14 +12,14 @@ import { toast } from 'react-toastify'
 import path from 'Ultils/Path'
 const Cart = ({ dispatch, navigate }) => {
   const { current } = useSelector(state => state.user)
-  console.log(current?.cart)
+
   const RemoteCart = async (pid, color) => {
     const response = await apiRemoteCart(pid, color)
     if (response.success) {
-      toast.success(response.mes)
+      toast.success("Đã xóa sản phẩm khỏi giỏ hàng!!!" )
       dispatch(getCurrent())
     }
-    else toast.error(response.mes)
+    else toast.error("Lỗi khi xóa sản phẩm khỏi giỏ hàng!!!"); 
   }
   return (
     <div onClick={e => { e.stopPropagation() }} className='grid grid-rows-10 sm:max-w-[400px] w-full h-screen bg-black text-white float-end animate__animated animate__fadeInRight'>

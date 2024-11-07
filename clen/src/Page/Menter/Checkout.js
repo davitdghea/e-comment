@@ -95,10 +95,10 @@ const Checkout = ({ dispatch, navigate, location }) => {
        </div>
         {checkout && (+amount >= 1 ? <div onClick={() => setCheckout(false)} className='absolute top-0 bottom-0 bg-overlay left-0 right-0 flex  justify-center items-end mt-8 w-full'>
           <div onClick={e => e.stopPropagation()} className='bg-white animate__animated animate__fadeInUp  w-full max-w-[672px]   '>
-            <div className=' w-full max-w-[95%] mx-auto bg-blue-500 rounded-[5px] py-4 flex my-4 text-white  flex-col'>
+            <div className=' w-full max-w-[95%] mx-auto bg-blue-500 rounded-[5px] py-4 flex mt-4 text-white  flex-col'>
               <span onClick={() => thanhtoan()} className='text-center text-[18px]'>Thanh toán bằng ví ứng dụng</span>
-              {moneyvi - sum < 0 && <span className='text-red-500'>Số tiền trong ví không đủ</span>}
             </div>
+            {moneyvi - sum < 0 && <span className='text-red-500 italic mb-4'>Lưu ý: Số tiền trong ví không đủ</span>}
             <div className='w-full max-w-[95%] mx-auto'>
               <Paypal
                 payload={{ products: selectedProductDetailsArray, total: +sum, address: current?.address }}

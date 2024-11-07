@@ -4,11 +4,17 @@ import { useSelector } from 'react-redux'
 import icons from '../../Ultils/Icons'
 import WithRase from 'hocs/withRase'
 import { memo } from 'react'
+import 'animate.css'
 import { createSearchParams, Link } from 'react-router-dom'
 import { apiGetProducts } from 'Apis/Products'
+import Chat from 'Comporen/Common/Chat'
+import { IoMdChatboxes } from "react-icons/io";
 
 const Home = ({ navigate }) => {
     const { IoIosArrowForward } = icons
+    const [isExiting, setIsExiting] = useState(false);
+    const [chatnow, setChatnow] = useState(false)
+    const current = useSelector(state => state.user)
     const [newproduct, setNewpoduct] = useState([])
     const { categories } = useSelector(state => state.app)
     const FetchProduct = async () => {
@@ -36,7 +42,7 @@ const Home = ({ navigate }) => {
             window.removeEventListener('resize', handleResize);
         };
     }, []);
-    console.log(newproduct)
+    
     return (
         <div className='w-full sm:max-w-[1150px] ml-4 sm:mx-auto'>
             <div className=' w-full sm:max-w-[1100px] flex mt-[25px] sm:mt-[50px] j'>
@@ -111,6 +117,22 @@ const Home = ({ navigate }) => {
                     </div>
                 </div>
             </div>
+            {current.current !== null && current?.current?.role !== '1945' && (chatnow ? <div className={`fadeInDown animate__animated animate__fadeInUp custom-animation w-full max-w-[349px] rounded-xl h-full max-h-[380px] border border-gray-300 fixed z-40 bottom-[120px] sm:bottom-5 right-5 bg-white custom-scrollbar ${isExiting ? 'animate__fadeOutDown' : ''}`}>
+                <Chat 
+                    StyleDiv='h-[250px] overflow-y-auto mt-4'
+                    Style='relative'
+                       onClose={() => {
+                        setIsExiting(true);
+                        setTimeout(() => {
+                            setChatnow(false);
+                            setIsExiting(false);
+                        }, 500); 
+                    }}
+                      />
+            </div> : <div className='cursor-pointer flex items-center fixed bg-blue-500 rounded-t-xl bottom-[100px] sm:bottom-0 right-0 px-3 text-white z-40' onClick={() => setChatnow(true)}>
+                    <span><IoMdChatboxes/></span>
+                    <span className='ml-3'>Chat với nhân viên tư vấn</span>
+                </div>)}
         </div >
     )
 }

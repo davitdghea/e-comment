@@ -84,7 +84,7 @@ const TopHearder = ({ handleClickMenu, dispatch, navigate }) => {
           {isLoggedIn && current ? (<div onMouseEnter={() => setInformationUser(true)} onMouseLeave={() => setInformationUser(false)} className='rounded-sm  sm:flex flex-col justify-center items-center relative'>
             {current && <Fragment>
               <div onMouseEnter={() => setInformationUser(true)} onMouseLeave={() => setInformationUser(false)} className='flex items-center cursor-pointer justify-center   '>
-                {current?.avatar ? <img src={current?.avatar} alt='avatar' className='w-[30px] h-[30px] mt-5 mr-4 w1234:mt-0' /> : <LuUser size={30} />}
+                {current?.avatar ? <img src={current?.avatar} alt='avatar' className='w-[30px] h-[30px]  rounded-[50px]' /> : <LuUser size={30} />}
                 <span className='w1230:flex hidden flex-col mx-2'>
                   <span className='text-[12px]'>My Account</span>
                   <span className='text-[12px] font-medium hover:text-blue-500'>{`${current?.lastname} ${current?.firstname}`}</span>
@@ -93,9 +93,9 @@ const TopHearder = ({ handleClickMenu, dispatch, navigate }) => {
               {InformationUser && (<div onMouseEnter={() => setInformationUser(true)} onMouseLeave={() => setInformationUser(false)} className='bg-white absolute bottom-[-70px] right-[10px] shadow-xl border rounded-md'>
                 <ul className=''>
                   <Link to={+current?.role === 1945 ? `/${path.ADMIN}/${path.DASHBOARD}` : `/${path.MEMBER}/${path.PERSONAL}`}  >
-                    <li className='pt-2 pb-1 px-2 hover:text-white hover:bg-slate-500'>{+current?.role === 1945 ? 'Admin' : 'User'}</li>
+                    <li className='pt-2 pb-1 px-2 hover:text-white hover:bg-slate-500 hover: rounded-md'>{+current?.role === 1945 ? 'Admin' : 'User'}</li>
                   </Link>
-                  <li className='px-2 pt-1 cursor-pointer pb-2 text-red-500 hover:text-white hover:bg-slate-500' onClick={() => { dispatch(logout()); clearLocalStorage(); }}>Logout</li>
+                  <li className='px-2 pt-1 cursor-pointer pb-2 text-red-500 hover: rounded-md hover:text-white hover:bg-slate-500' onClick={() => { dispatch(logout()); clearLocalStorage(); }}>Logout</li>
                 </ul>
               </div>)}
             </Fragment>}
@@ -116,55 +116,3 @@ const TopHearder = ({ handleClickMenu, dispatch, navigate }) => {
 }
 
 export default WithRase(memo(TopHearder))
-
-
-// <div div className = "flex text-[13px] " >
-//         <div onClick={() => handleClickMenu(true)} className='hidden sm:flex items-center justify-center border-x p-2 cursor-pointer'>
-//           <span><LuMenuSquare size={24} className='mr-3' /></span>
-//           <span className='flex flex-col'><span>Danh</span><span>mục</span> </span>
-//         </div>
-//
-//         <div className='  flex-col px-4 sm:border-r items-center hidden lg:block'>
-//           <span className='flex items-center'>
-//             <RiPhoneFill color="red" />
-//             <span className='font-semibold ml-3 text-base'> (+1800) 000 8808</span>
-//           </span>
-//           <span>Online Support 24/7</span>
-//         </div>
-//         <div onClick={() => navigate(`/${path.MEMBER}/${path.WISHLIST}`)} className='cursor-pointer hidden sm:flex items-center sm:border-r justify-end '>
-//           <span className='mx-3'><FaRegHeart size={24} color='red' /></span>
-//         </div>
-//         <div onClick={() => dispatch(ShowCart())} className='cursor-pointer flex items-center justify-center  sm:p-2  sm:border-r sm:mr-2'>
-//           <span className='flex relative items-center '>
-//        <BsHandbagFill color='red' size={25} />
-//             <span className=' absolute left-2.5  sm:top-none top-2'>{current?.cart?.length || 0}</span>
-//             {/* <span className='hidden  sm:flex flex-col ml-1'><span>Giỏ</span><span>hàng</span></span> */}
-//           </span>
-//         </div>
-//         <div className='hidden sm:block'>
-//           {isLoggedIn && current ? (<div onClick={() => setInformationUser(!InformationUser)} className='rounded-sm  sm:flex flex-col justify-center items-center relative'>
-//             {current && <Fragment>
-//               <div className='flex items-center cursor-pointer justify-center  flex-col'>
-//                 {current?.avatar ? <img src={current?.avatar} alt='avatar' className='w-[25px] h-[25px]' /> : <BsPersonCircle size={25} />}
-//                 <span>{`${current?.lastname} ${current?.firstname}`}</span>
-//               </div>
-//               {InformationUser && (<div className='bg-white absolute bottom-[-50px] right-[0px] shadow-xl border'>
-//                 <ul className=''>
-//                   <Link to={+current?.role === 1945 ? `/${path.ADMIN}/${path.DASHBOARD}` : `/${path.MEMBER}/${path.PERSONAL}`}  >
-//                     <li className='pt-2 pb-1 px-2 hover:text-white hover:bg-slate-500'>{+current?.role === 1945 ? 'Admin' : 'User'}</li>
-//                   </Link>
-//                   <li className='px-2 pt-1 cursor-pointer pb-2 text-red-500 hover:text-white hover:bg-slate-500' onClick={() => { dispatch(logout()); clearLocalStorage(); }}>Logout</li>
-//                 </ul>
-
-//               </div>)}
-//             </Fragment>}
-
-//           </div>) :
-//             <Link to={`${path.LOGIN}`}>
-//               <div className=' flex items-center rounded-lg justify-center flex-col'>
-//                 <BsPersonCircle size={25} />
-//                 <span>Đăng nhập</span>
-//               </div>
-//             </Link>}
-//         </div>
-//       </div >

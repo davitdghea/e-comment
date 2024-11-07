@@ -85,7 +85,12 @@ const login = asyncHend(async (req, res) => {
         //lưu refresh token vào database
         await User.findByIdAndUpdate(response._id, { refreshToken: refreshTokennew }, { new: true })
         //lưu refr vào cookie httpOnly: true,
-        res.cookie("refreshToken", refreshTokennew, {  maxAge: 7 * 24 * 60 * 60 * 1000 })
+        res.cookie("refreshToken", refreshTokennew, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production", // Chỉ sử dụng `secure` khi đang ở môi trường production
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 ngày
+        });
+
         return res.status(200).json({
             success: true,
             accessToken,
@@ -375,12 +380,12 @@ const removeProductInCart = asyncHend(async (req, res) => {
     const alreadyProduct = user?.cart.find(el => el.product.toString() === pid && el.color === color)
     if (!alreadyProduct) return res.status(200).json({
         success: true,
-        MessageChannel: 'Updated your cart'
+        mes: 'Updated your cart'
     })
     const response = await User.findByIdAndUpdate(_id, { $pull: { cart: { product: pid, color } } }, { new: true })
     return res.status(200).json({
         success: response ? true : false,
-        MessageChannel: response ? 'update your cart' : 'no update'
+        mes: response ? 'update your cart' : 'no update'
     })
 })
 

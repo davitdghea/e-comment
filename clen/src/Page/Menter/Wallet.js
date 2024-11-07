@@ -55,14 +55,14 @@ const Wallet = ({dispatch}) => {
       Swal.fire('Rút tiền thành công!', 'Vui lòng check tài khoản paypal của bạn.', 'success')
   }
   return (
-      <div className='w-full relative'>
+      <div className='w-full relative bg-white h-full min-h-screen'>
         <div className='w-full bg-slate-400'>
           <header className='flex items-center fixed top-0 z-30 w-full bg-gray-100 text-3xl font-semibold h-[70px] border-b-2 pl-2 '>
                   <p className='ml-[50px] sm:ml-0'>Wallet</p>
           </header>
       </div>
       <div className='relative mt-[50px]'>
-          <div className='bg-orange-500 min-h-[200px] text-white text-[25px] font-extrabold flex justify-center items-center'>
+        <div className='bg-blue-400 min-h-[200px] text-white text-[25px] font-extrabold flex justify-center items-center'>
           <span>Money: {formatMoney(Math.round(current.money))}</span>
           </div>
           <div>
@@ -84,11 +84,11 @@ const Wallet = ({dispatch}) => {
               </div>
             )) }
             </div>
-          {naptien && <div onClick={(e) => { setNaptien(!naptien); e.stopPropagation(); setNap(false); setMoneynap(0) }} className='bg-overlay  absolute flex min-h-screen justify-center  top-0 bottom-0 right-0 left-0'>
-            <div onClick={(e) => e.stopPropagation()} className='bg-white relative p-5 rounded-md  h-full max-h-[400px] mt-[200px] w-full max-w-[600px]'>
+          {naptien && <div onClick={(e) => { setNaptien(!naptien); e.stopPropagation(); setNap(false); setMoneynap(0) }} className='bg-overlay items-center absolute flex  justify-center  top-0 bottom-0 right-0 left-0  h-full min-h-screen'>
+            <div onClick={(e) => e.stopPropagation()} className='bg-white relative p-5 rounded-md  h-full max-h-[400px]  w-full max-w-[600px]'>
               <h1 className='text-center text-[20px] font-extrabold'>Nạp tiền</h1>
               <div className='flex flex-col mt-5'>
-                <img className='h-full max-h-[150px]' src="https://res-console.cloudinary.com/dpdta6mey/thumbnails/v1/image/upload/v1729828642/Y2FzaGJhY2staWNvbi13aXRoLXdhbGxldC1jYXNoYmFjay1tb25leS1iYWNrLWxhYmVsXzM0ODItMTE3OTItcmVtb3ZlYmctcHJldmlld193YW51bmg=/drilldown" />
+                <img className='h-full max-h-[150px]' src="https://res.cloudinary.com/dpdta6mey/image/upload/v1729828642/cashback-icon-with-wallet-cashback-money-back-label_3482-11792-removebg-preview_wanunh.png" />
                 <span>Nhập số tiền:</span>
                 <input className='outline-none mt-2 border-2 border-gray-400 py-3 pl-2 rounded-md' onChange={(el) => setMoneynap(el.target.value)} placeholder='Nhập tối thiểu 50000' />
               </div> 
@@ -112,11 +112,11 @@ const Wallet = ({dispatch}) => {
               </div>
             </div></div>}
             </div>}
-          {ruttien && <div onClick={() => setRuttien(!ruttien)} className='bg-overlay  absolute flex min-h-screen justify-center  top-0 bottom-0 right-0 left-0'>
-            <div onClick={(e) => e.stopPropagation()} className='bg-white p-5   rounded-md  h-full max-h-[480px] mt-[150px] w-full max-w-[600px]'>
+          {ruttien && <div onClick={() => setRuttien(!ruttien)} className='bg-overlay  absolute flex  justify-center items-center  top-0 bottom-0 right-0 left-0 h-full min-h-screen'>
+            <div onClick={(e) => e.stopPropagation()} className='bg-white p-5   rounded-md  h-full max-h-[480px]  w-full max-w-[600px]'>
               <h1 className='text-center text-[20px] font-extrabold'>Rút tiền</h1>
               <div className='flex flex-col justify-center'>
-                <img className='h-full max-h-[150px]' src="https://res-console.cloudinary.com/dpdta6mey/thumbnails/v1/image/upload/v1729828642/Y2FzaGJhY2staWNvbi13aXRoLXdhbGxldC1jYXNoYmFjay1tb25leS1iYWNrLWxhYmVsXzM0ODItMTE3OTItcmVtb3ZlYmctcHJldmlld193YW51bmg=/drilldown"/>
+                <img className='h-full max-h-[150px]' src="https://res.cloudinary.com/dpdta6mey/image/upload/v1729828642/cashback-icon-with-wallet-cashback-money-back-label_3482-11792-removebg-preview_wanunh.png"/>
                 <span className='my-2'>Nhập số tiền:</span>
                 <input className='outline-none border-2 border-gray-400 px-2 py-3' onChange={(el) => setMoneyrut(el.target.value)} placeholder='Nhập tối thiểu 50000' />
               </div>

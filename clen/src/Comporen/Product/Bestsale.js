@@ -3,10 +3,7 @@ import { apiGetProducts } from '../../Apis/Products'
 import { CustomSlider } from '../Index'
 import { useDispatch } from 'react-redux'
 import { TiThMenu } from "react-icons/ti";
-// const tabs = [
-//   { id: 1, name: "best saller" },
-//   { id: 2, name: "new arrivals" },
-// ]
+
 
 const Bestsale = () => {
   const [activedtab, setActivedtab] = useState('Smartphone')
@@ -26,13 +23,6 @@ const Bestsale = () => {
   return (
     <div>
       <div  className='relative w-full flex text-[20px] gap-8 mt-4 justify-between border-b border-solid-2px pb-4  items-center pl-4  mr-2'>
-        {/* {tabs.map((el) => (
-          <span key={el.id}
-            onClick={() => { setActivedtab(el.id) }}
-            className={` rounded-md flex items-center p-2 justify-center cursor-pointer font-semibold capitalize   border-r shadow-md  ${activedtab === el.id ? "text-gray-900" : "text-gray-400"}`}>
-            {el.name}
-          </span>
-        ))} */}
         <span className='font-semibold  text-[20px]'>Top Selling</span>
         <span
           className='flex sm:hidden '

@@ -52,7 +52,7 @@ const OrderItem = ({ el, defaultQuantity = 1, dispatch, handCallBack, selectedPr
 
     return (
         <div key={el._id} className='w-full  mx-auto font-bold  border-b py-3 grid grid-cols-10  '>
-            <span className='sm:col-span-5 col-span-4  w-full'>
+            <span className='sm:col-span-5 col-span-4  w-full ml-2'>
                 <div className='flex gap-2'>
                     <img src={el?.thumb} alt='thumb' className='w-16 h-16 object-cover'></img>
                     <div className='flex flex-col gap-1'>
@@ -74,7 +74,7 @@ const OrderItem = ({ el, defaultQuantity = 1, dispatch, handCallBack, selectedPr
             <span className='col-span-3 w-full h-full mt-5'>
                 <span className='sm:text-lg text-[10px]'>{formatMoney(el.price * quantity)}</span>
             </span>
-            <span className='col-span-1 w-full h-full mt-5 text-center' >
+            <span className='col-span-1 w-full h-full mt-5 ml-5' >
                 <input
                     checked={isSelected}
                     onChange={() => handleSelectProduct(el._id)}

@@ -4,4 +4,5 @@ export { default as Dashboard } from './Dashboard'
 export { default as ManageOrider } from './ManageOrider'
 export { default as ManageProducts } from './ManageProducts'
 export { default as ManageUser } from './ManageUser'
+export { default as Message } from './Message'
 

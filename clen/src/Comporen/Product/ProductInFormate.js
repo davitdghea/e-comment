@@ -53,12 +53,12 @@ const ProductInFormate = ({ rerender, totalRatings, ratings, nameProduct, pid })
   }
 
   return (
-    <div className="border flex flex-col justify-center items-center ">
+    <div className="border rounded-xl flex flex-col justify-center items-center ">
       <div className="mt-10">
         <span className={`border rounded-[50px] font-semibold p-2 ${tab === 1 && 'bg-blue-500 text-white'}`} onClick={()=>setTab(1)}>Product details</span>
         <span className={`ml-10 border rounded-[50px] p-2 font-semibold  ${tab === 2 && 'bg-blue-500 text-white'}`} onClick={() => setTab(2)}>Review ({ratings?.length || 0})</span>
       </div>
-      {tab === 1 && <div className="shadow-xl w-full mt-[20px]  min-h-[420px] rounded-xl">
+      {tab === 1 && <div className="shadow-sm w-full mt-[20px]  min-h-[420px] rounded-xl">
         <div className="flex items-center gap-2 relative bottom-[-1px] ml-[13px] mt-[10px]">
           {tabs.map(el => (
             <span

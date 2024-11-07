@@ -6,17 +6,17 @@ import { useSelector } from 'react-redux';
 import { apiupdateReplist } from 'Apis/Products';
 import { Button } from 'Comporen/Index';
 
-const CommentList = ({ comments, pid }) => {
-    const [visibleComments, setVisibleComments] = useState(2); // Hiển thị 5 bình luận mặc định
-    console.log(comments)
-    // Hàm để xem thêm bình luận
+const CommentList = ({ comments, pid, }) => {
+    const [visibleComments, setVisibleComments] = useState(2); 
+
     const showMoreComments = () => {
-        setVisibleComments(prev => prev + 5); // Hiển thị thêm 5 bình luận mỗi lần nhấn
+        setVisibleComments(prev => prev + 5); 
     };
     const showLessComments = () => {
-        setVisibleComments(2); // Trở về hiển thị 5 bình luận mặc định
+        setVisibleComments(2); 
     };
     const sortedComments = [...comments].sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+   
     return (
         <div className='flex flex-col justify-center '>
             {sortedComments.slice(0, visibleComments).map((comment, index) => (
@@ -31,15 +31,12 @@ const CommentList = ({ comments, pid }) => {
                     star={comment.star}
                 />
             ))}
-
-            {/* Nút "Xem thêm" chỉ hiện nếu có bình luận chưa được hiển thị */}
             {visibleComments < comments.length && (
                 <button onClick={showMoreComments} className="mt-4 text-blue-500 ">
                     Xem thêm
                 </button>
             )}
-            {/* Nút "Ẩn bớt" chỉ hiện nếu có nhiều hơn số bình luận mặc định */}
-            {visibleComments > 5 && (
+            {visibleComments > 2 && (
                 <button onClick={showLessComments} className="mt-4 text-blue-500 ml-4">
                     Ẩn bớt
                 </button>
@@ -51,6 +48,7 @@ const CommentList = ({ comments, pid }) => {
 const Comment = ({ name = "Biên Nguyên", content, updatedAt, star, rid, pid, repList }) => {
     const { current } = useSelector(state => state.user)
     const modalRef = useRef();
+    console.log(current)
     const [showRep, setShowRep] = useState(false)
     const [contentrep,setContentrep] = useState()
     const [rep, setRep] = useState(false)
@@ -67,13 +65,13 @@ const Comment = ({ name = "Biên Nguyên", content, updatedAt, star, rid, pid, r
         }
     }, [rep]);
     return (
-        <div className='gap-4 flex '>
+        <div className='gap-4 flex my-2 ml-2 '>
             <div className=' flex-none'>
-                <IoPersonCircleOutline size={35} />
+                {current.avatar !== "" ? <img className='w-[35px] h-[35px] rounded-[50px]' src={current.avatar} alt=''/> : <IoPersonCircleOutline size={35} />}
             </div>
             <div className='flex flex-col flex-auto'>
                 <div className='flex justify-between items-center w-[98%]'>
-                    <h3 className='font-semibold'>{name}</h3>
+                    <h3 className='font-semibold'>{current.lastname} {current.firstname}</h3>
                     <span>{moment(updatedAt)?.fromNow()}</span>
                 </div>
                 <div className='flex flex-col gap-2 pl-4 text-sm mt-4 border border-gray-300 py-2 bg-gray-100 w-[98%]'>

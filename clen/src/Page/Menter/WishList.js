@@ -9,7 +9,6 @@ import { closestColor, formatMoney } from 'Ultils/Hellpers'
 
 const WishList = ({ dispatch }) => {
   const { current } = useSelector(s => s.user)
-  console.log(current)
   const handleClickOptions = async(data)=>{
     const response = await apiUpdateWithlist({ pid: data })
     if (response.success){
@@ -31,18 +30,18 @@ const WishList = ({ dispatch }) => {
       <header className='fixed top-0 left-0 right-0 sm:relative z-30 text-3xl font-semibold bg-gray-100 py-4 border-b-2'>
         <p className='ml-[55px] sm:ml-0'>My Wishlist</p> 
       </header>
-      {current?.wishList >= 1 ?  <table className='p-4 w-full gap-4 sm:mt-0 mt-[80px]' >
-        <tr>
-          <th>Product</th>
+      {current?.wishList.length >= 1 ?  <table className='p-4 w-full gap-4 sm:mt-5 mt-[80px] rounded-md ' >
+        <tr className='font-bold bg-gray-700   text-white mt-5 border-b border-gray-100'>
+          <th className='py-1'>Product</th>
           <th>Price</th>
           <th>Color</th>
           <th></th>
           <th></th>
         </tr>
         {current?.wishList?.map(el => (
-          <tr className='gap-3 rounded-md drop-shadow bg-white ' key={el._id}>
+          <tr className='gap-3 rounded-md drop-shadow border-b border-gray-100 ' key={el._id}>
             <Link to={`/${el.category}/${el.pid}/${el.title}`}>
-            <td className='flex'>
+            <td className='flex ml-2 py-2'>
                 <img src={el.thumb} alt='' className='w-[50px] h-[50px] object-cover mr-2' />
               <span>{el.title}</span>
             </td>

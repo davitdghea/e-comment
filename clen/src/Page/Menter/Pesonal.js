@@ -1,8 +1,9 @@
-import { Button } from '@mui/material'
+
 import {  apiUpdateCurrent } from 'Apis/User'
-import { InputFrom } from 'Comporen/Index'
+import { Button, InputFrom } from 'Comporen/Index'
 import WithRase from 'hocs/withRase'
 import moment from 'moment'
+import { IoIosCamera } from "react-icons/io";
 import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
@@ -46,7 +47,7 @@ const Pesonal = ({navigate}) => {
       </div>
     
       <form className='mt-5 ml-2 sm:ml-20 ' onSubmit={handleSubmit(handleUpdateInform)}>
-        <p className='flex '><span className='w-[120px]'>Email address:</span> <span>{current?.email}</span></p>
+        <p className='flex '><span className='w-[120px] font-medium'>Email address:</span> <span>{current?.email}</span></p>
         <InputFrom
           layoutUser
           className='flex  w-full mt-[10px]'
@@ -86,7 +87,7 @@ const Pesonal = ({navigate}) => {
           }}
         />
         <InputFrom
-          className='flex  w-full mt-[10px]'
+          className='flex  w-full mt-[10px] '
           label='Address'
           layoutUser
           register={register}
@@ -116,13 +117,14 @@ const Pesonal = ({navigate}) => {
         <span className='font-medium'>
          Profile image:
         </span>
-       <label htmlFor='file'>
-            <img src={current?.avatar || "https://static.vecteezy.com/system/resources/previews/005/005/788/original/user-icon-in-trendy-flat-style-isolated-on-grey-background-user-symbol-for-your-web-site-design-logo-app-ui-illustration-eps10-free-vector.jpg"} alt='' className='w-10 h-10 object-cover rounded-full cursor-pointer' />
+       <label htmlFor='file' className='relative'>
+            <img src={current?.avatar || "https://static.vecteezy.com/system/resources/previews/005/005/788/original/user-icon-in-trendy-flat-style-isolated-on-grey-background-user-symbol-for-your-web-site-design-logo-app-ui-illustration-eps10-free-vector.jpg"} alt='' className='w-10 h-10 object-cover rounded-full cursor-pointer ml-2' />
+            <span className='absolute bottom-0 right-[-5px]'><IoIosCamera/></span>
        </label>
           <input type='file' id='file' {...register('avatar')} hidden/>
         </div>
         <div className='w-full flex'>
-          <Button type="submit">Update Information</Button>
+          <Button type="submit" Style='bg-blue-500 text-white px-4 py-2 rounded-xl '>Update Information</Button>
         </div>
       </form>
       

@@ -54,16 +54,16 @@ const DealdeallyCart = ({ location, navigate, dispatch }) => {
  
   const selectedProductDetails = effectiveCart.filter(product => selectedProducts.includes(product._id));
   return (
-    <div className='max-w-[1100px] mx-auto w-full '>
+    <div className=' w-full '>
       <div className='h-[70px] flex  items-center bg-gray-100 sm:relative fixed top-0 left-0 right-0'>
           <h3 className='text-3xl font-bold tracking-tight  ml-[55px] sm:ml-2'>My Cart</h3>
       </div>
       <div className='sm:mt-[50px] mt-[100px]'>
-        <div className='w-full  mt-8 border py-3  font-bold grid grid-cols-10  opacity-70'>
-          <span className='sm:col-span-5 col-span-4 w-full ml-1 text-[12px] sm:text-[20px]'>Products</span>
-          <span className='col-span-2 sm:col-span-1 w-full text-[12px] sm:text-[20px]'>Quantity</span>
-          <span className='col-span-3 w-full text-[12px] sm:text-[20px]'>Price</span>
-          <span className='col-span-1 w-full text-[12px] sm:text-[20px]'>Paypal</span>
+        <div className='font-bold bg-gray-700 py-2 border border-blue-300  text-white grid grid-cols-10  '>
+          <span className='sm:col-span-5 col-span-4 w-full ml-1 text-[12px] sm:text-[15px]'>Products</span>
+          <span className='col-span-2 sm:col-span-1 w-full text-[12px] sm:text-[15px]'>Quantity</span>
+          <span className='col-span-3 w-full text-[12px] sm:text-[15px]'>Price</span>
+          <span className='col-span-1 w-full text-[12px] sm:text-[15px]'>Paypal</span>
         </div>
         {effectiveCart?.map(el => (
           <OrderItem 

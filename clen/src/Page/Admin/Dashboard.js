@@ -1,7 +1,6 @@
 
-import { Button } from '@mui/material'
 import { apiUpdateCurrent } from 'Apis/User'
-import { InputFrom } from 'Comporen/Index'
+import { Button, InputFrom } from 'Comporen/Index'
 import WithRase from 'hocs/withRase'
 import moment from 'moment'
 import React, { useEffect } from 'react'
@@ -47,7 +46,7 @@ const Dashboard = ({ navigate }) => {
       </div>
 
       <form className='mt-5 sm:ml-20 ml-2' onSubmit={handleSubmit(handleUpdateInform)}>
-        <p className='flex '><span className='w-[120px]'>Email address:</span> <span>{current?.email}</span></p>
+        <p className='flex '><span className='w-[120px] font-medium'>Email address:</span> <span>{current?.email}</span></p>
         <InputFrom
           layoutUser
           className='flex  w-full mt-[10px]'
@@ -117,16 +116,15 @@ const Dashboard = ({ navigate }) => {
           <span className='font-medium'>
             Profile image:
           </span>
-          <label htmlFor='file'>
+          <label htmlFor='file' className='ml-3'>
             <img src={current?.avatar || "https://static.vecteezy.com/system/resources/previews/005/005/788/original/user-icon-in-trendy-flat-style-isolated-on-grey-background-user-symbol-for-your-web-site-design-logo-app-ui-illustration-eps10-free-vector.jpg"} alt='' className='w-10 h-10 object-cover rounded-full cursor-pointer' />
           </label>
           <input type='file' id='file' {...register('avatar')} hidden />
         </div>
-        <div className='w-full flex'>
-          <Button type="submit">Update Information</Button>
+        <div className='w-full flex mt-5'>
+          <Button type="submit" Style='bg-blue-500 text-white px-4 py-2 rounded-xl '>Update Information</Button>
         </div>
       </form>
-
     </div>
   )
 }

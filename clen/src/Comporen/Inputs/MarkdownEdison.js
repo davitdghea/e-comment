@@ -6,7 +6,7 @@ const MarkdownEdison = ({ invalidFields, setInvalidFields, label, name, value, c
 
     return (
         <div className='flex flex-col '>
-            <span className='mb-1'>{label}</span>
+            <span className='mb-1 font-medium'>{label}</span>
             <Editor
                 apiKey="7i1tkevpjd16czb6d6k2uwebbcpy35w9u24cx438umrhj4ay"
                 value={value}

@@ -1,5 +1,6 @@
 import path from "./Path"
 import icons from "./Icons"
+import { BiSolidMessageSquareDetail } from "react-icons/bi";
 import { AiOutlineDashboard} from "react-icons/ai"
 import { FaShoppingCart } from "react-icons/fa";
 import { TbBrandProducthunt } from "react-icons/tb";
@@ -97,7 +98,7 @@ export const sorts = [
     },
     {
         id: 2,
-        value: '-title',
+        value: 'title',
         text: "AIphabetically,A-Z"
     },
     {
@@ -107,7 +108,7 @@ export const sorts = [
     },
     {
         id: 4,
-        value: '-price',
+        value: 'price',
         text: "Price,high to low"
     },
     {
@@ -118,7 +119,7 @@ export const sorts = [
     ,
     {
         id: 6,
-        value: '-createdAt',
+        value: 'createdAt',
         text: "Date,new to old"
     }
     ,
@@ -193,6 +194,13 @@ export const adminSidebar = [
         path: `/${path.ADMIN}/${path.MANAGE_ORDER}`,
          icon: <FaRegListAlt />
     },
+    {
+        id: 5,
+        type: "Single",
+        text: "Message",
+        path: `/${path.ADMIN}/${path.MESSAGE}`,
+        icon: <BiSolidMessageSquareDetail />
+    }
     
 ]
 export const roles = [
