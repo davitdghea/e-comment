@@ -32,14 +32,21 @@ app.use(express.urlencoded({ extended: true }));
 
 dbConnect();
 initRouter(app);
-
+let onlineUsers = {};
 io.on('connection', (socket) => {
     socket.on('setUser', (data) => {
         const userId = data.userId;
         socket.join(userId); 
-        io.emit('userStatusChange', { userId, status: 'online' });
+        
     });
+    const userId = socket.handshake.query.userId;
+    onlineUsers[userId] = 'online';
 
+    // Gửi danh sách trạng thái online của tất cả người dùng cho người kết nối mới
+    socket.emit("updateUserStatuses", onlineUsers);
+
+    // Phát tín hiệu online cho những người khác
+    socket.broadcast.emit("userStatusChange", { userId, status: "online" });
     socket.on('send-file', (data) => {
         const { buffer, senderId } = data;
         if (!buffer) {
@@ -82,6 +89,8 @@ io.on('connection', (socket) => {
         io.emit('userStatusChange', { userId, status: 'offline' });
     });
     socket.on('disconnect', () => {
+        delete onlineUsers[userId];
+        io.emit("userStatusChange", { userId, status: "offline" });
     });
 });
 

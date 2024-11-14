@@ -4,24 +4,34 @@ const Message = require("../Models/Chat")
 const getMessages = asyncHandler(async (req, res) => {
     const { recipientId = '670f5f0bcb44f62340a29d24' } = req.query;
     const latestMessages = await Message.aggregate([
-        { $match: { toUserID: recipientId } },
-        { $sort: { timestamp: -1 } },
-        { $group: { _id: "$fromUserID", latestMessage: { $first: "$$ROOT" } } },
-        { $replaceRoot: { newRoot: "$latestMessage" } },
+        { $match: { toUserID: recipientId } }, 
+        { $sort: { timestamp: -1 } }, 
+        { $group: { _id: "$fromUserID", latestMessage: { $first: "$$ROOT" } } }, 
+        { $replaceRoot: { newRoot: "$latestMessage" } }
     ]);
-    const latestMessage = await Message.find({
-        $or: [
-            { toUserID: recipientId, fromUserID: latestMessages[0].fromUserID }, 
-            { fromUserID: recipientId, toUserID: latestMessages[0].fromUserID }  
-        ]
-    })
+    if (latestMessages.length === 0) {
+        return res.json([]);
+    }
+    const messages = [];
+    for (let msg of latestMessages) {
+        const latestMessage = await Message.findOne({
+            $or: [
+                { toUserID: recipientId, fromUserID: msg.fromUserID },
+                { fromUserID: recipientId, toUserID: msg.fromUserID }
+            ]
+        })
         .sort({ timestamp: -1 }) 
-        .limit(1) 
         .exec();
 
-    res.json(latestMessage);
-   
+        if (latestMessage) {
+            messages.push(latestMessage); 
+        }
+    } 
+    messages.sort((a, b) => b.timestamp - a.timestamp);
+    res.json(messages);
 });
+
+
 
 const getMessageOne = asyncHandler(async (req, res) => {
     const { fromUserID, toUserID } = req.query;

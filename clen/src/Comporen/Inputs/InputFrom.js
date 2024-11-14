@@ -26,7 +26,7 @@ readOnly
         {...register(id, validate)}
         disabled={disabled}
         placeholder={placeholder}
-        className={clsx("form-input my-auto", FullWidth && 'w-full', ' p-1 outline-none border-2 ml-5', layoutUser && 'w-[80%]', label !== 'Name product' && label !== 'Quantity' && label !== 'Price (nhập hai số thập thân VD: 14 000 000 là 1400000000)' ? "ml-5" : "ml-0")}
+        className={clsx("form-input my-auto", FullWidth && 'w-full', ' p-1 outline-none border-2 ', layoutUser && 'w-[80%]', label !== 'Name product' && label !== 'Quantity' && label !== 'Price (nhập hai số thập thân VD: 14 000 000 là 1400000000)' ? "ml-5" : "ml-0 " )}
         defaultValue={defaultValue}
         readOnly={readOnly}
       />

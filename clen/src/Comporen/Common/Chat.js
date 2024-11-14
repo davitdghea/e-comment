@@ -49,7 +49,12 @@ const Chat = ({ StyleDiv, onClose, idnhan = '670f5f0bcb44f62340a29d24', fromUser
         }
     };
     useEffect(() => {
-        socketRef.current = io('http://localhost:5000');
+        socketRef.current = io('http://localhost:5000',{
+            query: { userId: current.current._id }
+        });
+        socketRef.current.on("updateUserStatuses", (statuses) => {
+            setUserStatuses(statuses);
+        });
         socketRef.current.on("connect", () => {
             socketRef.current.emit('setUser', { userId: current.current._id });
             console.log(current.current._id + " Connected to server");
@@ -126,6 +131,7 @@ const Chat = ({ StyleDiv, onClose, idnhan = '670f5f0bcb44f62340a29d24', fromUser
             setMessage('');
         } 
     };
+    console.log(userStatuses)
     return (
         <div onClick={e => e.stopPropagation()} className={Style}>
             {fromUserName ?
